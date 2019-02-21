@@ -38,7 +38,7 @@ Running xr_web
 Deploying xr_web
 ---------------------------------------
 - If there were any js or style changes compile the static assets by running
-   `npm run build_production`, add them to git `git add webpack` and commit & push them.
+   `yarn run build_production`, add them to git `git add webpack` and commit & push them.
 - FIXME add project specific deployment instructions
 
 Testing & Linting
