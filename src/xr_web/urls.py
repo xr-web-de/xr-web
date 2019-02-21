@@ -19,9 +19,8 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(
-        template_name='xr_web/pages/hello.html')),
-    url(r'^admin/', admin.site.urls),
+    url(r"^$", TemplateView.as_view(template_name="xr_web/pages/hello.html")),
+    url(r"^admin/", admin.site.urls),
 ]
 
 

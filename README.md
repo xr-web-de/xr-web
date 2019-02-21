@@ -19,6 +19,9 @@ pip install -r requirements-dev.txt
 # install node requirements
 yarn install
 
+# setup pre-commit
+pre-commit install
+
 # create your local django config
 echo 'from .dev import *  # noqa' > src/xr_web/settings/local.py
 
