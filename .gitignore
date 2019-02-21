@@ -1,0 +1,82 @@
+# Python bytecode:
+*.py[co]
+
+# Packaging files:
+*.egg*
+
+# Sphinx docs:
+/build
+
+# SQLite3 database files:
+*.db
+*.db-journal
+
+# Logs:
+*.log
+
+# Eclipse
+.project
+.pydevproject
+.settings
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+
+# Mac
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# VirtualEnv
+env/
+
+# PyCharm
+.idea
+
+# Cache
+__pycache__/
+*.sass-cache*
+
+# Coverage
+cover/
+.coverage
+
+# SQlite DB
+*.sqlite
+*.sqlite3
+
+# User files
+/uploads/
+/pdfs/
+
+# Caches
+/cache/
+/search_index/
+
+# collected static files
+/static/
+
+# Local settings
+src/*/settings/local.py
+src/*/settings/local_credentials.py
+
+# NPM / Webpack / Bower
+bower_components/*
+node_modules/*
+webpack/webpack-stats.json
+npm-debug.log
+
+# Ansible
+/deployment/*.retry

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Fail the script if any subcommand fails
+set -e
+
+source=$(dirname $BASH_SOURCE)
+
+(cd "$source"; ./node_modules/.bin/eslint src)
+$source/env/bin/flake8 $source/src
+$source/env/bin/python $source/src/manage.py makemigrations --dry-run --exit --settings=xr_web.settings.dev 2>/dev/null

@@ -1,0 +1,7 @@
+django
+django-webpack-loader
+django-extensions
+django-webtest
+django-dynamic-fixture
+flake8
+selenium

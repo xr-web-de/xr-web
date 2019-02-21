@@ -1,0 +1,24 @@
+{% load static i18n %}
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    {% render_bundle 'main' %}
+
+    {% block extrastyles %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+</head>
+<body class="{% block body_classes %}{% endblock %}">
+    <div id="page">
+        {% block layout %}
+        {% endblock %}
+    </div>
+</body>
+</html>
