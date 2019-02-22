@@ -18,10 +18,10 @@ class BaseWebTest(WebTest):
     def test_admin_requires_authorization(self):
         response = self.app.get(reverse("admin:index"))
 
-        login_url = "{}?next=/admin/".format(reverse("admin:login"))
+        login_url = "{}?next={}".format(reverse("admin:login"), reverse("admin:index"))
         self.assertRedirects(response, login_url)
 
-    def test_user_login(self):
+    def test_admin_authenticated_user_has_access(self):
         response = self.app.get(reverse("admin:index"), user=self.user)
 
         self.assertEqual(response.status_code, 200)

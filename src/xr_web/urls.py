@@ -15,12 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.urls import re_path, include
 from django.views.generic.base import TemplateView
 from django.conf import settings
 
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.documents import urls as wagtaildocs_urls
+from wagtail.core import urls as wagtail_urls
+
 urlpatterns = [
+    # TODO use Django 2 path patterns
     url(r"^$", TemplateView.as_view(template_name="xr_web/pages/hello.html")),
-    url(r"^admin/", admin.site.urls),
+    url(r"^django_admin/", admin.site.urls),
+    re_path(r"^admin/", include(wagtailadmin_urls)),
+    re_path(r"^documents/", include(wagtaildocs_urls)),
+    re_path(r"", include(wagtail_urls)),
 ]
 
 

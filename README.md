@@ -52,7 +52,13 @@ Running xr_web
 - Compile your assets with `yarn run watch`
 (with Hot Module Replacement)
 - Start the django server with `src/manage.py runserver`
-- Visit `http://localhost:8000`
+- Visit [http://localhost:8000](http://localhost:8000)
+
+Create a (super-)user and log in
+-------------
+- run `src/manage.py createsuperuser`
+- you find the Wagtail CMS admin at `/admin/` 
+([http://localhost:8000/admin/](http://localhost:8000/admin/))
 
 Contributing
 ------------
