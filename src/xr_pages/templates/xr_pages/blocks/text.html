@@ -1,0 +1,6 @@
+{% load wagtailcore_tags %}
+
+
+<section class="block image-block {% if value.align %}align--{{ value.align }}{% endif %}">
+    {{ value.text|richtext }}
+</section>

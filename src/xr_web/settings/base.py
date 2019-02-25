@@ -51,9 +51,11 @@ INSTALLED_APPS = [
     "modelcluster",
     "taggit",
     # Project
+    "xr_pages",
 ]
 
 MIDDLEWARE = [
+    # Django
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

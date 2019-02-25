@@ -13,6 +13,9 @@ for template_engine in TEMPLATES:  # noqa
     template_engine["OPTIONS"]["debug"] = DEBUG
 
 
+INSTALLED_APPS += ["wagtail.contrib.styleguide"]
+
+
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "bundles/",
