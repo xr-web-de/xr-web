@@ -12,7 +12,7 @@ module.exports = (env = {}) => {
             'babel-polyfill',
             'classlist-polyfill',
             // entry point of our app. index.js should require other js modules and dependencies it needs
-            '../src/xr_web/static/js/index'
+            '../src/xr_pages/static/js/index'
         ],
 
         output: {
