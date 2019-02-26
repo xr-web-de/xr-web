@@ -11,12 +11,7 @@ import 'normalize.css'
 // Import project styles
 import '../styles/main.scss'
 
-// import umbrella js
-import u from 'umbrellajs/umbrella.esm.js'
+// import js bootstrapping
+import { init } from './init'
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    u("button").on('click', () => {
-        alert("Hello world!")
-    })
-})
+init();

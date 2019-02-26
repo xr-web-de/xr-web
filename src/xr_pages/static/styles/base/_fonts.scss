@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Crimson Text SemiBold'),
+       local('CrimsonText-SemiBold'),
+       url('../fonts/Crimson_Text/CrimsonText-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Crimson Text Bold'),
+       local('CrimsonText-Bold'),
+       url('../fonts/Crimson_Text/CrimsonText-Bold.ttf') format('truetype');
+};
+
+@font-face {
+  font-family: 'Fucxed';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Fucxed/fucxedcaps-webfont.woff2') format('woff2'),
+       url('../fonts/Fucxed/fucxedcaps-webfont.woff') format('woff');
+};
