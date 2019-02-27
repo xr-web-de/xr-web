@@ -1,11 +1,11 @@
-const path = require('path');
-const merge = require('webpack-merge');
-const BundleTracker = require('webpack-bundle-tracker');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const path = require('path')
+const merge = require('webpack-merge')
+const BundleTracker = require('webpack-bundle-tracker')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 
-const common = require('./webpack.config.base.js');
+const common = require('./webpack.config.base.js')
 
 
 module.exports = (env = {}) => {
@@ -32,5 +32,5 @@ module.exports = (env = {}) => {
                 new OptimizeCSSAssetsPlugin({})
             ]
         }
-    });
-};
+    })
+}

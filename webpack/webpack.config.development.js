@@ -1,8 +1,8 @@
-const path = require("path");
-const merge = require('webpack-merge');
-const BundleTracker = require('webpack-bundle-tracker');
+const path = require("path")
+const merge = require('webpack-merge')
+const BundleTracker = require('webpack-bundle-tracker')
 
-const common = require('./webpack.config.base.js');
+const common = require('./webpack.config.base.js')
 
 
 module.exports = (env = {}) => {
@@ -26,5 +26,5 @@ module.exports = (env = {}) => {
                 headers: { "Access-Control-Allow-Origin": "*" }
             }
         }
-    });
-};
+    })
+}
