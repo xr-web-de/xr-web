@@ -5,9 +5,9 @@ WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "bundles/",
         "STATS_FILE": os.path.join(
-            os.path.dirname(BASE_DIR),
+            os.path.dirname(BASE_DIR),  # noqa
             "webpack",
-            "webpack-stats-production.json",  # noqa
+            "webpack-stats-production.json",
         ),  # noqa
     }
 }

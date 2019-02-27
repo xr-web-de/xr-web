@@ -13,7 +13,7 @@ for template_engine in TEMPLATES:  # noqa
     template_engine["OPTIONS"]["debug"] = DEBUG
 
 
-INSTALLED_APPS += ["wagtail.contrib.styleguide"]
+INSTALLED_APPS += ["wagtail.contrib.styleguide"]  # noqa
 
 
 WEBPACK_LOADER = {
