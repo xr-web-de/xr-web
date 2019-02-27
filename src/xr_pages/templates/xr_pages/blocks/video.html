@@ -1,0 +1,11 @@
+{% load wagtailcore_tags %}
+
+<section class="block video-block {% if value.align %}align--{{ value.align }}{% endif %}">
+    {{ value.video|safe }}
+
+    {% if value.caption %}
+        <caption>
+            {{ value.caption }}
+        </caption>
+    {% endif %}
+</section>

@@ -1,0 +1,30 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+<section class="block message-block bg--{{ value.background_color }} color--{{ value.font_color }}
+                {% if block.align %}align-{{ value.align }}{% endif %}">
+
+    {% if value.link.has_link %}
+        {% include_block value.link %}
+    {% endif %}
+
+    {% if value.background_image %}
+        {% if value.align == "full_content" %}
+            {% image value.background_image width-800 as bg_img %}
+        {% elif value.align == "full_page" %}
+            {% image value.background_image width-1200 as bg_img %}
+        {% else %} {# align in "left,right" #}
+            {% image value.background_image width-400 as bg_img %}
+        {% endif %}
+    {% endif %}
+
+    <div class="message-block--inner"
+         style="font-size: {{ value.font_size_factor }}em; {% if bg_img %}background: url('{{ bg_img.url }}') 0 0 no-repeat; background-size: cover;{% endif %}">
+        {{ value.message.text|richtext }}
+    </div>
+
+    {% if value.link.has_link %}
+        </a>
+    {% endif %}
+</section>

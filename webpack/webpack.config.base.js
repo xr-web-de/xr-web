@@ -1,9 +1,9 @@
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 
 module.exports = (env = {}) => {
-    const devMode = !env.production;
+    const devMode = !env.production
 
     return {
         context: __dirname,
@@ -12,7 +12,7 @@ module.exports = (env = {}) => {
             'babel-polyfill',
             'classlist-polyfill',
             // entry point of our app. index.js should require other js modules and dependencies it needs
-            '../src/xr_web/static/js/index'
+            '../src/xr_pages/static/js/index'
         ],
 
         output: {
@@ -81,5 +81,5 @@ module.exports = (env = {}) => {
             modules: ['node_modules'],
             extensions: ['.js', '.jsx']
         }
-    };
-};
+    }
+}
