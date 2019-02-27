@@ -1,9 +1,9 @@
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 
 module.exports = (env = {}) => {
-    const devMode = !env.production;
+    const devMode = !env.production
 
     return {
         context: __dirname,
@@ -81,5 +81,5 @@ module.exports = (env = {}) => {
             modules: ['node_modules'],
             extensions: ['.js', '.jsx']
         }
-    };
-};
+    }
+}
