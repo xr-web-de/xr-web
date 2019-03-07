@@ -1,15 +1,20 @@
 {% extends "xr_pages/layouts/default.html" %}
 {% load wagtailcore_tags %}
+{% load menu_tags %}
 
 {% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
 
 {% block header %}
-    <h1>{{ page.title }}</h1>
+    {% main_menu %}
 {% endblock %}
 
 {% block content %}
+    <h1>{{ page.title }}</h1>
     {% include_block page.content %}
 {% endblock %}
 
 {% block footer %}
+    {% flat_menu "about_us" %}
+    {% flat_menu "for_activists" %}
+    {% flat_menu "learn_more" %}
 {% endblock %}

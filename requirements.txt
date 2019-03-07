@@ -7,6 +7,7 @@
 beautifulsoup4==4.6.0     # via wagtail, webtest
 certifi==2018.11.29       # via requests
 chardet==3.0.4            # via requests
+django-cogwheels==0.2     # via wagtailmenus
 django-dynamic-fixture==2.0.0
 django-extensions==2.1.5
 django-modelcluster==4.3  # via wagtail
@@ -31,7 +32,9 @@ selenium==3.141.0
 six==1.12.0               # via django-dynamic-fixture, django-extensions, html5lib, wagtail, webtest
 unidecode==1.0.23         # via wagtail
 urllib3==1.24.1           # via requests, selenium
+wagtail-condensedinlinepanel==0.5.2
 wagtail==2.4
+wagtailmenus==2.12
 waitress==1.2.1           # via webtest
 webencodings==0.5.1       # via html5lib
 webob==1.8.5              # via webtest

@@ -4,5 +4,7 @@ django-extensions
 django-webtest
 django-dynamic-fixture
 wagtail
+wagtailmenus
+wagtail-condensedinlinepanel
 flake8
 selenium
