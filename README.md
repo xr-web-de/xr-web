@@ -26,7 +26,7 @@ cd xr-web
 ### setup the project
 
 ```
-# create a virtualenv and activate it
+# create a python3 virtualenv and activate it
 virtualenv -p python3 env
 source env/bin/activate
 
@@ -37,13 +37,13 @@ pip install -r requirements-dev.txt
 # install node requirements
 yarn install
 
-# setup pre-commit
+# setup pre-commit (recommended)
 pre-commit install
 
 # create your local django config
 echo 'from .dev import *  # noqa' > src/xr_web/settings/local.py
 
-# run django migrations
+# run django database migrations
 src/manage.py migrate
 ```
 
@@ -62,14 +62,22 @@ Create a (super-)user and log in
 
 Contributing
 ------------
-Before you commit changes:
+Checkout the project and create a new branch. 
+Commit your changes to the new branch.
+Create a merge request for your branch.
+
+We merge changes when tests and the linter do not complain.
+And of course the changes should be constructive.
+
+In order to satisfy the code styleguide:
+
 - reformat your python code with _black_: `black path/or/file.py`
 - check your Javascript code with _eslint_:
 `./node_modules/.bin/eslint path/or/file.js`
 - we recommend _pre-commit_, which makes sure makes sure black is run
 and JS code is checked before you commit.
-- run tests and the linter, like described in the next section.
-- now commit and push to a branch != master
+
+You can run the tests and linter, as described in the next section.
 
 
 Testing & Linting
