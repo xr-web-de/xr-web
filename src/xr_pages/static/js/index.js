@@ -14,4 +14,4 @@ import '../styles/main.scss'
 // import js bootstrapping
 import { init } from './init'
 
-init();
+init()
