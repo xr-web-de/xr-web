@@ -13,9 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import admin
-from django.urls import re_path, include
+from django.urls import re_path, include, path
 from django.conf import settings
 
 from wagtail.admin import urls as wagtailadmin_urls
@@ -23,8 +22,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.core import urls as wagtail_urls
 
 urlpatterns = [
-    # TODO use Django 2 path patterns
-    url(r"^django_admin/", admin.site.urls),
+    re_path(r"^django-admin/", admin.site.urls),
     re_path(r"^admin/", include(wagtailadmin_urls)),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"", include(wagtail_urls)),
@@ -34,7 +32,15 @@ urlpatterns = [
 if settings.DEBUG or settings.TESTING:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    from django.views.defaults import server_error, page_not_found
+    from django.http import Http404
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # Serve error pages
+    urlpatterns = [
+        path("500/", server_error),
+        path("404/", page_not_found, {"exception": Http404()}),
+    ] + urlpatterns
