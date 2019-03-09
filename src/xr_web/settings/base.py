@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "webpack_loader",
+    "django_extensions",
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

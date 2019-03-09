@@ -1,16 +1,1 @@
-{% extends "xr_pages/layouts/default.html" %}
-
-{% load wagtailcore_tags %}
-
-{% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
-
-{% block header %}
-    <h1>{{ page.title }}</h1>
-{% endblock %}
-
-{% block content %}
-    {% include_block page.content %}
-{% endblock %}
-
-{% block footer %}
-{% endblock %}
+{% extends "xr_pages/pages/standard.html" %}
