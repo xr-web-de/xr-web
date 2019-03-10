@@ -6,6 +6,9 @@
 
 {% block header %}
     {% main_menu %}
+    {% if parent_page.specific.is_local_group_page %}
+        {% children_menu parent_page apply_active_classes=True %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}

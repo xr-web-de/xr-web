@@ -10,7 +10,6 @@
 
     <ul>
         {% for local_group in local_groups %}
-            <li>{% pageurl local_group %}</li>
             <li><a href="{% pageurl local_group %}">{{ local_group.title }}</a></li>
         {% endfor %}
     </ul>

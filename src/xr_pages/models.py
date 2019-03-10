@@ -21,6 +21,8 @@ class HomePage(Page):
 
     parent_page_types = []
 
+    is_home_page = True
+
 
 class StandardPage(Page):
     template = "xr_pages/pages/standard.html"
@@ -29,6 +31,11 @@ class StandardPage(Page):
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["HomePage", "LocalGroupPage"]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["parent_page"] = self.get_parent()
+        return context
 
 
 class LocalGroupIndexPage(Page):
@@ -58,6 +65,8 @@ class LocalGroupPage(Page):
     ]
 
     parent_page_types = ["LocalGroupIndexPage"]
+
+    is_local_group_page = True
 
     @transaction.atomic
     def save(self, *args, **kwargs):

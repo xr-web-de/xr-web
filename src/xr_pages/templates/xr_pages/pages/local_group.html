@@ -1,5 +1,11 @@
 {% extends "xr_pages/pages/standard.html" %}
 {% load wagtailcore_tags %}
+{% load menu_tags %}
+
+{% block header %}
+    {% main_menu %}
+    {% children_menu page %}
+{% endblock %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>

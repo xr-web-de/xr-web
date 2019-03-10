@@ -163,9 +163,10 @@ WEBPACK_LOADER = {
 WAGTAIL_SITE_NAME = "XR de"
 
 WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = "xr_pages/menus/main_menu.html"
-WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE = "xr_pages/menus/flat_menu.html"
+WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE = "xr_pages/menus/footer_menu.html"
 WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
     ("about_us", "about_us"),
     ("for_activists", "for_activists"),
     ("learn_more", "learn_more"),
 )
+WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = "xr_pages/menus/local_group_submenu.html"
