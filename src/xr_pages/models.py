@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.db import models, transaction
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.fields import StreamField
@@ -22,13 +23,32 @@ class HomePage(Page):
     parent_page_types = []
 
 
-class StandardPage(Page):
+class HomeSubPage(Page):
     template = "xr_pages/pages/standard.html"
     content = StreamField(ContentBlock)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["HomePage"]
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        is_new = self.id is None
+
+        super().save(*args, **kwargs)
+
+        # we only need to add permissions on page creation
+        if is_new:
+            xr_de_moderators = Group.objects.get(name="XR de Moderators")
+            xr_de_editors = Group.objects.get(name="XR de Editors")
+
+            # Moderators
+            for permission_type in ["add", "edit", "publish"]:
+                add_group_page_permission(xr_de_moderators, self, permission_type)
+
+            # Editors
+            for permission_type in ["add", "edit"]:
+                add_group_page_permission(xr_de_editors, self, permission_type)
 
 
 class LocalGroupIndexPage(Page):
