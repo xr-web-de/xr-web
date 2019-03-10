@@ -8,7 +8,6 @@
 
     {% include_block page.content %}
 
-    {% get_site_root as site_root %}
     <ul>
         {% for local_group in local_groups %}
             <li>{% pageurl local_group %}</li>
