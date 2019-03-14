@@ -24,7 +24,7 @@ class HomePage(Page):
 
 
 class HomeSubPage(Page):
-    template = "xr_pages/pages/standard.html"
+    template = "xr_pages/pages/home_sub.html"
     content = StreamField(ContentBlock)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
@@ -51,8 +51,8 @@ class HomeSubPage(Page):
                 add_group_page_permission(xr_de_editors, self, permission_type)
 
 
-class LocalGroupIndexPage(Page):
-    template = "xr_pages/pages/local_group_index.html"
+class LocalGroupListPage(Page):
+    template = "xr_pages/pages/local_group_list.html"
     content = StreamField(ContentBlock)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
@@ -77,7 +77,7 @@ class LocalGroupPage(Page):
         StreamFieldPanel("content"),
     ]
 
-    parent_page_types = ["LocalGroupIndexPage"]
+    parent_page_types = ["LocalGroupListPage"]
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -120,7 +120,7 @@ class LocalGroupPage(Page):
 
 
 class LocalGroupSubPage(Page):
-    template = "xr_pages/pages/standard.html"
+    template = "xr_pages/pages/local_group_sub.html"
     content = StreamField(ContentBlock)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
