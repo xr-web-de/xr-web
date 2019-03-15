@@ -8,6 +8,7 @@
 
 @import "modules/body";
 @import "modules/siteheader";
+@import "modules/sitefooter";
 
 
 
@@ -36,11 +37,6 @@ h1 {
   font-size: 4rem;
 }
 
-#main {
-  img {
-    max-width: 100%;
-  }
-}
 
 // Content blocks
 //---------------

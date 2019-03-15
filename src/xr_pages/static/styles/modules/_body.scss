@@ -1,21 +1,19 @@
+html {
+  height: 100%;
+}
 
 body {
     color: $body-color;
-    font-family: sans-serif;
-  }
-  
-  h1 {
-    margin-bottom: 35px;
-    text-align: center;
+    height: 100%;
     font-family: 'Crimson Text', serif;
+}
+
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > main {
+    flex: 1 1 auto;
   }
-  
-  p {
-    padding-bottom: 1em;
-  }
-  
-  main {
-    @extend .container;
-    margin-top: 50px;
-  }
-  
+}

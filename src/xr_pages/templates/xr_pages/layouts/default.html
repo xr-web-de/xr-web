@@ -1,16 +1,36 @@
 {% extends "base.html" %}
 
 {% block layout %}
-    <header id="header" class="container">
-        {% block header %}
-        {% endblock %}
+    <header id="header" class="siteheader">
+        <div class="container">
+            {% block header %}
+            {% endblock %}
+        </div>
     </header>
-    <main id="main" class="container">
+    <main id="main">
         {% block content %}
         {% endblock %}
     </main>
-    <footer id="footer" class="container">
-        {% block footer %}
-        {% endblock %}
+    <footer id="footer" class="sitefooter">
+        <div class="container">
+            <p>Extinction Rebellion Deutschland ist eine Grassroots-Bewegung inspiriert von Extinction Rebellion UK.</p>
+    
+            <ul class="">
+                <li class="">
+                    <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/" class="icon">
+                        <span>Facebook</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="https://twitter.com/ExtinctionR_DE">
+                        <span>Twitter</span>
+                    </a>
+                </li>
+            </ul>
+    
+            {% block footer %}
+    
+            {% endblock %}
+    </div>
     </footer>
 {% endblock %}

@@ -1,1 +1,27 @@
 @import "typecast_scale";
+
+body {
+    font-family: 'Crimson Text', serif;
+}
+
+p {
+    padding-bottom: 1em;
+}
+
+.h {
+    &--1 {
+        
+        &-caps {
+            text-transform: uppercase;
+            font-family: 'Fucxed', Impact, Arial, sans-serif;
+        }
+    }
+
+    &--2 {
+
+        &-caps {
+            text-transform: uppercase;
+            font-family: 'Fucxed', Impact, Arial, sans-serif;
+        }
+    }
+}
