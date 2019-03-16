@@ -18,7 +18,17 @@ p {
     }
 
     &--2 {
+        font-size: 3.2rem;
 
+        &-caps {
+            text-transform: uppercase;
+            font-family: 'Fucxed', Impact, Arial, sans-serif;
+        }
+    }
+
+    &--3 {
+        font-size: 2.4rem;
+        
         &-caps {
             text-transform: uppercase;
             font-family: 'Fucxed', Impact, Arial, sans-serif;

@@ -1,7 +1,9 @@
+/*
+  
+*/
 
 $header-height: 94px;
 $logo-height: 72px;
-
 
 .siteheader {
   background-color: $primary-color;
@@ -18,7 +20,7 @@ $logo-height: 72px;
   }
 }
 
-.siteheader-nav {
+.main-nav {
   $nav-toggle-size: 32px;
 
   &__toggle {

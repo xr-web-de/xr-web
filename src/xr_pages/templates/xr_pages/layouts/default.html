@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block layout %}
     <header id="header" class="siteheader">
         <div class="container">
+            <div class="siteheader-logo">
+                <img src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
+            </div>
+
             {% block header %}
             {% endblock %}
         </div>

@@ -5,7 +5,6 @@ html {
 body {
     color: $body-color;
     height: 100%;
-    font-family: 'Crimson Text', serif;
 }
 
 .page-wrap {
@@ -16,4 +15,8 @@ body {
   > main {
     flex: 1 1 auto;
   }
+}
+
+.main-funnel {
+  padding: 2rem 0;
 }
