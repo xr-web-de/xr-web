@@ -71,9 +71,9 @@ And of course the changes should be constructive.
 
 In order to satisfy the code styleguide:
 
-- reformat your python code with _black_: `black path/or/file.py`
+- reformat your python code with _black_: `black ./src`
 - check your Javascript code with _eslint_:
-`./node_modules/.bin/eslint path/or/file.js`
+`./node_modules/.bin/eslint ./src`
 - we recommend _pre-commit_, which makes sure makes sure black is run
 and JS code is checked before you commit.
 
