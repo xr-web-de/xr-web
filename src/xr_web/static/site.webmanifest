@@ -1,0 +1,21 @@
+{
+    "name": "Extinction Rebellion Deutschland",
+    "short_name": "XR de",
+    "lang": "de-DE",
+    "start_url": ".",
+    "description": "Veranstaltungen, Ortsgruppen, Infos und mehr.",
+    "icons": [
+        {
+            "src": "/static/favicons/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/favicons/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#00a836",
+    "background_color": "#00a836"
+}
