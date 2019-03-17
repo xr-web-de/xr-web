@@ -39,8 +39,8 @@ class HomeSubPage(Page):
 
         # we only need to add permissions on page creation
         if is_new:
-            xr_de_moderators = Group.objects.get(name="XR de Moderators")
-            xr_de_editors = Group.objects.get(name="XR de Editors")
+            xr_de_moderators = Group.objects.get(name="XR de Page Moderators")
+            xr_de_editors = Group.objects.get(name="XR de Page Editors")
 
             # Moderators
             for permission_type in ["add", "edit", "publish"]:
@@ -86,9 +86,11 @@ class LocalGroupPage(Page):
         super().save(*args, **kwargs)
 
         moderators_group = get_or_create_or_update_auth_group_for_page(
-            self, "Moderators"
+            self, "Page Moderators"
         )
-        editors_group = get_or_create_or_update_auth_group_for_page(self, "Editors")
+        editors_group = get_or_create_or_update_auth_group_for_page(
+            self, "Page Editors"
+        )
 
         # we only need to add permissions on page creation
         if is_new:

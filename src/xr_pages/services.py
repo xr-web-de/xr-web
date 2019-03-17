@@ -9,7 +9,7 @@ from wagtail.core.models import (
     Collection,
 )
 
-AUTH_GROUP_TYPES = ["Moderators", "Editors"]
+AUTH_GROUP_TYPES = ["Page Moderators", "Page Editors"]
 PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
 IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image", "delete_image", "view_image"]
 DOCUMENT_PERMISSION_CODENAMES = [
