@@ -13,8 +13,7 @@ def add_initial_homesubpage_if_there_is_none(apps, schema_editor):
     HomeSubPage = apps.get_model("xr_pages.HomeSubPage")
 
     if HomeSubPage.objects.all().exists():
-        # return
-        pass
+        return
 
     # Create HomeSubPage content type
     home_sub_page_content_type, created = ContentType.objects.get_or_create(
