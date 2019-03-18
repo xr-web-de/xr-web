@@ -20,14 +20,16 @@ DOCUMENT_PERMISSION_CODENAMES = [
 ]
 
 
-def get_or_create_or_update_auth_group_for_page(page, group_type):
-    if not isinstance(page, Page):
+def get_or_create_or_update_auth_group_for_local_group_page(page, group_type):
+    from xr_pages.models import LocalGroupPage
+
+    if not isinstance(page, LocalGroupPage):
         raise ValidationError("Object '%s' must be an instance of Page." % page)
 
     if group_type not in AUTH_GROUP_TYPES:
         raise ValidationError("Invalid group_type '%s'." % group_type)
 
-    group_name = "%s %s" % (page.title, group_type)
+    group_name = "%s %s" % (page.name, group_type)
 
     # first check for existing group by name
     group_qs = Group.objects.filter(name=group_name)
@@ -35,7 +37,7 @@ def get_or_create_or_update_auth_group_for_page(page, group_type):
     if group_qs.exists():
         return group_qs.get()
 
-    # second check for a appropriate group_page_permission
+    # second check for an appropriate group_page_permission
     group_page_permission_qs = GroupPagePermission.objects.filter(
         page=page, group__name__endswith=group_type
     )
@@ -46,6 +48,44 @@ def get_or_create_or_update_auth_group_for_page(page, group_type):
         group.name = group_name
         group.save()
         return group
+
+    # else create a new auth group
+    return Group.objects.create(name=group_name)
+
+
+def get_or_create_or_update_auth_group_for_home_page(page, group_type):
+    from xr_pages.models import HomePage, HomeSubPage
+
+    if not isinstance(page, HomePage):
+        raise ValidationError("Object '%s' must be an instance of Page." % page)
+
+    if group_type not in AUTH_GROUP_TYPES:
+        raise ValidationError("Invalid group_type '%s'." % group_type)
+
+    group_name = "%s %s" % (page.group_name, group_type)
+
+    # first check for existing group by name
+    group_qs = Group.objects.filter(name=group_name)
+
+    if group_qs.exists():
+        return group_qs.get()
+
+    # second look for a subpage
+    subpage_qs = HomeSubPage.objects.all()
+
+    if subpage_qs.exists():
+        subpage = subpage_qs.first()
+        # and look for an appropriate group_page_permission
+        group_page_permission_qs = GroupPagePermission.objects.filter(
+            page=subpage, group__name__endswith=group_type
+        )
+        if group_page_permission_qs.exists():
+            group_page_permission = group_page_permission_qs.first()
+            group = group_page_permission.group
+            # the name has changed so we update the existing group
+            group.name = group_name
+            group.save()
+            return group
 
     # else create a new auth group
     return Group.objects.create(name=group_name)
