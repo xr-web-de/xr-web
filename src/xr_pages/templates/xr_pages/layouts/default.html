@@ -4,18 +4,24 @@
 {% block layout %}
     <header id="header" class="siteheader">
         <div class="container">
-            <div class="siteheader-logo">
-                <img src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
+            <div class="siteheader__wrap">
+                <div class="siteheader-logo">
+                    <img src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
+                </div>
+    
+                {% block header %}
+
+                {% endblock %}
             </div>
 
-            {% block header %}
-            {% endblock %}
         </div>
     </header>
+
     <main id="main">
         {% block content %}
         {% endblock %}
     </main>
+
     <footer id="footer" class="sitefooter">
         <div class="container">
             <p>Extinction Rebellion Deutschland ist eine Grassroots-Bewegung inspiriert von Extinction Rebellion UK.</p>

@@ -12,8 +12,6 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-        {% render_bundle 'main' %}
-
         {% block extrastyles %}{% endblock %}
         {% block extrahead %}{% endblock %}
     </head>
@@ -23,4 +21,5 @@
             {% endblock %}
         </div>
     </body>
+    {% render_bundle 'main' %}
 </html>

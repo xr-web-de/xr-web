@@ -1,5 +1,5 @@
 /*
-  
+  All header elements
 */
 
 $header-height: 94px;
@@ -9,6 +9,10 @@ $logo-height: 72px;
   background-color: $primary-color;
   width: 100%;
   box-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.1);
+
+  &__wrap {
+
+  }
 }
 
 .siteheader-logo {
