@@ -1,0 +1,34 @@
+{% extends "xr_pages/pages/default.html" %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+
+{% block content %}
+
+    {{ block.super }}
+
+    {% if event_groups %}
+        <section class="container">
+            <h3>Filtern nach Ortsgruppe</h3>
+            <ul>
+                {% for event_group in event_groups %}
+                    <li><a href="{% pageurl event_group %}">{{ event_group.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if events %}
+        <section class="container">
+            <h2>{% trans "Veranstaltungen" %}</h2>
+            <div class="row">
+                {% for event in events %}
+                    <div class="col-sm-4">
+                        {% include "xr_events/partials/event_card.html" with event=event %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+{% endblock %}
