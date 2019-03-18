@@ -7,6 +7,7 @@ def add_initial_event_pages_and_auth_groups(apps, schema_editor):
     Group = apps.get_model("auth.Group")
     Permission = apps.get_model("auth.Permission")
     ContentType = apps.get_model("contenttypes.ContentType")
+    Page = apps.get_model("wagtailcore.Page")
     GroupPagePermission = apps.get_model("wagtailcore.GroupPagePermission")
     GroupCollectionPermission = apps.get_model("wagtailcore.GroupCollectionPermission")
     Collection = apps.get_model("wagtailcore.Collection")
