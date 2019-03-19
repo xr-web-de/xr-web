@@ -17,13 +17,15 @@ $logo-height: 72px;
 }
 
 .siteheader-logo {
+  display: block;
   margin-top: ($header-height - $logo-height) / 2;
   margin-bottom: ($header-height - $logo-height) / 2;
   width: 210px;
+  height: $logo-height;
   margin-right: 32px;
 
   img {
-    height: $logo-height;
+    display: block;
   }
 }
 
