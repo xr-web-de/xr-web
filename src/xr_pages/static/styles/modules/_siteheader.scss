@@ -7,24 +7,40 @@ $header-height-mobile: 64px;
 $logo-height: 72px;
 $nav-toggle-size: 32px;
 
-.page-wrap {
-  @media (max-width: $bp-xs) {
-    padding-top: $header-height-mobile;
+
+body:not(.page-home) { 
+  .page-wrap {
+    @media (max-width: $bp-xs) {
+      padding-top: $header-height-mobile;
+    }
+  }
+}
+
+.page-home {
+  .siteheader {
+    transition: background-color .25s;
+    background-color: rgba($primary-color, 0);
+    box-shadow: none;
+
+    &.is-scrolled {
+      background-color: rgba($primary-color, 1);
+      box-shadow: 0 3px 2px rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
 .siteheader {
   background-color: $primary-color;
+  box-shadow: 0 3px 0 hsla(0, 0%, 0%, 0.1);
   width: 100%;
-  box-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 
   @media (max-width: $bp-xs) {
     height: $header-height-mobile;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
   }
   
   @media (min-width: $bp-sm) {
