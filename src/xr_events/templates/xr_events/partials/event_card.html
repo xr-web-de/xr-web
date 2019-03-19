@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<article>
+
+    {% if event.image %}
+        <a href="{% pageurl event %}">
+            {% image event.image width-400 alt=event.title class="img-responsive" %}
+        </a>
+    {% endif %}
+
+    <h3><a href="{% pageurl event %}">{{ event.title }}</a></h3>
+
+    {% if event.dates.exists %}
+        <h4>{% trans "Wann?" %}</h4>
+        {% for date in event.dates.all %}
+            <p>{{ date.start }}{% if date.label %}: {{ date.label }}{% endif %}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if event.location %}
+        <h4>{% trans "Wo?" %}</h4>
+        <p>{{ event.location }}</p>
+    {% endif %}
+
+</article>

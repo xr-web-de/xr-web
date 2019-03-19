@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Django 3rd Party
     "webpack_loader",
     "django_extensions",
     # Wagtail
@@ -51,11 +52,13 @@ INSTALLED_APPS = [
     "wagtail.core",
     "modelcluster",
     "taggit",
-    "wagtail.contrib.modeladmin",  # Don't repeat if it's there already
+    "wagtail.contrib.modeladmin",
+    # Wagtail 3rd Party
     "wagtailmenus",
     "condensedinlinepanel",
     # Project
     "xr_pages",
+    "xr_events",
 ]
 
 MIDDLEWARE = [
@@ -162,6 +165,7 @@ WEBPACK_LOADER = {
 # ------------
 WAGTAIL_SITE_NAME = "XR de"
 
+# Wagtailmenus
 WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = "xr_pages/menus/main_menu.html"
 WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE = "xr_pages/menus/footer_menu.html"
 WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (

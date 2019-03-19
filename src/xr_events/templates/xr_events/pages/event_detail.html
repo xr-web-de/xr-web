@@ -1,0 +1,48 @@
+{% extends "xr_pages/pages/default.html" %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+{% block content %}
+    <article class="container">
+
+        {% if event.image %}
+            {% image event.image width-800 alt=event.title class="img-responsive" %}
+        {% endif %}
+
+        <h1>{{ event.title }}</h1>
+
+        {% if event.dates.exists %}
+            <h2>{% trans "Wann?" %}</h2>
+            {% for date in event.dates.all %}
+                <p>{{ date.start }}{% if date.label %}: {{ date.label }}{% endif %}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if event.location %}
+            <h2>{% trans "Wo?" %}</h2>
+            <p>{{ event.location }}</p>
+        {% endif %}
+
+        {{ event.description|richtext }}
+
+        {% if event.organiser %}
+            <h2>{% trans "Veranstalter" %}</h2>
+            <p>
+                <a href="{{ event.organiser.url }}">{{ event.organiser.name }}</a>
+                {% if event.organiser.email %}, <a href="mailto:{{ event.organiser.email }}">{{ event.organiser.email }}</a>{% endif %}
+            </p>
+        {% endif %}
+
+        {% if event.further_organisers.exists %}
+            <p>
+                {% trans "in Kooperation mit" %}
+                {% for organiser in event.further_organisers.all %}
+                    {{ organiser.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+
+    </article>
+{% endblock %}

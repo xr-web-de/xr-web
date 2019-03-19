@@ -7,12 +7,14 @@ from wagtail.core.models import Page, Collection
 
 from .blocks import ContentBlock
 from .services import (
-    get_or_create_or_update_auth_group_for_local_group_page,
+    get_or_create_or_update_page_auth_group_for_local_group_page,
     add_group_page_permission,
     get_document_permission,
     add_group_collection_permission,
     get_image_permission,
-    get_or_create_or_update_auth_group_for_home_page,
+    get_or_create_or_update_page_auth_group_for_home_page,
+    get_or_create_or_update_event_auth_group_for_home_page,
+    get_or_create_or_update_event_auth_group_for_local_group_page,
 )
 
 
@@ -45,12 +47,20 @@ class HomePage(Page):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # update the regional page auth groups
-        moderators_group = get_or_create_or_update_auth_group_for_home_page(
+        # update regional page auth groups
+        get_or_create_or_update_page_auth_group_for_home_page(
             self.specific, "Page Moderators"
         )
-        editors_group = get_or_create_or_update_auth_group_for_home_page(
+        get_or_create_or_update_page_auth_group_for_home_page(
             self.specific, "Page Editors"
+        )
+
+        # update regional event auth groups
+        get_or_create_or_update_event_auth_group_for_home_page(
+            self.specific, "Event Moderators"
+        )
+        get_or_create_or_update_event_auth_group_for_home_page(
+            self.specific, "Event Editors"
         )
 
 
@@ -162,6 +172,7 @@ class LocalGroupPage(Page):
     def event_group(self):
         if self.event_group_set.all().exists:
             return self.event_group_set.first()
+        return None
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -169,14 +180,24 @@ class LocalGroupPage(Page):
 
         super().save(*args, **kwargs)
 
-        moderators_group = get_or_create_or_update_auth_group_for_local_group_page(
+        # update local page group names
+        moderators_group = get_or_create_or_update_page_auth_group_for_local_group_page(
             self, "Page Moderators"
         )
-        editors_group = get_or_create_or_update_auth_group_for_local_group_page(
+        editors_group = get_or_create_or_update_page_auth_group_for_local_group_page(
             self, "Page Editors"
         )
 
-        # we only need to add permissions on page creation
+        if self.event_group:
+            # update local event group names
+            get_or_create_or_update_event_auth_group_for_local_group_page(
+                self, "Event Moderators"
+            )
+            get_or_create_or_update_event_auth_group_for_local_group_page(
+                self, "Event Editors"
+            )
+
+        # we only need to add page permissions on page creation
         if is_new:
             collection = Collection.objects.get(name="Common")
 
