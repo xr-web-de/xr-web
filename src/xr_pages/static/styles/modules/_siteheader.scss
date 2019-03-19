@@ -4,6 +4,7 @@
 
 $header-height: 94px;
 $logo-height: 72px;
+$nav-toggle-size: 32px;
 
 .siteheader {
   background-color: $primary-color;
@@ -17,23 +18,80 @@ $logo-height: 72px;
 }
 
 .siteheader-logo {
-  display: block;
+  display: flex;
   margin-top: ($header-height - $logo-height) / 2;
   margin-bottom: ($header-height - $logo-height) / 2;
-  width: 210px;
+  width: 180px;
+  align-items: center;
   height: $logo-height;
   margin-right: 32px;
 
+  @media (min-width: $bp-md) {
+    width: 210px;
+  }
+
   img {
-    display: block;
+    display: inline-block;
   }
 }
 
 .main-nav {
-  $nav-toggle-size: 32px;
-  display: flex;
-  justify-content: space-evenly;
+  padding-left: 15px;
+  padding-right: 15px;
   
+
+  @media (max-width: $bp-sm) {
+    
+  }
+
+  @media (min-width: $bp-sm) {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &.open {
+    .main-nav__nav {
+      visibility: visible;
+      pointer-events: auto;
+      opacity: 1;
+      background-color: $primary-color;
+      text-align: center;
+      padding: 2rem;
+    }
+    .main-nav__toggle {
+      svg.hamburger {
+        display: none;
+      }
+      svg.close {
+        display: initial;
+      }
+    }
+    .main-nav__item {
+      transform: translateY(0);
+    }
+  }
+
+  &__nav {
+    @media (max-width: $bp-sm) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      visibility: hidden;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 8999;
+      transition: opacity .15s;
+    }
+    @media (min-width: $bp-sm) {
+      display: flex;
+      justify-content: space-evenly;
+    }
+  }
+
   &__toggle {
     height: $nav-toggle-size;
     width: $nav-toggle-size;
@@ -47,29 +105,22 @@ $logo-height: 72px;
       display: none;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: $bp-sm) {
       display: none;
     }
   }
 
   &__item {
-    margin: 0 15px;
-    font-size: 22px;
-  }
+    font-size: 18px;
+    font-weight: 700;
 
-  &.open {
-    .siteheader-nav__nav {
-      visibility: visible;
-      pointer-events: auto;
-      opacity: 1;
+    @media (max-width: $bp-sm) {
+      transform: translateY(-20px);
+      transition: transform .4s ease;
     }
-    .siteheader-nav__toggle {
-      svg.hamburger {
-        display: none;
-      }
-      svg.close {
-        display: initial;
-      }
+    @media (min-width: $bp-sm) {
+      margin: 0 15px;
+      font-size: 22px;
     }
   }
 }

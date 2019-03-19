@@ -1,5 +1,5 @@
 {% load menu_tags %}
-<ul class="nav navbar-nav main-nav" id="nav">
+<ul class="navbar-nav main-nav__nav">
     {% for item in menu_items %}
         <li class="main-nav__item {{ item.active_class }}{% if item.has_children_in_menu %} dropdown{% endif %}">
             <a href="{{ item.href }}"{% if item.has_children_in_menu %} class="dropdown-toggle" id="ddtoggle_{{ item.link_page.pk }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}</a>
@@ -9,4 +9,5 @@
         </li>
     {% endfor %}
 </ul>
+
 <button class="main-nav__toggle" id="nav-toggle">MENU</button>
