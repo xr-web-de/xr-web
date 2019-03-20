@@ -1,6 +1,7 @@
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.utils import formats
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -90,6 +91,12 @@ class EventDate(Orderable):
         FieldPanel("label"),
     ]
 
+    def __str__(self):
+        start = formats.date_format(self.start, "SHORT_DATETIME_FORMAT")
+        if not self.label:
+            return start
+        return "%s | %s" % (start, self.label)
+
 
 class EventOrganiser(Orderable):
     event_page = ParentalKey(
@@ -109,6 +116,9 @@ class EventOrganiser(Orderable):
         FieldRowPanel([FieldPanel("name"), FieldPanel("email")]),
         FieldRowPanel([FieldPanel("url")]),
     ]
+
+    def __str__(self):
+        return self.name
 
 
 class EventListPage(Page):
