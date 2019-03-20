@@ -12,12 +12,23 @@ from wagtail.core.models import (
 PAGE_AUTH_GROUP_TYPES = ["Page Moderators", "Page Editors"]
 EVENT_AUTH_GROUP_TYPES = ["Event Moderators", "Event Editors"]
 AUTH_GROUP_TYPES = PAGE_AUTH_GROUP_TYPES + EVENT_AUTH_GROUP_TYPES
-PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
+AVAILABLE_PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
 IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image", "delete_image", "view_image"]
 DOCUMENT_PERMISSION_CODENAMES = [
     "add_document",
     "change_document",
     "delete_document",
+    "view_document",
+]
+
+MODERATORS_PAGE_PERMISSIONS = ["add", "edit", "publish"]
+MODERATORS_IMAGE_PERMISSIONS = IMAGE_PERMISSION_CODENAMES
+MODERATORS_DOCUMENT_PERMISSIONS = DOCUMENT_PERMISSION_CODENAMES
+
+EDITORS_PAGE_PERMISSIONS = ["add", "edit"]
+EDITORS_IMAGE_PERMISSIONS = ["add_image", "view_image"]  # includes change own image
+EDITORS_DOCUMENT_PERMISSIONS = [
+    "add_document",  # includes change own document
     "view_document",
 ]
 
@@ -171,7 +182,7 @@ def add_group_page_permission(group, page, permission_type):
         raise ValidationError("Object '%s' must be an instance of Group." % group)
     if not isinstance(page, Page):
         raise ValidationError("Object '%s' must be an instance of Page." % page)
-    if permission_type not in PAGE_PERMISSION_TYPES:
+    if permission_type not in AVAILABLE_PAGE_PERMISSION_TYPES:
         raise ValidationError("Invalid permission_type '%s'." % permission_type)
 
     group_page_permission, created = GroupPagePermission.objects.get_or_create(
