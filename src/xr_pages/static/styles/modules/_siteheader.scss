@@ -10,9 +10,7 @@ $nav-toggle-size: 32px;
 
 body:not(.page-home) { 
   .page-wrap {
-    @media (max-width: $bp-xs) {
-      padding-top: $header-height-mobile;
-    }
+    padding-top: $header-height-mobile;
   }
 }
 

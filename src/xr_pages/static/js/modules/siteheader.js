@@ -12,6 +12,7 @@ const toggleHeaderBackground = () => {
     }
 }
 export const initSiteHeader = () => {
+    toggleHeaderBackground()
     
     window.addEventListener('scroll', toggleHeaderBackground)
 

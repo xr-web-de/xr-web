@@ -17,6 +17,26 @@ body {
   }
 }
 
+.main-hero {
+
+}
+
 .main-funnel {
-  padding: 2rem 0;
+  margin-bottom: 1.5rem;
+
+  &__headline {
+    text-align: center;
+  }
+  &__form{
+    
+  }
+}
+
+.content-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.linkblock-with-image {
+  margin-bottom: 1.5rem;
 }

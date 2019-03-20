@@ -6,11 +6,11 @@
 {% block page_class %}page-home{% endblock %} 
 {% block content %}
 
-    <div class="">
+    <div class="main-hero">
         <img style="width: 100%; height: auto;" src="{% static "img/rebellion-ueberleben.jpg" %}" alt="My image" class="img-responsive"/>
     </div>
 
-    <div class="">
+    <div class="content-section">
         <div class="container">
             <h1 class="h h--1-caps">Rebellion für das Überleben</h1>
             <p>Wir stehen vor einer beispiellosen globalen Katastrophe. Unsere Regierung tut nicht, was nötig wäre, um uns zu schützen, obwohl die Lösungen auf dem Tisch liegen. Das Überleben der Menschheit zu sichern, wird von uns alles abverlangen.</p>
@@ -30,15 +30,15 @@
                 </li>
             </ul>
             <div class="row">
-                <div class="col-sm-6"><a href="">Was ist die globale Katastrophe? ></a></div>
-                <div class="col-sm-6"><a href="">mehr über unsere Forderungen ></a></div>
+                <div class="col-xxs-12 col-sm-6"><a href="">Was ist die globale Katastrophe? ></a></div>
+                <div class="col-xxs-12 col-sm-6"><a href="">mehr über unsere Forderungen ></a></div>
             </div>
         </div>
     </div>
 
-    <div class="bg-green main-funnel">
+    <div class="bg-green main-funnel content-section">
         <div class="container">
-            <h3 class="h h--2 c-white">Mitmachen</h3>
+            <h3 class="h h--2 c-white h--center">Mitmachen</h3>
             <form action="">
                 <input type="text" >
                 <input type="text" >
@@ -50,20 +50,27 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-4">
-                <img src="{% static "img/tell-the-truth.png" %}" alt="My image" class="img-responsive"/>
-                <h3>Mehr über die Bewegung</h3>
+            <div class="col-xxs-12 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="linkblock-with-image">
+                    <img src="{% static "img/tell-the-truth.png" %}" alt="My image" class="img-responsive"/>
+                    <h3>Mehr über die Bewegung</h3>                    
+                </div>
             </div>
-            <div class="col-sm-4">
-                <img src="{% static "img/rebel-for-life.png" %}" alt="My image" class="img-responsive"/>
-                <h3>In deiner Nähe</h3>
+            <div class="col-xxs-12 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="linkblock-with-image">
+                    <img src="{% static "img/rebel-for-life.png" %}" alt="My image" class="img-responsive"/>
+                    <h3>In deiner Nähe</h3>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <img src="{% static "img/act-now.png" %}" alt="My image" class="img-responsive"/>
-                <h3>Werde aktiv</h3>
+            <div class="col-xxs-12 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="linkblock-with-image">
+                    <img src="{% static "img/act-now.png" %}" alt="My image" class="img-responsive"/>
+                    <h3>Werde aktiv</h3>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="container">VIDEOS</div>
     
     {% include_block page.content %}
