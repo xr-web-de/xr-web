@@ -12,14 +12,19 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
+        {% render_bundle 'main' 'css' %}
+
         {% block extrastyles %}{% endblock %}
         {% block extrahead %}{% endblock %}
     </head>
     <body class="{% block body_classes %}{% endblock %} {% block page_class %} {% endblock %}" data-page="{% block page_type %} {% endblock %}">
+
         <div id="page" class="page-wrap">
             {% block layout %}
             {% endblock %}
         </div>
+
+        {% render_bundle 'main' 'js' %}
+
     </body>
-    {% render_bundle 'main' %}
 </html>
