@@ -14,6 +14,7 @@
 @import "modules/body";
 @import "modules/siteheader";
 @import "modules/sitefooter";
+@import "modules/links";
 
 
 
@@ -34,12 +35,6 @@ $colors: (
   .color--#{$key} {
     color: $value;
   }
-}
-
-
-// General
-h1 {
-  font-size: 4rem;
 }
 
 

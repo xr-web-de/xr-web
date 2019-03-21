@@ -16,3 +16,20 @@
     overflow: hidden;
     width: 100%;
 }
+
+.b {
+    &t {
+        border-top: 1px solid $primary-color;
+    }
+    &b {
+        border-bottom: 1px solid $primary-color;
+    }
+}
+
+.pt {
+    &--scaled {
+        &-1 {
+            padding-top: calc(1rem + 1vw);
+        }
+    }
+}

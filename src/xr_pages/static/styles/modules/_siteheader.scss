@@ -9,8 +9,17 @@ $nav-toggle-size: 32px;
 
 
 body:not(.page-home) { 
-  .page-wrap {
-    padding-top: $header-height-mobile;
+  @media (max-width: $bp-xs) {
+    .page-wrap {
+      padding-top: $header-height-mobile;
+    }
+  }
+  
+  @media (min-width: $bp-sm) {
+    .page-wrap {
+      padding-top: $header-height-desktop
+    }
+  
   }
 }
 
@@ -130,6 +139,7 @@ body:not(.page-home) {
       transition: opacity .15s;
       padding: 4rem 2rem;
     }
+
     @media (min-width: $bp-sm) {
       display: flex;
       justify-content: space-evenly;

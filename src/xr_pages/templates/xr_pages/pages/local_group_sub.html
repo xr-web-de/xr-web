@@ -6,3 +6,20 @@
     {% main_menu %}
     {% children_menu parent_page apply_active_classes=True %}
 {% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <a href="">Link zurück zur Übersicht</a>
+    </div>
+
+    <div class="container">
+        <h1 class="h h--1-caps">{{ page.title }}</h1>
+    </div>
+    
+    <div class="container">
+        {% include_block page.content %}
+    </div>
+
+{% endblock %}

@@ -6,3 +6,20 @@
     {% main_menu %}
     {% children_menu page %}
 {% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <a class="" href="/ortsgruppen">Link zurück zur Übersicht</a>
+    </div>
+
+    <div class="container">
+        <h1 class="h h--1-caps">{{ page.title }}</h1>
+    </div>
+    
+    <div class="container">
+        {% include_block page.content %}
+    </div>
+
+{% endblock %}
