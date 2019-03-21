@@ -11,7 +11,7 @@
 {% block content %}
 
     <div class="container">
-        <a class="" href="{{ page.parent }}">Link zurück zur Übersicht</a>
+        <a class="" href="{% pageurl page.get_parent %}">Link zurück zur Übersicht</a>
     </div>
 
     <div class="container">
