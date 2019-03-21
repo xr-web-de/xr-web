@@ -6,5 +6,10 @@ import { initSiteHeader } from './modules/siteheader'
 
 export const init = () => {
     console.log('Init')
+
+    window.ctx = {
+        modalOpen: false
+    }
+
     initSiteHeader();
 }

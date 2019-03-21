@@ -23,7 +23,6 @@ html {
   -ms-text-size-adjust: 100%; /* 1 */
   -webkit-text-size-adjust: 100%; /* 1 */
   box-sizing: border-box; /* 2 */
-  scroll-behavior: smooth; /* 3 */
 }
 
 /**
@@ -37,7 +36,6 @@ body {
   line-height: 1.6; /* 1 */
   -moz-osx-font-smoothing: grayscale; /* 2 */
   -webkit-font-smoothing: antialiased; /* 2 */
-  overflow-x: hidden; /* 3 */
 }
 
 /**

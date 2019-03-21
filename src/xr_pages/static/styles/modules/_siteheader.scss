@@ -88,9 +88,12 @@ body:not(.page-home) {
   }
 
   &.open {
-    height: 100%;
-
     .main-nav__nav {
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
       position: fixed;
       visibility: visible;
       pointer-events: auto;
