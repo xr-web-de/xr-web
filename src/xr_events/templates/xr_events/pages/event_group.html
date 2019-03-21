@@ -2,13 +2,17 @@
 {% load i18n %}
 {% load wagtailcore_tags %}
 
-
 {% block content %}
+   
+    <div class="container">
+        <a class="" href="{{ page.parent }}">Zurück zur Übersicht</a>
+    </div>
 
     {{ block.super }}
 
 
     {% if events %}
+
         <section class="container">
             <h2>{% trans "Veranstaltungen" %}</h2>
             <div class="row">

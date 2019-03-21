@@ -8,10 +8,11 @@
     {% main_menu %}
 {% endblock %}
 
-{% block content %}
+{% block page_type %}events{% endblock %}
 
+{% block content %}
     <div class="container">
-        <h1>{{ page.title }}</h1>
+        <h1 class="h h--1-caps">{{ page.title }}</h1>
     </div>
 
     {% include_block page.content %}
