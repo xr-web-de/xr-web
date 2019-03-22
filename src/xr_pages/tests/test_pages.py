@@ -9,9 +9,9 @@ from wagtail.core.models import (
 from wagtail.tests.utils import WagtailPageTests
 
 from xr_pages.models import (
+    HomePage,
     HomeSubPage,
     LocalGroupListPage,
-    HomePage,
     LocalGroupPage,
     LocalGroupSubPage,
 )
@@ -19,12 +19,21 @@ from xr_pages.services import (
     AVAILABLE_PAGE_PERMISSION_TYPES,
     MODERATORS_PAGE_PERMISSIONS,
     EDITORS_PAGE_PERMISSIONS,
-    get_collection_permission,
     MODERATORS_COLLECTION_PERMISSIONS,
     AVAILABLE_COLLECTION_PERMISSION_TYPES,
     EDITORS_COLLECTION_PERMISSIONS,
     COMMON_COLLECTION_NAME,
+    get_collection_permission,
 )
+
+
+PAGES_PAGE_CLASSES = {
+    HomePage,
+    HomeSubPage,
+    LocalGroupListPage,
+    LocalGroupPage,
+    LocalGroupSubPage,
+}
 
 
 class PagesBaseTest(WagtailPageTests):
@@ -140,33 +149,26 @@ class PagesPageTreeTest(PagesBaseTest):
 
     def test_can_create_pages_under_home_page(self):
         self.assertCanCreateAt(HomePage, HomeSubPage)
-        self.assertCanNotCreateAt(HomePage, LocalGroupListPage)
-        self.assertCanNotCreateAt(HomePage, LocalGroupPage)
-        self.assertCanNotCreateAt(HomePage, LocalGroupSubPage)
+        for page_class in PAGES_PAGE_CLASSES - {HomeSubPage}:
+            self.assertCanNotCreateAt(HomePage, page_class)
 
     def test_can_create_pages_under_home_sub_page(self):
-        self.assertCanNotCreateAt(HomeSubPage, HomePage)
-        self.assertCanNotCreateAt(HomeSubPage, LocalGroupListPage)
-        self.assertCanNotCreateAt(HomeSubPage, LocalGroupPage)
-        self.assertCanNotCreateAt(HomeSubPage, LocalGroupSubPage)
+        for page_class in PAGES_PAGE_CLASSES:
+            self.assertCanNotCreateAt(HomeSubPage, page_class)
 
     def test_can_create_pages_under_local_group_list_page(self):
-        self.assertCanNotCreateAt(LocalGroupListPage, HomePage)
-        self.assertCanNotCreateAt(LocalGroupListPage, HomeSubPage)
         self.assertCanCreateAt(LocalGroupListPage, LocalGroupPage)
-        self.assertCanNotCreateAt(LocalGroupListPage, LocalGroupSubPage)
+        for page_class in PAGES_PAGE_CLASSES - {LocalGroupPage}:
+            self.assertCanNotCreateAt(LocalGroupListPage, page_class)
 
     def test_can_create_pages_under_local_group_page(self):
-        self.assertCanNotCreateAt(LocalGroupPage, HomePage)
-        self.assertCanNotCreateAt(LocalGroupPage, HomeSubPage)
-        self.assertCanNotCreateAt(LocalGroupPage, LocalGroupListPage)
         self.assertCanCreateAt(LocalGroupPage, LocalGroupSubPage)
+        for page_class in PAGES_PAGE_CLASSES - {LocalGroupSubPage}:
+            self.assertCanNotCreateAt(LocalGroupPage, page_class)
 
     def test_can_create_pages_under_local_group_sub_page(self):
-        self.assertCanNotCreateAt(LocalGroupSubPage, HomePage)
-        self.assertCanNotCreateAt(LocalGroupSubPage, HomeSubPage)
-        self.assertCanNotCreateAt(LocalGroupSubPage, LocalGroupListPage)
-        self.assertCanNotCreateAt(LocalGroupSubPage, LocalGroupPage)
+        for page_class in PAGES_PAGE_CLASSES:
+            self.assertCanNotCreateAt(LocalGroupSubPage, page_class)
 
 
 class PagesGroupPagePermissionsTest(PagesBaseTest):
