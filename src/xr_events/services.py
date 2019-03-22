@@ -1,18 +1,9 @@
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
-from wagtail.core.models import PAGE_PERMISSION_TYPE_CHOICES, GroupPagePermission
+from wagtail.core.models import GroupPagePermission
 
 from xr_pages.models import HomePage
-
-AUTH_GROUP_TYPES = ["Event Moderators", "Event Editors"]
-PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
-IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image", "delete_image", "view_image"]
-DOCUMENT_PERMISSION_CODENAMES = [
-    "add_document",
-    "change_document",
-    "delete_document",
-    "view_document",
-]
+from xr_pages.services import EVENT_AUTH_GROUP_TYPES
 
 
 def get_or_create_or_update_auth_group_for_event_group_page(page, group_type):
@@ -21,7 +12,7 @@ def get_or_create_or_update_auth_group_for_event_group_page(page, group_type):
     if not isinstance(page, EventGroupPage):
         raise ValidationError("Object '%s' must be an instance of Page." % page)
 
-    if group_type not in AUTH_GROUP_TYPES:
+    if group_type not in EVENT_AUTH_GROUP_TYPES:
         raise ValidationError("Invalid group_type '%s'." % group_type)
 
     homepage = HomePage.objects.ancestor_of(page).live().first()

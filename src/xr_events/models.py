@@ -23,8 +23,12 @@ from xr_pages.models import HomePage
 from xr_pages.services import (
     add_group_page_permission,
     add_group_collection_permission,
-    get_document_permission,
-    get_image_permission,
+    get_collection_permission,
+    COMMON_COLLECTION_NAME,
+    MODERATORS_PAGE_PERMISSIONS,
+    MODERATORS_COLLECTION_PERMISSIONS,
+    EDITORS_PAGE_PERMISSIONS,
+    EDITORS_COLLECTION_PERMISSIONS,
 )
 
 
@@ -181,7 +185,7 @@ class EventGroupPage(Page):
         )
         if event_group_page_exists:
             message = _(
-                "There exists already an EventGroupPage for the choosen local group. "
+                "There exists already an EventGroupPage for the chosen local group. "
                 "Please choose another local group."
             )
             raise ValidationError(message)
@@ -201,31 +205,25 @@ class EventGroupPage(Page):
 
         # we only need to add permissions on page creation
         if is_new:
-            collection = Collection.objects.get(name="Common")
+            collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
 
             # Moderators
-            for permission_type in ["add", "edit", "publish"]:
+            for permission_type in MODERATORS_PAGE_PERMISSIONS:
                 add_group_page_permission(moderators_group, self, permission_type)
 
-            for codename in ["add_document", "change_document", "delete_document"]:
+            for codename in MODERATORS_COLLECTION_PERMISSIONS:
                 add_group_collection_permission(
-                    moderators_group, collection, get_document_permission(codename)
-                )
-            for codename in ["add_image", "change_image", "delete_image"]:
-                add_group_collection_permission(
-                    moderators_group, collection, get_image_permission(codename)
+                    moderators_group, collection, get_collection_permission(codename)
                 )
 
             # Editors
-            for permission_type in ["add", "edit"]:
+            for permission_type in EDITORS_PAGE_PERMISSIONS:
                 add_group_page_permission(editors_group, self, permission_type)
 
-            add_group_collection_permission(
-                editors_group, collection, get_document_permission("add_document")
-            )
-            add_group_collection_permission(
-                editors_group, collection, get_image_permission("add_image")
-            )
+            for codename in EDITORS_COLLECTION_PERMISSIONS:
+                add_group_collection_permission(
+                    editors_group, collection, get_collection_permission(codename)
+                )
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
