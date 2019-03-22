@@ -237,5 +237,4 @@ class LocalGroupSubPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context["parent_page"] = self.get_parent()
-        context["local_group_page"] = self.get_parent()
         return context

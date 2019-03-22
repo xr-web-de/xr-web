@@ -3,13 +3,7 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 from django_dynamic_fixture import G
 from django_webtest import WebTest
-from wagtail.core.models import (
-    Site,
-    Page,
-    GroupPagePermission,
-    Collection,
-    GroupCollectionPermission,
-)
+from wagtail.core.models import Site, Page, GroupPagePermission
 from wagtail.tests.utils import WagtailPageTests
 
 from xr_pages.models import (
@@ -23,7 +17,6 @@ from xr_pages.services import (
     AVAILABLE_PAGE_PERMISSION_TYPES,
     MODERATORS_PAGE_PERMISSIONS,
     EDITORS_PAGE_PERMISSIONS,
-    get_document_permission,
 )
 
 
@@ -67,7 +60,7 @@ class PagesBaseTest(WagtailPageTests):
                     msg,
                     'Group "%s" has no "%s" permission for page %s.%s but should.'
                     % (
-                        group.name,
+                        group,
                         permission_type,
                         page._meta.app_label,
                         page._meta.model_name,
@@ -89,34 +82,13 @@ class PagesBaseTest(WagtailPageTests):
                     msg,
                     'Group "%s" has "%s" permission for page %s.%s but should not.'
                     % (
-                        group.name,
+                        group,
                         permission_type,
                         page._meta.app_label,
                         page._meta.model_name,
                     ),
                 )
                 raise self.failureException(msg)
-
-    def assertHasGroupCollectionPermissions(
-        self, group, collection, permission_types=None, msg=None
-    ):
-        if permission_types is None:
-            permission_types = []
-
-        for permission_type in permission_types:
-            document_permission = get_document_permission(permission_type)
-            image_permission = get_document_permission(permission_type)
-
-            for permission in [document_permission, image_permission]:
-                if not GroupCollectionPermission.objects.filter(
-                    group=group, collection=collection, permission=permission
-                ).exists():
-                    msg = self._formatMessage(
-                        msg,
-                        'Group "%s" has no "%s" permission for collection "%s" but should.'
-                        % (group.name, permission_type, collection.name),
-                    )
-                    raise self.failureException(msg)
 
 
 class PagesPageTreeTest(PagesBaseTest):
@@ -308,10 +280,3 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
 
         # we do not need to check since local_group_sub_page inherits
         # the permissions from local_group_page
-
-    def test_regional_group_collection_permissions(self):
-        regional_moderators = Group.objects.get(name="Deutschland Page Moderators")
-        regional_editors = Group.objects.get(name="Deutschland Page Editors")
-        collection = Collection.objects.get(name="Common")
-
-        self.assertHasCollectionPermissions(regional_moderators)
