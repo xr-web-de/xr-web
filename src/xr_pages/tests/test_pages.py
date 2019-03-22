@@ -41,6 +41,26 @@ class PagesBaseTest(WagtailPageTests):
         site = Site.objects.get()
         self.home_page = site.root_page
         self.root_page = Page.objects.parent_of(self.home_page).get()
+        self.home_sub_page = HomeSubPage.objects.get()
+
+        self.BASE_PAGES = {self.home_sub_page, self.root_page, self.home_sub_page}
+
+    def _setup_local_group_pages(self):
+        self.local_group_list_page = LocalGroupListPage.objects.get()
+
+        self.local_group_page = LocalGroupPage(
+            title="Example Group", name="Example Group"
+        )
+        self.local_group_list_page.add_child(instance=self.local_group_page)
+
+        self.local_group_sub_page = LocalGroupSubPage(title="Example SubPage")
+        self.local_group_page.add_child(instance=self.local_group_sub_page)
+
+        self.LOCAL_GROUP_PAGES = {
+            self.local_group_list_page,
+            self.local_group_page,
+            self.local_group_sub_page,
+        }
 
     def assertHasGroupPagePermissions(
         self, group, page, permission_types=None, msg=None, exact=True
@@ -81,50 +101,45 @@ class PagesBaseTest(WagtailPageTests):
                 raise self.failureException(msg)
 
     def assertHasGroupCollectionPermissions(
-        self, group, collection, permission_types=None, msg=None, exact=True
+        self, groups, collection, permission_types=None, msg=None, exact=True
     ):
         if permission_types is None:
             permission_types = []
 
-        for permission_type in AVAILABLE_COLLECTION_PERMISSION_TYPES:
-            permission = get_collection_permission(permission_type)
+        if not isinstance(groups, (list, tuple, set)):
+            groups = [groups]
 
-            has_permission = GroupCollectionPermission.objects.filter(
-                group=group, collection=collection, permission=permission
-            ).exists()
+        for group in groups:
+            for permission_type in AVAILABLE_COLLECTION_PERMISSION_TYPES:
+                permission = get_collection_permission(permission_type)
 
-            should_have_permission = permission_type in permission_types
+                has_permission = GroupCollectionPermission.objects.filter(
+                    group=group, collection=collection, permission=permission
+                ).exists()
 
-            if not has_permission and should_have_permission:
-                msg = self._formatMessage(
-                    msg,
-                    'Group "%s" has no "%s" permission for collection "%s" but should.'
-                    % (group.name, permission_type, collection.name),
-                )
-                raise self.failureException(msg)
+                should_have_permission = permission_type in permission_types
 
-            if exact and has_permission and not should_have_permission:
-                msg = self._formatMessage(
-                    msg,
-                    'Group "%s" has "%s" permission for collection "%s" but should not.'
-                    % (group.name, permission_type, collection.name),
-                )
-                raise self.failureException(msg)
+                if not has_permission and should_have_permission:
+                    msg = self._formatMessage(
+                        msg,
+                        'Group "%s" has no "%s" permission for collection "%s" but should.'
+                        % (group.name, permission_type, collection.name),
+                    )
+                    raise self.failureException(msg)
+
+                if exact and has_permission and not should_have_permission:
+                    msg = self._formatMessage(
+                        msg,
+                        'Group "%s" has "%s" permission for collection "%s" but should not.'
+                        % (group.name, permission_type, collection.name),
+                    )
+                    raise self.failureException(msg)
 
 
 class PagesPageTreeTest(PagesBaseTest):
     def setUp(self):
         super().setUp()
-        self.home_sub_page = HomeSubPage.objects.get()
-        self.local_group_list_page = LocalGroupListPage.objects.get()
-
-        self.local_group_page = LocalGroupPage(
-            title="Example Group", name="Example Group"
-        )
-        self.local_group_list_page.add_child(instance=self.local_group_page)
-
-        self.local_group_sub_page = LocalGroupSubPage(title="Example SubPage")
-        self.local_group_page.add_child(instance=self.local_group_sub_page)
+        self._setup_local_group_pages()
 
     def test_page_titles(self):
         self.assertEqual(self.home_page.title, "XR Deutschland")
@@ -174,16 +189,7 @@ class PagesPageTreeTest(PagesBaseTest):
 class PagesGroupPagePermissionsTest(PagesBaseTest):
     def setUp(self):
         super().setUp()
-        self.home_sub_page = HomeSubPage.objects.get()
-        self.local_group_list_page = LocalGroupListPage.objects.get()
-
-        self.local_group_page = LocalGroupPage(
-            title="Example Group", name="Example Group"
-        )
-        self.local_group_list_page.add_child(instance=self.local_group_page)
-
-        self.local_group_sub_page = LocalGroupSubPage(title="Example SubPage")
-        self.local_group_list_page.add_child(instance=self.local_group_sub_page)
+        self._setup_local_group_pages()
 
     def test_overall_site_group_page_permissions(self):
         overall_site_moderators = Group.objects.get(name="Overall Site Moderators")
@@ -203,7 +209,7 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
             overall_site_editors, self.root_page, EDITORS_PAGE_PERMISSIONS
         )
 
-    def test_regional_group_page_permissions(self):
+    def test_regional_group_base_page_permissions(self):
         regional_moderators = Group.objects.get(name="Deutschland Page Moderators")
         regional_editors = Group.objects.get(name="Deutschland Page Editors")
 
@@ -226,6 +232,9 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
             regional_editors, self.home_sub_page, EDITORS_PAGE_PERMISSIONS
         )
 
+    def test_regional_group_local_group_page_permissions(self):
+        regional_moderators = Group.objects.get(name="Deutschland Page Moderators")
+        regional_editors = Group.objects.get(name="Deutschland Page Editors")
         # local_group_list_page
 
         self.assertHasGroupPagePermissions(
@@ -253,7 +262,7 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
             regional_editors, self.local_group_sub_page, None
         )
 
-    def test_local_group_page_permissions(self):
+    def test_local_group_base_page_permissions(self):
         local_moderators = Group.objects.get(name="Example Group Page Moderators")
         local_editors = Group.objects.get(name="Example Group Page Editors")
 
@@ -272,6 +281,9 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
         self.assertHasGroupPagePermissions(local_moderators, self.home_sub_page, None)
         self.assertHasGroupPagePermissions(local_editors, self.home_sub_page, None)
 
+    def test_local_group_local_group_page_permissions(self):
+        local_moderators = Group.objects.get(name="Example Group Page Moderators")
+        local_editors = Group.objects.get(name="Example Group Page Editors")
         # local_group_list_page
 
         self.assertHasGroupPagePermissions(
