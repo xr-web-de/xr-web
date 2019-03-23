@@ -9,12 +9,21 @@ from .blocks import ContentBlock
 from .services import (
     get_or_create_or_update_page_auth_group_for_local_group_page,
     add_group_page_permission,
-    get_document_permission,
     add_group_collection_permission,
-    get_image_permission,
+    get_collection_permission,
     get_or_create_or_update_page_auth_group_for_home_page,
     get_or_create_or_update_event_auth_group_for_home_page,
     get_or_create_or_update_event_auth_group_for_local_group_page,
+    MODERATORS_PAGE_PERMISSIONS,
+    EDITORS_PAGE_PERMISSIONS,
+    PAGE_EDITORS_SUFFIX,
+    PAGE_MODERATORS_SUFFIX,
+    EVENT_EDITORS_SUFFIX,
+    EVENT_MODERATORS_SUFFIX,
+    get_auth_group_name,
+    COMMON_COLLECTION_NAME,
+    MODERATORS_COLLECTION_PERMISSIONS,
+    EDITORS_COLLECTION_PERMISSIONS,
 )
 
 
@@ -49,18 +58,18 @@ class HomePage(Page):
 
         # update regional page auth groups
         get_or_create_or_update_page_auth_group_for_home_page(
-            self.specific, "Page Moderators"
+            self.specific, PAGE_MODERATORS_SUFFIX
         )
         get_or_create_or_update_page_auth_group_for_home_page(
-            self.specific, "Page Editors"
+            self.specific, PAGE_EDITORS_SUFFIX
         )
 
         # update regional event auth groups
         get_or_create_or_update_event_auth_group_for_home_page(
-            self.specific, "Event Moderators"
+            self.specific, EVENT_MODERATORS_SUFFIX
         )
         get_or_create_or_update_event_auth_group_for_home_page(
-            self.specific, "Event Editors"
+            self.specific, EVENT_EDITORS_SUFFIX
         )
 
 
@@ -83,20 +92,20 @@ class HomeSubPage(Page):
             home_page = HomePage.objects.ancestor_of(self).live().get()
 
             regional_moderators_group = Group.objects.get(
-                name="%s Page Moderators" % home_page.group_name
+                name=get_auth_group_name(home_page.group_name, PAGE_MODERATORS_SUFFIX)
             )
             regional_editors_group = Group.objects.get(
-                name="%s Page Editors" % home_page.group_name
+                name=get_auth_group_name(home_page.group_name, PAGE_EDITORS_SUFFIX)
             )
 
             # Moderators
-            for permission_type in ["add", "edit", "publish"]:
+            for permission_type in MODERATORS_PAGE_PERMISSIONS:
                 add_group_page_permission(
                     regional_moderators_group, self, permission_type
                 )
 
             # Editors
-            for permission_type in ["add", "edit"]:
+            for permission_type in EDITORS_PAGE_PERMISSIONS:
                 add_group_page_permission(regional_editors_group, self, permission_type)
 
 
@@ -182,48 +191,42 @@ class LocalGroupPage(Page):
 
         # update local page group names
         moderators_group = get_or_create_or_update_page_auth_group_for_local_group_page(
-            self, "Page Moderators"
+            self, PAGE_MODERATORS_SUFFIX
         )
         editors_group = get_or_create_or_update_page_auth_group_for_local_group_page(
-            self, "Page Editors"
+            self, PAGE_EDITORS_SUFFIX
         )
 
         if self.event_group:
             # update local event group names
             get_or_create_or_update_event_auth_group_for_local_group_page(
-                self, "Event Moderators"
+                self, EVENT_MODERATORS_SUFFIX
             )
             get_or_create_or_update_event_auth_group_for_local_group_page(
-                self, "Event Editors"
+                self, EVENT_EDITORS_SUFFIX
             )
 
         # we only need to add page permissions on page creation
         if is_new:
-            collection = Collection.objects.get(name="Common")
+            collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
 
             # Moderators
-            for permission_type in ["add", "edit", "publish"]:
+            for permission_type in MODERATORS_PAGE_PERMISSIONS:
                 add_group_page_permission(moderators_group, self, permission_type)
 
-            for codename in ["add_document", "change_document", "delete_document"]:
+            for codename in MODERATORS_COLLECTION_PERMISSIONS:
                 add_group_collection_permission(
-                    moderators_group, collection, get_document_permission(codename)
-                )
-            for codename in ["add_image", "change_image", "delete_image"]:
-                add_group_collection_permission(
-                    moderators_group, collection, get_image_permission(codename)
+                    moderators_group, collection, get_collection_permission(codename)
                 )
 
             # Editors
-            for permission_type in ["add", "edit"]:
+            for permission_type in EDITORS_PAGE_PERMISSIONS:
                 add_group_page_permission(editors_group, self, permission_type)
 
-            add_group_collection_permission(
-                editors_group, collection, get_document_permission("add_document")
-            )
-            add_group_collection_permission(
-                editors_group, collection, get_image_permission("add_image")
-            )
+            for codename in EDITORS_COLLECTION_PERMISSIONS:
+                add_group_collection_permission(
+                    editors_group, collection, get_collection_permission(codename)
+                )
 
 
 class LocalGroupSubPage(Page):
@@ -237,4 +240,5 @@ class LocalGroupSubPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context["parent_page"] = self.get_parent()
+        context["local_group_page"] = self.get_parent()
         return context

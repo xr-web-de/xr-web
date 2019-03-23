@@ -9,28 +9,37 @@ from wagtail.core.models import (
     Collection,
 )
 
-PAGE_AUTH_GROUP_TYPES = ["Page Moderators", "Page Editors"]
-EVENT_AUTH_GROUP_TYPES = ["Event Moderators", "Event Editors"]
+PAGE_MODERATORS_SUFFIX = "Page Moderators"
+PAGE_EDITORS_SUFFIX = "Page Editors"
+EVENT_MODERATORS_SUFFIX = "Event Moderators"
+EVENT_EDITORS_SUFFIX = "Event Editors"
+
+COMMON_COLLECTION_NAME = "Common"
+
+PAGE_AUTH_GROUP_TYPES = [PAGE_MODERATORS_SUFFIX, PAGE_EDITORS_SUFFIX]
+EVENT_AUTH_GROUP_TYPES = [EVENT_MODERATORS_SUFFIX, EVENT_EDITORS_SUFFIX]
 AUTH_GROUP_TYPES = PAGE_AUTH_GROUP_TYPES + EVENT_AUTH_GROUP_TYPES
 AVAILABLE_PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
-IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image", "delete_image", "view_image"]
-DOCUMENT_PERMISSION_CODENAMES = [
-    "add_document",
-    "change_document",
-    "delete_document",
-    "view_document",
-]
+
+IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image"]  # change includes delete
+DOCUMENT_PERMISSION_CODENAMES = ["add_document", "change_document"]
+AVAILABLE_COLLECTION_PERMISSION_TYPES = (
+    IMAGE_PERMISSION_CODENAMES + DOCUMENT_PERMISSION_CODENAMES
+)
 
 MODERATORS_PAGE_PERMISSIONS = ["add", "edit", "publish"]
 MODERATORS_IMAGE_PERMISSIONS = IMAGE_PERMISSION_CODENAMES
 MODERATORS_DOCUMENT_PERMISSIONS = DOCUMENT_PERMISSION_CODENAMES
+MODERATORS_COLLECTION_PERMISSIONS = AVAILABLE_COLLECTION_PERMISSION_TYPES
 
 EDITORS_PAGE_PERMISSIONS = ["add", "edit"]
-EDITORS_IMAGE_PERMISSIONS = ["add_image", "view_image"]  # includes change own image
-EDITORS_DOCUMENT_PERMISSIONS = [
-    "add_document",  # includes change own document
-    "view_document",
-]
+EDITORS_IMAGE_PERMISSIONS = IMAGE_PERMISSION_CODENAMES
+EDITORS_DOCUMENT_PERMISSIONS = DOCUMENT_PERMISSION_CODENAMES
+EDITORS_COLLECTION_PERMISSIONS = AVAILABLE_COLLECTION_PERMISSION_TYPES
+
+
+def get_auth_group_name(page_group_name, group_type):
+    return "%s %s" % (page_group_name, group_type)
 
 
 def get_or_create_or_update_page_auth_group_for_local_group_page(page, group_type):
@@ -42,7 +51,7 @@ def get_or_create_or_update_page_auth_group_for_local_group_page(page, group_typ
     if group_type not in PAGE_AUTH_GROUP_TYPES:
         raise ValidationError("Invalid group_type '%s'." % group_type)
 
-    group_name = "%s %s" % (page.name, group_type)
+    group_name = get_auth_group_name(page.name, group_type)
 
     # first check for existing group by name
     group_qs = Group.objects.filter(name=group_name)
@@ -191,30 +200,27 @@ def add_group_page_permission(group, page, permission_type):
     return group_page_permission
 
 
-def get_document_permission(permission_codename):
-    if permission_codename not in DOCUMENT_PERMISSION_CODENAMES:
-        raise ValidationError("Invalid permission_codename '%s'." % permission_codename)
+def get_collection_permission(permission_type):
+    if permission_type not in AVAILABLE_COLLECTION_PERMISSION_TYPES:
+        raise ValidationError(
+            "Invalid collection_permission_type '%s'." % permission_type
+        )
 
-    document_content_type = ContentType.objects.get(
-        model="document", app_label="wagtaildocs"
-    )
-    document_permission = Permission.objects.get(
-        content_type=document_content_type, codename=permission_codename
-    )
-    return document_permission
+    if permission_type.endswith("document"):
+        content_type = ContentType.objects.get(
+            model="document", app_label="wagtaildocs"
+        )
+    elif permission_type.endswith("image"):
+        content_type = ContentType.objects.get(model="image", app_label="wagtailimages")
+    else:
+        raise ValidationError(
+            "Invalid collection_permission_type '%s'." % permission_type
+        )
 
-
-def get_image_permission(permission_codename):
-    if permission_codename not in IMAGE_PERMISSION_CODENAMES:
-        raise ValidationError("Invalid permission_codename '%s'." % permission_codename)
-
-    image_content_type = ContentType.objects.get(
-        model="image", app_label="wagtailimages"
+    permission = Permission.objects.get(
+        content_type=content_type, codename=permission_type
     )
-    image_permission = Permission.objects.get(
-        content_type=image_content_type, codename=permission_codename
-    )
-    return image_permission
+    return permission
 
 
 def add_group_collection_permission(group, collection, permission):

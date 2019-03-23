@@ -1,6 +1,8 @@
 {% extends "xr_pages/pages/default.html" %}
 {% load wagtailcore_tags %}
 {% load menu_tags %}
+{% load xr_pages_tags %}
+
 
 {% block header %}
     {% main_menu %}
@@ -11,7 +13,15 @@
 {% block content %}
 
     <div class="container">
-        <a href="">Link zurück zur Übersicht</a>
+        {% get_site as site %}
+        {% get_home_page as home_page %}
+        {% get_local_group_list_page as local_group_list_page %}
+        {% get_local_group_page_for page as local_group_page %}
+
+        <a href="{% pageurl local_group_list_page %}">Alle Ortsgruppen</a>
+        <a href="{% pageurl local_group_page %}">{{ local_group_page.xr_name }}</a>
+        <a href="{% pageurl local_group_page %}">{{ local_group_page.name }}</a>
+        <a href="{% pageurl local_group_page %}">{{ local_group_page.title }}</a>
     </div>
 
     <div class="container">
