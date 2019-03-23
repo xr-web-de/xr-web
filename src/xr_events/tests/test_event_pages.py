@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Collection
 
 from xr_pages.models import (
     HomeSubPage,
@@ -8,7 +8,13 @@ from xr_pages.models import (
     HomePage,
     LocalGroupSubPage,
 )
-from xr_pages.services import MODERATORS_PAGE_PERMISSIONS, EDITORS_PAGE_PERMISSIONS
+from xr_pages.services import (
+    MODERATORS_PAGE_PERMISSIONS,
+    EDITORS_PAGE_PERMISSIONS,
+    COMMON_COLLECTION_NAME,
+    MODERATORS_COLLECTION_PERMISSIONS,
+    EDITORS_COLLECTION_PERMISSIONS,
+)
 from xr_pages.tests.test_pages import PagesBaseTest, PAGES_PAGE_CLASSES
 from xr_events.models import EventListPage, EventGroupPage, EventPage
 
@@ -21,6 +27,21 @@ class EventsBaseTest(PagesBaseTest):
         super().setUp()
 
     def _setup_event_pages(self):
+        # create local group page, if needed
+        local_group_page_qs = LocalGroupPage.objects.filter(
+            title="Example Group", name="Example Group"
+        )
+        if local_group_page_qs.exists():
+            self.local_group_page = local_group_page_qs.get()
+        else:
+            self.local_group_list_page = LocalGroupListPage.objects.get()
+
+            self.local_group_page = LocalGroupPage(
+                title="Example Group", name="Example Group"
+            )
+            self.local_group_list_page.add_child(instance=self.local_group_page)
+
+        # create event pages
         self.event_list_page = EventListPage.objects.get()
 
         self.regional_event_group_page = EventGroupPage.objects.get()
@@ -162,3 +183,21 @@ class EventsGroupPagePermissionsTest(EventsBaseTest):
         for page in self.EVENT_PAGES:
             for group in [regional_moderators, regional_editors]:
                 self.assertHasGroupPagePermissions(group, page, None)
+
+
+class EventsGroupCollectionPermissionsTest(EventsBaseTest):
+    def setUp(self):
+        super().setUp()
+        self._setup_event_pages()
+        self.event_moderators = Group.objects.get(name="Example Group Event Moderators")
+        self.event_editors = Group.objects.get(name="Example Group Event Editors")
+
+    def test_event_group_collection_permissions(self):
+        collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
+
+        self.assertHasGroupCollectionPermissions(
+            self.event_moderators, collection, MODERATORS_COLLECTION_PERMISSIONS
+        )
+        self.assertHasGroupCollectionPermissions(
+            self.event_editors, collection, EDITORS_COLLECTION_PERMISSIONS
+        )
