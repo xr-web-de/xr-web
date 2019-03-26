@@ -39,7 +39,7 @@ class EventsBaseTest(PagesBaseTest):
 
         if created:
             self.local_group_page = LocalGroupPage(
-                title="Example Group", name="Example Group", group=self.local_group
+                title="Example Group", group=self.local_group
             )
             self.local_group_list_page.add_child(instance=self.local_group_page)
 
@@ -50,13 +50,11 @@ class EventsBaseTest(PagesBaseTest):
         self.event_list_page = EventListPage.objects.get()
 
         self.regional_event_group_page = EventGroupPage.objects.get(
-            is_regional_group=True
+            group__is_regional_group=True
         )
 
         self.event_group_page = EventGroupPage(
-            title="Example Event Group",
-            local_group=self.local_group_page,
-            group=self.local_group,
+            title="Example Event Group", group=self.local_group
         )
         self.event_list_page.add_child(instance=self.event_group_page)
 
@@ -233,9 +231,7 @@ class EventsSignalsTest(PagesBaseTest):
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
 
@@ -245,9 +241,7 @@ class EventsSignalsTest(PagesBaseTest):
         special_group = LocalGroup.objects.create(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
 
@@ -261,9 +255,7 @@ class EventsSignalsTest(PagesBaseTest):
         special_group = LocalGroup.objects.create(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
 

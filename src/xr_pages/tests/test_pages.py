@@ -58,14 +58,16 @@ class PagesBaseTest(WagtailPageTests):
         self.local_group_list_page = LocalGroupListPage.objects.get()
 
         self.local_group_page = LocalGroupPage(
-            title="Example Group", name="Example Group", group=self.local_group
+            title="Example Group", group=self.local_group
         )
         self.local_group_list_page.add_child(instance=self.local_group_page)
 
         self.local_group_sub_page = LocalGroupSubPage(title="Example SubPage")
         self.local_group_page.add_child(instance=self.local_group_sub_page)
 
-        self.regional_group_page = LocalGroupPage.objects.get(is_regional_group=True)
+        self.regional_group_page = LocalGroupPage.objects.get(
+            group__is_regional_group=True
+        )
 
         self.LOCAL_GROUP_PAGES = {
             self.local_group_list_page,
@@ -392,9 +394,7 @@ class PagesGroupCollectionPermissionsTest(PagesBaseTest):
     def test_local_group_collection_permissions(self):
         # create a local group
         local_group, created = LocalGroup.objects.get_or_create(name="Example Group")
-        local_group_page = LocalGroupPage(
-            title="Example Group", name="Example Group", group=local_group
-        )
+        local_group_page = LocalGroupPage(title="Example Group", group=local_group)
         local_group_list_page = LocalGroupListPage.objects.get()
         local_group_list_page.add_child(instance=local_group_page)
 
@@ -429,9 +429,7 @@ class PagesSignalsTest(PagesBaseTest):
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.local_group_list_page.add_child(instance=special_group_page)
 
@@ -441,9 +439,7 @@ class PagesSignalsTest(PagesBaseTest):
         special_group = LocalGroup.objects.create(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.local_group_list_page.add_child(instance=special_group_page)
 
@@ -457,9 +453,7 @@ class PagesSignalsTest(PagesBaseTest):
         special_group = LocalGroup.objects.create(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
-            title=self.special_group_name,
-            name=self.special_group_name,
-            group=special_group,
+            title=self.special_group_name, group=special_group
         )
         self.local_group_list_page.add_child(instance=special_group_page)
 

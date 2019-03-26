@@ -43,24 +43,20 @@ class PagesTemplatetagsTest(TestCase):
 
     def test_get_local_group_page_for_page(self):
         local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
-        local_group_page = LocalGroupPage(
-            title="SubPage", name="LocalGroup SpecialName", group=local_group
-        )
+        local_group_page = LocalGroupPage(title="SubPageTitle", group=local_group)
         self.site.root_page.add_child(instance=local_group_page)
         context = Context({"request": self.request, "page": local_group_page})
         test_template = Template(
             "{% load xr_pages_tags %}"
             "{% get_local_group_page_for page as local_group_page %}"
-            "{{ local_group_page.name }}"
+            "{{ local_group_page.title }}"
         )
         rendered_template = test_template.render(context)
-        self.assertEqual(rendered_template, "LocalGroup SpecialName")
+        self.assertEqual(rendered_template, "SubPageTitle")
 
     def test_get_local_group_page_for_subpage(self):
         local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
-        local_group_page = LocalGroupPage(
-            title="SubPage", name="LocalGroup SpecialName", group=local_group
-        )
+        local_group_page = LocalGroupPage(title="SubPageTitle", group=local_group)
         self.site.root_page.add_child(instance=local_group_page)
         local_group_sub_page = LocalGroupSubPage(title="SubPage")
         local_group_page.add_child(instance=local_group_sub_page)
@@ -68,7 +64,7 @@ class PagesTemplatetagsTest(TestCase):
         test_template = Template(
             "{% load xr_pages_tags %}"
             "{% get_local_group_page_for page as local_group_page %}"
-            "{{ local_group_page.name }}"
+            "{{ local_group_page.title }}"
         )
         rendered_template = test_template.render(context)
-        self.assertEqual(rendered_template, "LocalGroup SpecialName")
+        self.assertEqual(rendered_template, "SubPageTitle")

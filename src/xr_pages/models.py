@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Group
-from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
@@ -14,27 +13,15 @@ from .blocks import ContentBlock
 class HomePage(Page):
     template = "xr_pages/pages/home.html"
     content = StreamField(ContentBlock, blank=True)
-    group_name = models.CharField(max_length=50, default="Deutschland")
-    group_email = models.EmailField(null=True, blank=True)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
-    settings_panels = Page.settings_panels + [
-        MultiFieldPanel(
-            [FieldPanel("group_name"), FieldPanel("group_email")],
-            heading=_("Regional Group settings"),
-        )
-    ]
 
     parent_page_types = []
     is_creatable = False
 
     @property
-    def xr_group_name(self):
-        return "XR %s" % self.group_name
-
-    def clean(self):
-        if not self.group_name:
-            self.group_name = self.title
+    def group(self):
+        return LocalGroup.objects.get(is_regional_group=True)
 
 
 class HomeSubPage(Page):
@@ -44,6 +31,10 @@ class HomeSubPage(Page):
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["HomePage"]
+
+    @property
+    def group(self):
+        return LocalGroup.objects.get(is_regional_group=True)
 
 
 class LocalGroup(models.Model):
@@ -122,19 +113,6 @@ class LocalGroup(models.Model):
     def xr_name(self):
         return "XR %s" % self.name
 
-    @property
-    def local_group_page(self):
-        local_group_page_qs = LocalGroupPage.objects.filter(group=self).live()
-        if local_group_page_qs.exists():
-            return local_group_page_qs.first()
-        return None
-
-    @property
-    def event_group_page(self):
-        if self.local_group_page and self.local_group_page.event_group_page:
-            return self.local_group_page.event_group_page
-        return None
-
     @transaction.atomic
     def save(self, *args, **kwargs):
         is_new = self.id is None
@@ -157,6 +135,9 @@ class LocalGroup(models.Model):
         return self.name
 
 
+register_snippet(LocalGroup)
+
+
 class LocalGroupListPage(Page):
     template = "xr_pages/pages/local_group_list.html"
     content = StreamField(ContentBlock, blank=True)
@@ -177,69 +158,40 @@ class LocalGroupListPage(Page):
 class LocalGroupPage(Page):
     template = "xr_pages/pages/local_group.html"
     content = StreamField(ContentBlock, blank=True)
-    is_regional_group = models.BooleanField(editable=False, default=False)
-    group = models.OneToOneField(LocalGroup, null=True, on_delete=models.PROTECT)
-    name = models.CharField(
-        max_length=50,
-        default="",
-        unique=True,
-        help_text=_(
-            "The unique name for the local group. "
-            "Used as label for links referring to this page. "
-            'Enter a name without leading "XR ".'
-        ),
-    )
-    email = models.EmailField(null=True, blank=True)
-    # TODO: move state choices to settings
-    STATE_CHOICES = (
-        ("BW", "Baden-Württemberg"),
-        ("BY", "Bayern"),
-        ("BE", "Berlin"),
-        ("BB", "Brandenburg"),
-        ("HB", "Bremen"),
-        ("HH", "Hamburg"),
-        ("HE", "Hessen"),
-        ("MV", "Mecklenburg-Vorpommern"),
-        ("NI", "Niedersachsen"),
-        ("NW", "Nordrhein-Westfalen"),
-        ("RP", "Rheinland-Pfalz"),
-        ("SL", "Saarland"),
-        ("SN", "Sachsen"),
-        ("ST", "Sachsen-Anhalt"),
-        ("SH", "Schleswig-Holstein"),
-        ("TH", "Thüringen"),
-    )
-    state = models.CharField(
-        max_length=50, choices=STATE_CHOICES, null=True, blank=True
-    )
+    group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
     ]
-    settings_panels = Page.settings_panels + [
-        MultiFieldPanel(
-            [FieldPanel("name"), FieldPanel("email"), FieldPanel("state")],
-            heading=_("Local Group settings"),
-        )
-    ]
 
     parent_page_types = ["LocalGroupListPage"]
 
     @property
+    def name(self):
+        return self.group.name
+
+    @property
     def xr_name(self):
-        return "XR %s" % self.name
+        return "XR %s" % self.group.name
+
+    @property
+    def email(self):
+        return self.group.email
+
+    @property
+    def state(self):
+        return self.group.state
 
     @property
     def event_group(self):
-        if self.event_group_set.all().exists:
-            return self.event_group_set.first()
+        if hasattr(self.group, "event_group_page"):
+            return self.group.event_group_page
         return None
 
-    def clean(self):
-        if not self.group:
-            message = _('Please select a "group".')
-            raise ValidationError(message)
+    @property
+    def is_regional_group(self):
+        return self.group.is_regional_group
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -249,18 +201,11 @@ class LocalGroupPage(Page):
             self.group.save()
 
 
-register_snippet(LocalGroup)
-
-
 class LocalGroupSubPage(Page):
     template = "xr_pages/pages/local_group_sub.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.ForeignKey(
-        LocalGroup,
-        null=True,
-        on_delete=models.PROTECT,
-        editable=False,
-        related_name="+",
+        LocalGroup, on_delete=models.PROTECT, editable=False, related_name="+"
     )
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
@@ -274,7 +219,7 @@ class LocalGroupSubPage(Page):
         return context
 
     def save(self, *args, **kwargs):
-        if not self.group:
+        if not hasattr(self, "group"):
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)

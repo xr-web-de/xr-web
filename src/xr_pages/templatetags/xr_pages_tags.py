@@ -38,7 +38,7 @@ def get_local_group_list_page(context):
 @register.simple_tag(takes_context=True)
 def get_local_group_page_for(context, page=None):
     try:
-        local_group_page = context.get("page", None).group.local_group_page
+        local_group_page = context.get("page", None).group.localgrouppage.specific
     except (KeyError, AttributeError):
         return None
     return local_group_page
