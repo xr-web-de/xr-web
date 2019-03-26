@@ -6,7 +6,7 @@ from wagtail.admin.utils import permission_denied
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.core import hooks
 
-from .models import EventPage, EventGroupPage, EventListPage
+from .models import EventPage, EventGroupPage
 
 
 class EventAdmin(ModelAdmin):
@@ -16,64 +16,53 @@ class EventAdmin(ModelAdmin):
     menu_order = 100  # 000 being 1st, 100 2nd, 200 3rd
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = (
+    list_display = ("title", "get_dates_display", "location", "get_organisers_display")
+    list_filter = ("group", "start_date")
+    search_fields = (
         "title",
-        "get_dates_display",
+        "start_date",
+        "end_date",
         "location",
-        "get_organiser_display",
-        "get_further_organisers_display",
+        "group__name",
+        "further_organisers__name",
     )
-    list_filter = ("group",)
-    search_fields = ("title", "dates__start", "location", "further_organisers__name")
 
     def get_queryset(self, request):
         # we overwrite this method to annotate fields before ordering is applied
         # note that self.ordering or self.get_ordering() will have no effect
         qs = self.model._default_manager.get_queryset()
-        qs = qs.annotate(start_date=Min("dates__start"))
         return qs.order_by(F("start_date").desc(nulls_last=True), "title")
 
     def get_dates_display(self, obj):
-        dates = [
-            formats.date_format(date.start, "SHORT_DATE_FORMAT")
-            for date in obj.dates.all()
-            if date.start
-        ]
+        dates = []
+        if obj.start_date:
+            start = formats.date_format(obj.start_date, "SHORT_DATE_FORMAT")
+            dates.append(start)
+        if obj.end_date:
+            end = formats.date_format(obj.end_date, "SHORT_DATE_FORMAT")
+            dates.append(end)
         return mark_safe("<br>".join(dates))
 
     get_dates_display.short_description = _("Dates")
 
-    def get_organiser_display(self, obj):
-        if obj.group.is_regional_group:
-            return "%s<br>(%s)" % (obj.group.name, _("transregional"))
-        return obj.group.name
-
-    get_organiser_display.short_description = _("Organiser")
-
-    def get_further_organisers_display(self, obj):
-        organisers = []
-        if hasattr(obj, "further_organisers") and obj.further_organisers.count() > 0:
-            organisers = [
-                str(organiser)
-                for organiser in obj.further_organisers.all().order_by("sort_order")
-            ]
+    def get_organisers_display(self, obj):
+        organisers = [obj.group.name]
+        if obj.further_organisers.exists():
+            for organiser in obj.further_organisers.all().order_by("sort_order"):
+                organisers.append(str(organiser))
         return mark_safe("<br>".join(organisers))
 
-    get_further_organisers_display.short_description = _("Further Organisers")
+    get_organisers_display.short_description = _("Organisers")
 
 
 modeladmin_register(EventAdmin)
 
 
-@hooks.register("before_create_page")
 @hooks.register("before_delete_page")
 @hooks.register("before_copy_page")
 def protect_event_group_pages(request, page):
     if request.user.is_superuser:
         return
-
-    if isinstance(page.specific, EventListPage):
-        return permission_denied(request)
 
     if isinstance(page.specific, EventGroupPage):
         if page.is_regional_group:

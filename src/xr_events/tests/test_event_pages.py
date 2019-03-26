@@ -1,4 +1,7 @@
+import datetime
+
 from django.contrib.auth.models import Group
+from django.utils import timezone
 from wagtail.core.models import Page, Collection
 
 from xr_events.signals import EVENT_AUTH_GROUP_TYPES
@@ -18,8 +21,7 @@ from xr_pages.services import (
     EDITORS_COLLECTION_PERMISSIONS,
 )
 from xr_pages.tests.test_pages import PagesBaseTest, PAGES_PAGE_CLASSES
-from xr_events.models import EventListPage, EventGroupPage, EventPage
-
+from xr_events.models import EventListPage, EventGroupPage, EventPage, EventDate
 
 EVENT_PAGE_CLASSES = {EventListPage, EventGroupPage, EventPage}
 
@@ -272,3 +274,40 @@ class EventsSignalsTest(PagesBaseTest):
 
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
         self.assertAuthGroupsExists("Another Group", EVENT_AUTH_GROUP_TYPES)
+
+
+class EventsDatesTest(EventsBaseTest):
+    def setUp(self):
+        super().setUp()
+        self._setup_local_group_pages()
+        self._setup_event_pages()
+
+    def test_event_dates_get_set(self):
+        self.assertFalse(self.event_page.dates.exists())
+
+        date = timezone.now()
+        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
+        self.event_page.dates.add(event_date)
+
+        self.event_page.save()
+
+        self.assertTrue(self.event_page.dates.exists())
+        self.assertEqual(self.event_page.start_date, date)
+        self.assertEqual(self.event_page.end_date, date)
+
+    def test_event_dates_get_ordered(self):
+        self.assertFalse(self.event_page.dates.exists())
+
+        date = timezone.now()
+        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
+        self.event_page.dates.add(event_date)
+
+        date2 = timezone.now() + datetime.timedelta(1)
+        event_date2 = EventDate.objects.create(event_page=self.event_page, start=date2)
+        self.event_page.dates.add(event_date2)
+
+        self.event_page.save()
+
+        self.assertTrue(self.event_page.dates.exists())
+        self.assertEqual(self.event_page.start_date, date)
+        self.assertEqual(self.event_page.end_date, date2)

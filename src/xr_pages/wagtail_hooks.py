@@ -33,18 +33,11 @@ def filter_local_group_pages(parent_page, pages, request):
     return pages
 
 
-@hooks.register("before_create_page")
 @hooks.register("before_delete_page")
 @hooks.register("before_copy_page")
 def protect_base_and_local_group_pages(request, page):
     if request.user.is_superuser:
         return
-
-    if isinstance(page.specific, HomePage):
-        return permission_denied(request)
-
-    if isinstance(page.specific, LocalGroupListPage):
-        return permission_denied(request)
 
     if isinstance(page.specific, LocalGroupPage):
         if page.is_regional_group:

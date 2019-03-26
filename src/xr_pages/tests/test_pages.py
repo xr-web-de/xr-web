@@ -470,3 +470,15 @@ class PagesSignalsTest(PagesBaseTest):
 
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
         self.assertAuthGroupsExists("Another Group", PAGE_AUTH_GROUP_TYPES)
+
+
+class PagesLocalGroupSubPageTest(PagesBaseTest):
+    def setUp(self):
+        super().setUp()
+        self._setup_local_group_pages()
+
+    def test_local_group_sub_page_group_get_set(self):
+        local_group_sub_page = LocalGroupSubPage(title="Special HomeSub")
+        self.local_group_page.add_child(instance=local_group_sub_page)
+
+        self.assertEqual(local_group_sub_page.group.pk, self.local_group_page.group.pk)

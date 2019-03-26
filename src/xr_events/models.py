@@ -65,6 +65,8 @@ class EventPage(Page):
         editable=False,
         related_name="events",
     )
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
         ImageChooserPanel("image"),
@@ -100,10 +102,18 @@ class EventPage(Page):
         return self.event_group.organiser
 
     def save(self, *args, **kwargs):
-        is_new = self.id is None
-
-        if is_new:
+        if not self.group:
             self.group = self.get_parent().specific.group
+
+        if self.dates.exists():
+            all_dates = []
+            for date in self.dates.all():
+                all_dates.append(date.start)
+                if date.end:
+                    all_dates.append(date.end)
+            all_dates = sorted(all_dates)
+            self.start_date = all_dates[0]
+            self.end_date = all_dates[-1]
 
         super().save(*args, **kwargs)
 
