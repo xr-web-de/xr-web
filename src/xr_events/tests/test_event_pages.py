@@ -268,7 +268,7 @@ class EventsSignalsTest(PagesBaseTest):
         self.assertAuthGroupsExists("Another Group", EVENT_AUTH_GROUP_TYPES)
 
 
-class EventsDatesTest(EventsBaseTest):
+class EventsEventPageTest(EventsBaseTest):
     def setUp(self):
         super().setUp()
         self._setup_local_group_pages()
@@ -303,3 +303,10 @@ class EventsDatesTest(EventsBaseTest):
         self.assertTrue(self.event_page.dates.exists())
         self.assertEqual(self.event_page.start_date, date)
         self.assertEqual(self.event_page.end_date, date2)
+
+    def test_event_page_group_get_set(self):
+        event_page = LocalGroupSubPage(title="Special EventPage")
+        self.event_group_page.add_child(instance=event_page)
+
+        self.assertEqual(event_page.group.pk, self.event_group_page.group.pk)
+        self.assertEqual(event_page.group.pk, self.local_group.pk)

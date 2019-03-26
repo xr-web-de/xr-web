@@ -476,3 +476,4 @@ class PagesLocalGroupSubPageTest(PagesBaseTest):
         self.local_group_page.add_child(instance=local_group_sub_page)
 
         self.assertEqual(local_group_sub_page.group.pk, self.local_group_page.group.pk)
+        self.assertEqual(local_group_sub_page.group.pk, self.local_group.pk)

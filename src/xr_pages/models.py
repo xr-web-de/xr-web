@@ -185,8 +185,8 @@ class LocalGroupPage(Page):
 
     @property
     def event_group(self):
-        if hasattr(self.group, "event_group_page"):
-            return self.group.event_group_page
+        if hasattr(self.group, "eventgrouppage"):
+            return self.group.eventgrouppage
         return None
 
     @property

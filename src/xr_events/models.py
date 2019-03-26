@@ -2,7 +2,7 @@ from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Min
-from django.utils import formats
+from django.utils import formats, timezone
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -59,11 +59,7 @@ class EventPage(Page):
         ),
     )
     group = models.ForeignKey(
-        LocalGroup,
-        null=True,
-        on_delete=models.PROTECT,
-        editable=False,
-        related_name="events",
+        LocalGroup, on_delete=models.PROTECT, editable=False, related_name="events"
     )
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -76,7 +72,6 @@ class EventPage(Page):
         CondensedInlinePanel("further_organisers", label=_("Further organisers")),
         StreamFieldPanel("content"),
     ]
-    promote_panels = Page.promote_panels + []
 
     parent_page_types = ["EventGroupPage"]
 
@@ -91,18 +86,18 @@ class EventPage(Page):
 
     @property
     def event_group(self):
-        return EventGroupPage.objects.parent_of(self).live().first()
+        return self.group.eventgrouppage
 
     @property
     def local_group(self):
-        return self.event_group.local_group
+        return self.group.localgrouppage
 
     @property
     def organiser(self):
-        return self.event_group.organiser
+        return self.group
 
     def save(self, *args, **kwargs):
-        if not self.group:
+        if not hasattr(self, "group"):
             self.group = self.get_parent().specific.group
 
         if self.dates.exists():
@@ -174,11 +169,13 @@ class EventListPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        today = timezone.now().date()
         context["events"] = (
             EventPage.objects.descendant_of(self)
             .live()
-            .annotate(start_date=Min("dates__start"))
-            .order_by(F("start_date").desc(nulls_last=True), "title")
+            .filter(start_date__isnull=False)
+            .filter(start_date__gte=today)
+            .order_by("start_date", "title")
         )
         context["event_groups"] = (
             EventGroupPage.objects.child_of(self).live().order_by("title")
@@ -189,33 +186,24 @@ class EventListPage(Page):
 class EventGroupPage(Page):
     template = "xr_events/pages/event_group.html"
     content = StreamField(ContentBlock, blank=True)
-    local_group = models.ForeignKey(
-        "wagtailcore.Page",
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT,
-        related_name="event_group_set",
-    )
-    is_regional_group = models.BooleanField(editable=False, default=False)
-    group = models.OneToOneField(LocalGroup, null=True, on_delete=models.PROTECT)
+    group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
-    ]
-    settings_panels = Page.settings_panels + [
-        MultiFieldPanel(
-            [PageChooserPanel("local_group", "xr_pages.LocalGroupPage")],
-            heading=_("Event Group settings"),
-        )
     ]
 
     parent_page_types = ["EventListPage"]
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        today = timezone.now().date()
         context["events"] = (
-            EventPage.objects.child_of(self).live().order_by("-dates__start", "title")
+            EventPage.objects.child_of(self)
+            .live()
+            .filter(start_date__isnull=False)
+            .filter(start_date__gte=today)
+            .order_by("start_date", "title")
         )
         return context
 
@@ -223,7 +211,6 @@ class EventGroupPage(Page):
     def organiser(self):
         return self.group
 
-    def clean(self):
-        if not self.group:
-            message = _('Please select a "group".')
-            raise ValidationError(message)
+    @property
+    def is_regional_group(self):
+        return self.group.is_regional_group
