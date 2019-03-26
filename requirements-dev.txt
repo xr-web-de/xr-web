@@ -2,3 +2,4 @@ pip-tools
 ipython
 pre-commit
 black
+coverage

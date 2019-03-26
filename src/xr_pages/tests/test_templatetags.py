@@ -2,7 +2,7 @@ from django.template import Context, Template
 from django.test import RequestFactory, TestCase
 from wagtail.core.models import Site
 
-from ..models import LocalGroupSubPage, LocalGroupPage
+from ..models import LocalGroupSubPage, LocalGroupPage, LocalGroup
 
 
 class PagesTemplatetagsTest(TestCase):
@@ -42,8 +42,9 @@ class PagesTemplatetagsTest(TestCase):
         self.assertEqual(rendered_template, "Ortsgruppen")
 
     def test_get_local_group_page_for_page(self):
+        local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
         local_group_page = LocalGroupPage(
-            title="SubPage", name="LocalGroup SpecialName"
+            title="SubPage", name="LocalGroup SpecialName", group=local_group
         )
         self.site.root_page.add_child(instance=local_group_page)
         context = Context({"request": self.request, "page": local_group_page})
@@ -56,8 +57,9 @@ class PagesTemplatetagsTest(TestCase):
         self.assertEqual(rendered_template, "LocalGroup SpecialName")
 
     def test_get_local_group_page_for_subpage(self):
+        local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
         local_group_page = LocalGroupPage(
-            title="SubPage", name="LocalGroup SpecialName"
+            title="SubPage", name="LocalGroup SpecialName", group=local_group
         )
         self.site.root_page.add_child(instance=local_group_page)
         local_group_sub_page = LocalGroupSubPage(title="SubPage")

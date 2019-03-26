@@ -1,6 +1,7 @@
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
+from django.db import models
+from django.db.models import F, Min
 from django.utils import formats
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
@@ -13,23 +14,13 @@ from wagtail.admin.edit_handlers import (
     HelpPanel,
     StreamFieldPanel,
 )
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Collection
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from xr_events.services import get_or_create_or_update_auth_group_for_event_group_page
-from xr_pages.blocks import simple_rich_text_features, ContentBlock
-from xr_pages.models import HomePage
-from xr_pages.services import (
-    add_group_page_permission,
-    add_group_collection_permission,
-    get_collection_permission,
-    COMMON_COLLECTION_NAME,
-    MODERATORS_PAGE_PERMISSIONS,
-    MODERATORS_COLLECTION_PERMISSIONS,
-    EDITORS_PAGE_PERMISSIONS,
-    EDITORS_COLLECTION_PERMISSIONS,
-)
+from xr_pages.blocks import ContentBlock
+from xr_pages.models import HomePage, LocalGroup
 
 
 class EventPage(Page):
@@ -40,13 +31,40 @@ class EventPage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
+        help_text=_(
+            "An image that can be used not only for the detail view, but also for "
+            "lists, teasers or social media."
+        ),
     )
-    description = RichTextField(
-        features=simple_rich_text_features,
+    description = models.CharField(
+        max_length=254,
+        default="",
         blank=True,
-        help_text=_("The description is only visible on the detail page."),
+        help_text=_(
+            "A description not only for the detail view, but also for lists, "
+            "teasers or social media."
+        ),
     )
-    location = models.CharField(max_length=255, blank=True)
+    content = StreamField(
+        ContentBlock,
+        blank=True,
+        help_text=_("The content is only visible on the detail page."),
+    )
+    location = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "Some city or address, like you would enter in GMaps or OpenStreetMap, "
+            'e.g. "Berlin", "Somestreet 84, 12345 Samplecity".'
+        ),
+    )
+    group = models.ForeignKey(
+        LocalGroup,
+        null=True,
+        on_delete=models.PROTECT,
+        editable=False,
+        related_name="events",
+    )
 
     content_panels = Page.content_panels + [
         ImageChooserPanel("image"),
@@ -54,7 +72,9 @@ class EventPage(Page):
         FieldPanel("location"),
         CondensedInlinePanel("dates", label=_("Dates")),
         CondensedInlinePanel("further_organisers", label=_("Further organisers")),
+        StreamFieldPanel("content"),
     ]
+    promote_panels = Page.promote_panels + []
 
     parent_page_types = ["EventGroupPage"]
 
@@ -78,6 +98,14 @@ class EventPage(Page):
     @property
     def organiser(self):
         return self.event_group.organiser
+
+    def save(self, *args, **kwargs):
+        is_new = self.id is None
+
+        if is_new:
+            self.group = self.get_parent().specific.group
+
+        super().save(*args, **kwargs)
 
 
 class EventDate(Orderable):
@@ -139,7 +167,8 @@ class EventListPage(Page):
         context["events"] = (
             EventPage.objects.descendant_of(self)
             .live()
-            .order_by("-dates__start", "title")
+            .annotate(start_date=Min("dates__start"))
+            .order_by(F("start_date").desc(nulls_last=True), "title")
         )
         context["event_groups"] = (
             EventGroupPage.objects.child_of(self).live().order_by("title")
@@ -158,8 +187,12 @@ class EventGroupPage(Page):
         related_name="event_group_set",
     )
     is_regional_group = models.BooleanField(editable=False, default=False)
+    group = models.OneToOneField(LocalGroup, null=True, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = Page.content_panels + [
+        SnippetChooserPanel("group"),
+        StreamFieldPanel("content"),
+    ]
     settings_panels = Page.settings_panels + [
         MultiFieldPanel(
             [PageChooserPanel("local_group", "xr_pages.LocalGroupPage")],
@@ -168,62 +201,6 @@ class EventGroupPage(Page):
     ]
 
     parent_page_types = ["EventListPage"]
-
-    def clean(self):
-        if self.local_group and self.is_regional_group:
-            message = _("This is the regional group. You can't select a local group.")
-            raise ValidationError(message)
-
-        elif not self.local_group and not self.is_regional_group:
-            message = _('Please choose a "local group" from the settings tab.')
-            raise ValidationError(message)
-
-        event_group_page_exists = (
-            EventGroupPage.objects.filter(local_group=self.local_group)
-            .exclude(pk=self.pk)
-            .exists()
-        )
-        if event_group_page_exists:
-            message = _(
-                "There exists already an EventGroupPage for the chosen local group. "
-                "Please choose another local group."
-            )
-            raise ValidationError(message)
-
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        is_new = self.id is None
-
-        super().save(*args, **kwargs)
-
-        moderators_group = get_or_create_or_update_auth_group_for_event_group_page(
-            self, "Event Moderators"
-        )
-        editors_group = get_or_create_or_update_auth_group_for_event_group_page(
-            self, "Event Editors"
-        )
-
-        # we only need to add permissions on page creation
-        if is_new:
-            collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
-
-            # Moderators
-            for permission_type in MODERATORS_PAGE_PERMISSIONS:
-                add_group_page_permission(moderators_group, self, permission_type)
-
-            for codename in MODERATORS_COLLECTION_PERMISSIONS:
-                add_group_collection_permission(
-                    moderators_group, collection, get_collection_permission(codename)
-                )
-
-            # Editors
-            for permission_type in EDITORS_PAGE_PERMISSIONS:
-                add_group_page_permission(editors_group, self, permission_type)
-
-            for codename in EDITORS_COLLECTION_PERMISSIONS:
-                add_group_collection_permission(
-                    editors_group, collection, get_collection_permission(codename)
-                )
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -234,20 +211,9 @@ class EventGroupPage(Page):
 
     @property
     def organiser(self):
-        if self.is_regional_group:
-            home_page = HomePage.objects.ancestor_of(self).live().first()
-            return {
-                "name": home_page.xr_group_name,
-                "email": home_page.group_email,
-                "url": home_page.get_url(),
-                "events_url": self.get_url(),
-            }
-        elif self.local_group:
-            local_group = self.local_group.specific
-            return {
-                "name": local_group.xr_name,
-                "email": local_group.email,
-                "url": local_group.get_url(),
-                "events_url": self.get_url(),
-            }
-        return None
+        return self.group
+
+    def clean(self):
+        if not self.group:
+            message = _('Please select a "group".')
+            raise ValidationError(message)
