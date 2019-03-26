@@ -1,12 +1,17 @@
+import datetime
+
 from django.contrib.auth.models import Group
+from django.utils import timezone
 from wagtail.core.models import Page, Collection
 
+from xr_events.signals import EVENT_AUTH_GROUP_TYPES
 from xr_pages.models import (
     HomeSubPage,
     LocalGroupListPage,
     LocalGroupPage,
     HomePage,
     LocalGroupSubPage,
+    LocalGroup,
 )
 from xr_pages.services import (
     MODERATORS_PAGE_PERMISSIONS,
@@ -16,8 +21,7 @@ from xr_pages.services import (
     EDITORS_COLLECTION_PERMISSIONS,
 )
 from xr_pages.tests.test_pages import PagesBaseTest, PAGES_PAGE_CLASSES
-from xr_events.models import EventListPage, EventGroupPage, EventPage
-
+from xr_events.models import EventListPage, EventGroupPage, EventPage, EventDate
 
 EVENT_PAGE_CLASSES = {EventListPage, EventGroupPage, EventPage}
 
@@ -27,27 +31,30 @@ class EventsBaseTest(PagesBaseTest):
         super().setUp()
 
     def _setup_event_pages(self):
-        # create local group page, if needed
-        local_group_page_qs = LocalGroupPage.objects.filter(
-            title="Example Group", name="Example Group"
+        # create local_group if needed
+        self.local_group_list_page = LocalGroupListPage.objects.get()
+        self.local_group, created = LocalGroup.objects.get_or_create(
+            name="Example Group"
         )
-        if local_group_page_qs.exists():
-            self.local_group_page = local_group_page_qs.get()
-        else:
-            self.local_group_list_page = LocalGroupListPage.objects.get()
 
+        if created:
             self.local_group_page = LocalGroupPage(
-                title="Example Group", name="Example Group"
+                title="Example Group", group=self.local_group
             )
             self.local_group_list_page.add_child(instance=self.local_group_page)
+
+        else:
+            self.local_group_page = LocalGroupPage.objects.get(group=self.local_group)
 
         # create event pages
         self.event_list_page = EventListPage.objects.get()
 
-        self.regional_event_group_page = EventGroupPage.objects.get()
+        self.regional_event_group_page = EventGroupPage.objects.get(
+            group__is_regional_group=True
+        )
 
         self.event_group_page = EventGroupPage(
-            title="Example Event Group", local_group=self.local_group_page
+            title="Example Event Group", group=self.local_group
         )
         self.event_list_page.add_child(instance=self.event_group_page)
 
@@ -58,6 +65,7 @@ class EventsBaseTest(PagesBaseTest):
             self.event_list_page,
             self.event_group_page,
             self.event_page,
+            self.regional_event_group_page,
         }
 
 
@@ -87,6 +95,7 @@ class EventsPageTreeTest(EventsBaseTest):
         ).live()
 
         self.assertEqual([self.event_page], list(event_group_page_children))
+        self.assertEqual(self.event_page.group.pk, self.local_group.pk)
 
     def test_can_create_pages_under_home_page(self):
         self.assertCanNotCreateAt(HomePage, EventListPage)
@@ -201,3 +210,103 @@ class EventsGroupCollectionPermissionsTest(EventsBaseTest):
         self.assertHasGroupCollectionPermissions(
             self.event_editors, collection, EDITORS_COLLECTION_PERMISSIONS
         )
+
+
+class EventsSignalsTest(PagesBaseTest):
+    def setUp(self):
+        super().setUp()
+        self.event_list_page = EventListPage.objects.get()
+        self.special_group_name = "Special Group"
+
+    def test_event_group_create_doesnt_create_auth_groups(self):
+        self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+        special_group = LocalGroup.objects.create(name=self.special_group_name)
+
+        self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+    def test_event_group_page_create_creates_event_auth_groups(self):
+        special_group = LocalGroup.objects.create(name=self.special_group_name)
+
+        self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+        special_group_page = LocalGroupPage(
+            title=self.special_group_name, group=special_group
+        )
+        self.event_list_page.add_child(instance=special_group_page)
+
+        self.assertAuthGroupsExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+    def test_event_group_page_delete(self):
+        special_group = LocalGroup.objects.create(name=self.special_group_name)
+
+        special_group_page = LocalGroupPage(
+            title=self.special_group_name, group=special_group
+        )
+        self.event_list_page.add_child(instance=special_group_page)
+
+        self.assertAuthGroupsExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+        special_group_page.delete()
+
+        self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+    def test_event_group_name_change(self):
+        special_group = LocalGroup.objects.create(name=self.special_group_name)
+
+        special_group_page = LocalGroupPage(
+            title=self.special_group_name, group=special_group
+        )
+        self.event_list_page.add_child(instance=special_group_page)
+
+        self.assertAuthGroupsExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+
+        special_group.name = "Another Group"
+        special_group.save()
+
+        self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
+        self.assertAuthGroupsExists("Another Group", EVENT_AUTH_GROUP_TYPES)
+
+
+class EventsEventPageTest(EventsBaseTest):
+    def setUp(self):
+        super().setUp()
+        self._setup_local_group_pages()
+        self._setup_event_pages()
+
+    def test_event_dates_get_set(self):
+        self.assertFalse(self.event_page.dates.exists())
+
+        date = timezone.now()
+        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
+        self.event_page.dates.add(event_date)
+
+        self.event_page.save()
+
+        self.assertTrue(self.event_page.dates.exists())
+        self.assertEqual(self.event_page.start_date, date)
+        self.assertEqual(self.event_page.end_date, date)
+
+    def test_event_dates_get_ordered(self):
+        self.assertFalse(self.event_page.dates.exists())
+
+        date = timezone.now()
+        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
+        self.event_page.dates.add(event_date)
+
+        date2 = timezone.now() + datetime.timedelta(1)
+        event_date2 = EventDate.objects.create(event_page=self.event_page, start=date2)
+        self.event_page.dates.add(event_date2)
+
+        self.event_page.save()
+
+        self.assertTrue(self.event_page.dates.exists())
+        self.assertEqual(self.event_page.start_date, date)
+        self.assertEqual(self.event_page.end_date, date2)
+
+    def test_event_page_group_get_set(self):
+        event_page = LocalGroupSubPage(title="Special EventPage")
+        self.event_group_page.add_child(instance=event_page)
+
+        self.assertEqual(event_page.group.pk, self.event_group_page.group.pk)
+        self.assertEqual(event_page.group.pk, self.local_group.pk)

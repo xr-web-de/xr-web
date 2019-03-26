@@ -4,73 +4,24 @@ from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Collection
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.snippets.models import register_snippet
 
 from .blocks import ContentBlock
-from .services import (
-    get_or_create_or_update_page_auth_group_for_local_group_page,
-    add_group_page_permission,
-    add_group_collection_permission,
-    get_collection_permission,
-    get_or_create_or_update_page_auth_group_for_home_page,
-    get_or_create_or_update_event_auth_group_for_home_page,
-    get_or_create_or_update_event_auth_group_for_local_group_page,
-    MODERATORS_PAGE_PERMISSIONS,
-    EDITORS_PAGE_PERMISSIONS,
-    PAGE_EDITORS_SUFFIX,
-    PAGE_MODERATORS_SUFFIX,
-    EVENT_EDITORS_SUFFIX,
-    EVENT_MODERATORS_SUFFIX,
-    get_auth_group_name,
-    COMMON_COLLECTION_NAME,
-    MODERATORS_COLLECTION_PERMISSIONS,
-    EDITORS_COLLECTION_PERMISSIONS,
-)
 
 
 class HomePage(Page):
     template = "xr_pages/pages/home.html"
     content = StreamField(ContentBlock, blank=True)
-    group_name = models.CharField(max_length=50, default="Deutschland")
-    group_email = models.EmailField(null=True, blank=True)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
-    settings_panels = Page.settings_panels + [
-        MultiFieldPanel(
-            [FieldPanel("group_name"), FieldPanel("group_email")],
-            heading=_("Regional Group settings"),
-        )
-    ]
 
     parent_page_types = []
     is_creatable = False
 
     @property
-    def xr_group_name(self):
-        return "XR %s" % self.group_name
-
-    def clean(self):
-        if not self.group_name:
-            self.group_name = self.title
-
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        # update regional page auth groups
-        get_or_create_or_update_page_auth_group_for_home_page(
-            self.specific, PAGE_MODERATORS_SUFFIX
-        )
-        get_or_create_or_update_page_auth_group_for_home_page(
-            self.specific, PAGE_EDITORS_SUFFIX
-        )
-
-        # update regional event auth groups
-        get_or_create_or_update_event_auth_group_for_home_page(
-            self.specific, EVENT_MODERATORS_SUFFIX
-        )
-        get_or_create_or_update_event_auth_group_for_home_page(
-            self.specific, EVENT_EDITORS_SUFFIX
-        )
+    def group(self):
+        return LocalGroup.objects.get(is_regional_group=True)
 
 
 class HomeSubPage(Page):
@@ -81,32 +32,110 @@ class HomeSubPage(Page):
 
     parent_page_types = ["HomePage"]
 
+    @property
+    def group(self):
+        return LocalGroup.objects.get(is_regional_group=True)
+
+
+class LocalGroup(models.Model):
+    is_regional_group = models.BooleanField(editable=False, default=False)
+    name = models.CharField(
+        max_length=50,
+        default="",
+        unique=True,
+        help_text=_(
+            "The unique name for the local group. "
+            "Used as label for links referring to this page. "
+            'Enter a name without leading "XR ".'
+        ),
+    )
+    # old_name field helps with identifying name changes
+    old_name = models.CharField(max_length=50, default="", editable=False)
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_(
+            "An image that can be used not only for the detail view, but also for "
+            "lists, teasers or social media."
+        ),
+    )
+    description = models.CharField(
+        max_length=254,
+        default="",
+        blank=True,
+        help_text=_(
+            "A description not only for the detail view, but also for lists, "
+            "teasers or social media."
+        ),
+    )
+    email = models.EmailField(null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+    phone = models.CharField(max_length=50, default="", blank=True)
+    # TODO: move state choices to settings
+    GERMANY_STATE_CHOICES = (
+        ("BW", "Baden-Württemberg"),
+        ("BY", "Bayern"),
+        ("BE", "Berlin"),
+        ("BB", "Brandenburg"),
+        ("HB", "Bremen"),
+        ("HH", "Hamburg"),
+        ("HE", "Hessen"),
+        ("MV", "Mecklenburg-Vorpommern"),
+        ("NI", "Niedersachsen"),
+        ("NW", "Nordrhein-Westfalen"),
+        ("RP", "Rheinland-Pfalz"),
+        ("SL", "Saarland"),
+        ("SN", "Sachsen"),
+        ("ST", "Sachsen-Anhalt"),
+        ("SH", "Schleswig-Holstein"),
+        ("TH", "Thüringen"),
+    )
+    state = models.CharField(
+        max_length=50, choices=GERMANY_STATE_CHOICES, null=True, blank=True
+    )
+    location = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "Some city or address, like you would enter in GMaps or OpenStreetMap, "
+            'e.g. "Berlin", "Somestreet 84, 12345 Samplecity".'
+        ),
+    )
+
+    class Meta:
+        verbose_name = _("Group")
+        verbose_name_plural = _("Groups")
+
+    @property
+    def xr_name(self):
+        return "XR %s" % self.name
+
     @transaction.atomic
     def save(self, *args, **kwargs):
         is_new = self.id is None
+        name_has_changed = self.old_name != self.name
+
+        if is_new:
+            from .signals import local_group_create
+
+            local_group_create.send(sender=self.__class__, instance=self)
+        elif name_has_changed:
+            from .signals import local_group_name_change
+
+            local_group_name_change.send(sender=self.__class__, instance=self)
+
+        self.old_name = self.name
 
         super().save(*args, **kwargs)
 
-        # we only need to add permissions on page creation
-        if is_new:
-            home_page = HomePage.objects.ancestor_of(self).live().get()
+    def __str__(self):
+        return self.name
 
-            regional_moderators_group = Group.objects.get(
-                name=get_auth_group_name(home_page.group_name, PAGE_MODERATORS_SUFFIX)
-            )
-            regional_editors_group = Group.objects.get(
-                name=get_auth_group_name(home_page.group_name, PAGE_EDITORS_SUFFIX)
-            )
 
-            # Moderators
-            for permission_type in MODERATORS_PAGE_PERMISSIONS:
-                add_group_page_permission(
-                    regional_moderators_group, self, permission_type
-                )
-
-            # Editors
-            for permission_type in EDITORS_PAGE_PERMISSIONS:
-                add_group_page_permission(regional_editors_group, self, permission_type)
+register_snippet(LocalGroup)
 
 
 class LocalGroupListPage(Page):
@@ -129,109 +158,55 @@ class LocalGroupListPage(Page):
 class LocalGroupPage(Page):
     template = "xr_pages/pages/local_group.html"
     content = StreamField(ContentBlock, blank=True)
-    name = models.CharField(
-        max_length=50,
-        default="",
-        unique=True,
-        help_text=_(
-            "The unique name for the local group. "
-            "Used as label for links referring to this page. "
-            'Enter a name without leading "XR ".'
-        ),
-    )
-    email = models.EmailField(null=True, blank=True)
-    # TODO: move state choices to settings
-    STATE_CHOICES = (
-        ("BW", "Baden-Württemberg"),
-        ("BY", "Bayern"),
-        ("BE", "Berlin"),
-        ("BB", "Brandenburg"),
-        ("HB", "Bremen"),
-        ("HH", "Hamburg"),
-        ("HE", "Hessen"),
-        ("MV", "Mecklenburg-Vorpommern"),
-        ("NI", "Niedersachsen"),
-        ("NW", "Nordrhein-Westfalen"),
-        ("RP", "Rheinland-Pfalz"),
-        ("SL", "Saarland"),
-        ("SN", "Sachsen"),
-        ("ST", "Sachsen-Anhalt"),
-        ("SH", "Schleswig-Holstein"),
-        ("TH", "Thüringen"),
-    )
-    state = models.CharField(
-        max_length=50, choices=STATE_CHOICES, null=True, blank=True
-    )
+    group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
-    settings_panels = Page.settings_panels + [
-        MultiFieldPanel(
-            [FieldPanel("name"), FieldPanel("email"), FieldPanel("state")],
-            heading=_("Local Group settings"),
-        )
+    content_panels = Page.content_panels + [
+        SnippetChooserPanel("group"),
+        StreamFieldPanel("content"),
     ]
 
     parent_page_types = ["LocalGroupListPage"]
 
     @property
+    def name(self):
+        return self.group.name
+
+    @property
     def xr_name(self):
-        return "XR %s" % self.name
+        return "XR %s" % self.group.name
+
+    @property
+    def email(self):
+        return self.group.email
+
+    @property
+    def state(self):
+        return self.group.state
 
     @property
     def event_group(self):
-        if self.event_group_set.all().exists:
-            return self.event_group_set.first()
+        if hasattr(self.group, "eventgrouppage"):
+            return self.group.eventgrouppage
         return None
 
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        is_new = self.id is None
+    @property
+    def is_regional_group(self):
+        return self.group.is_regional_group
 
+    def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # update local page group names
-        moderators_group = get_or_create_or_update_page_auth_group_for_local_group_page(
-            self, PAGE_MODERATORS_SUFFIX
-        )
-        editors_group = get_or_create_or_update_page_auth_group_for_local_group_page(
-            self, PAGE_EDITORS_SUFFIX
-        )
-
-        if self.event_group:
-            # update local event group names
-            get_or_create_or_update_event_auth_group_for_local_group_page(
-                self, EVENT_MODERATORS_SUFFIX
-            )
-            get_or_create_or_update_event_auth_group_for_local_group_page(
-                self, EVENT_EDITORS_SUFFIX
-            )
-
-        # we only need to add page permissions on page creation
-        if is_new:
-            collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
-
-            # Moderators
-            for permission_type in MODERATORS_PAGE_PERMISSIONS:
-                add_group_page_permission(moderators_group, self, permission_type)
-
-            for codename in MODERATORS_COLLECTION_PERMISSIONS:
-                add_group_collection_permission(
-                    moderators_group, collection, get_collection_permission(codename)
-                )
-
-            # Editors
-            for permission_type in EDITORS_PAGE_PERMISSIONS:
-                add_group_page_permission(editors_group, self, permission_type)
-
-            for codename in EDITORS_COLLECTION_PERMISSIONS:
-                add_group_collection_permission(
-                    editors_group, collection, get_collection_permission(codename)
-                )
+        if self.group and not self.group.url:
+            self.group.url = self.get_full_url()
+            self.group.save()
 
 
 class LocalGroupSubPage(Page):
     template = "xr_pages/pages/local_group_sub.html"
     content = StreamField(ContentBlock, blank=True)
+    group = models.ForeignKey(
+        LocalGroup, on_delete=models.PROTECT, editable=False, related_name="+"
+    )
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
@@ -242,3 +217,9 @@ class LocalGroupSubPage(Page):
         context["parent_page"] = self.get_parent()
         context["local_group_page"] = self.get_parent()
         return context
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "group"):
+            self.group = self.get_parent().specific.group
+
+        super().save(*args, **kwargs)

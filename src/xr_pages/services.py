@@ -9,17 +9,22 @@ from wagtail.core.models import (
     Collection,
 )
 
+
+# Pages
+
 PAGE_MODERATORS_SUFFIX = "Page Moderators"
 PAGE_EDITORS_SUFFIX = "Page Editors"
-EVENT_MODERATORS_SUFFIX = "Event Moderators"
-EVENT_EDITORS_SUFFIX = "Event Editors"
-
-COMMON_COLLECTION_NAME = "Common"
 
 PAGE_AUTH_GROUP_TYPES = [PAGE_MODERATORS_SUFFIX, PAGE_EDITORS_SUFFIX]
-EVENT_AUTH_GROUP_TYPES = [EVENT_MODERATORS_SUFFIX, EVENT_EDITORS_SUFFIX]
-AUTH_GROUP_TYPES = PAGE_AUTH_GROUP_TYPES + EVENT_AUTH_GROUP_TYPES
+
 AVAILABLE_PAGE_PERMISSION_TYPES = [key for key, _ in PAGE_PERMISSION_TYPE_CHOICES]
+MODERATORS_PAGE_PERMISSIONS = ["add", "edit", "publish"]
+EDITORS_PAGE_PERMISSIONS = ["add", "edit"]
+
+
+# Collections
+
+COMMON_COLLECTION_NAME = "Common"
 
 IMAGE_PERMISSION_CODENAMES = ["add_image", "change_image"]  # change includes delete
 DOCUMENT_PERMISSION_CODENAMES = ["add_document", "change_document"]
@@ -27,14 +32,7 @@ AVAILABLE_COLLECTION_PERMISSION_TYPES = (
     IMAGE_PERMISSION_CODENAMES + DOCUMENT_PERMISSION_CODENAMES
 )
 
-MODERATORS_PAGE_PERMISSIONS = ["add", "edit", "publish"]
-MODERATORS_IMAGE_PERMISSIONS = IMAGE_PERMISSION_CODENAMES
-MODERATORS_DOCUMENT_PERMISSIONS = DOCUMENT_PERMISSION_CODENAMES
 MODERATORS_COLLECTION_PERMISSIONS = AVAILABLE_COLLECTION_PERMISSION_TYPES
-
-EDITORS_PAGE_PERMISSIONS = ["add", "edit"]
-EDITORS_IMAGE_PERMISSIONS = IMAGE_PERMISSION_CODENAMES
-EDITORS_DOCUMENT_PERMISSIONS = DOCUMENT_PERMISSION_CODENAMES
 EDITORS_COLLECTION_PERMISSIONS = AVAILABLE_COLLECTION_PERMISSION_TYPES
 
 
@@ -42,148 +40,146 @@ def get_auth_group_name(page_group_name, group_type):
     return "%s %s" % (page_group_name, group_type)
 
 
-def get_or_create_or_update_page_auth_group_for_local_group_page(page, group_type):
-    from xr_pages.models import LocalGroupPage
+def create_auth_groups(local_group=None, auth_group_types=None):
+    from xr_pages.models import LocalGroup
 
-    if not isinstance(page, LocalGroupPage):
+    if not isinstance(local_group, LocalGroup):
+        raise ValueError(
+            "Object '%s' must be an instance of xr_pages.LocalGroup." % local_group
+        )
+
+    if auth_group_types is None:
+        auth_group_types = []
+
+    auth_groups = []
+    for group_type in auth_group_types:
+        group_name = get_auth_group_name(local_group.name, group_type)
+        group, created = Group.objects.get_or_create(name=group_name)
+        auth_groups.append(group)
+    return auth_groups
+
+
+def get_auth_groups(local_group=None, auth_group_types=None):
+    from xr_pages.models import LocalGroup
+
+    if not isinstance(local_group, LocalGroup):
+        raise ValueError(
+            "Object '%s' must be an instance of xr_pages.LocalGroup." % local_group
+        )
+
+    if auth_group_types is None:
+        auth_group_types = []
+
+    auth_groups = []
+    for group_type in auth_group_types:
+        group_name = get_auth_group_name(local_group.name, group_type)
+        group = Group.objects.get(name=group_name)
+        auth_groups.append(group)
+    return auth_groups
+
+
+def set_auth_groups_page_permissions(
+    auth_groups, page, moderators_permissions=None, editors_permissions=None
+):
+    if not isinstance(page, Page):
         raise ValidationError("Object '%s' must be an instance of Page." % page)
 
-    if group_type not in PAGE_AUTH_GROUP_TYPES:
-        raise ValidationError("Invalid group_type '%s'." % group_type)
+    for auth_group in auth_groups:
+        if not isinstance(auth_group, Group):
+            raise ValidationError(
+                "Object '%s' must be an instance of Group." % auth_group
+            )
 
-    group_name = get_auth_group_name(page.name, group_type)
+        if auth_group.name.endswith("Moderators"):
+            permission_types = moderators_permissions
+        elif auth_group.name.endswith("Editors"):
+            permission_types = editors_permissions
+        else:
+            raise ValidationError(
+                'Group.name must end with "Moderators" or "Editors". Got "%s".'
+                % auth_group.name
+            )
 
-    # first check for existing group by name
-    group_qs = Group.objects.filter(name=group_name)
+        for permission_type in permission_types:
+            add_group_page_permission(auth_group, page, permission_type)
 
-    if group_qs.exists():
-        return group_qs.get()
 
-    # second check for an appropriate group_page_permission
-    group_page_permission_qs = GroupPagePermission.objects.filter(
-        page=page, group__name__endswith=group_type
-    )
-    if group_page_permission_qs.exists():
-        group_page_permission = group_page_permission_qs.first()
-        group = group_page_permission.group
-        # the name has changed so we update the existing group
-        group.name = group_name
+def set_auth_groups_collection_permissions(
+    auth_groups,
+    collection_name=None,
+    moderators_permissions=None,
+    editors_permissions=None,
+):
+    if collection_name is None:
+        collection_name = COMMON_COLLECTION_NAME
+    collection = Collection.objects.get(name=collection_name)
+
+    for auth_group in auth_groups:
+        if not isinstance(auth_group, Group):
+            raise ValidationError(
+                "Object '%s' must be an instance of Group." % auth_group
+            )
+
+        if auth_group.name.endswith("Moderators"):
+            permission_types = moderators_permissions
+        elif auth_group.name.endswith("Editors"):
+            permission_types = editors_permissions
+        else:
+            raise ValidationError(
+                'Group.name must end with "Moderators" or "Editors". Got "%s".'
+                % auth_group.name
+            )
+
+        for codename in permission_types:
+            add_group_collection_permission(
+                auth_group, collection, get_collection_permission(codename)
+            )
+
+
+def update_auth_group_names(local_group=None, auth_group_types=None):
+    from xr_pages.models import LocalGroup
+
+    if not isinstance(local_group, LocalGroup):
+        raise ValueError(
+            "local_group must be an instance of xr_pages.LocalGroup. got '%s'"
+            % local_group
+        )
+
+    if auth_group_types is None:
+        auth_group_types = []
+
+    auth_groups = []
+    for group_type in auth_group_types:
+        old_group_name = get_auth_group_name(local_group.old_name, group_type)
+        new_group_name = get_auth_group_name(local_group.name, group_type)
+
+        if not Group.objects.filter(name=old_group_name).exists():
+            continue
+
+        group = Group.objects.get(name=old_group_name)
+        group.name = new_group_name
         group.save()
-        return group
 
-    # else create a new auth group
-    return Group.objects.create(name=group_name)
+        auth_groups.append(group)
+
+    return auth_groups
 
 
-def get_or_create_or_update_event_auth_group_for_local_group_page(page, group_type):
-    from xr_pages.models import LocalGroupPage
+def delete_auth_groups(local_group=None, auth_group_types=None):
+    from xr_pages.models import LocalGroup
 
-    if not isinstance(page, LocalGroupPage):
-        raise ValidationError("Object '%s' must be an instance of Page." % page)
-
-    if group_type not in EVENT_AUTH_GROUP_TYPES:
-        raise ValidationError("Invalid group_type '%s'." % group_type)
-
-    group_name = "%s %s" % (page.name, group_type)
-
-    # first check for existing group by name
-    group_qs = Group.objects.filter(name=group_name)
-
-    if group_qs.exists():
-        return group_qs.get()
-
-    # second check for an appropriate group_page_permission
-    if page.event_group:
-        group_page_permission_qs = GroupPagePermission.objects.filter(
-            page=page.event_group, group__name__endswith=group_type
+    if not isinstance(local_group, LocalGroup):
+        raise ValueError(
+            "Object '%s' must be an instance of xr_pages.LocalGroup." % local_group
         )
-        if group_page_permission_qs.exists():
-            group_page_permission = group_page_permission_qs.first()
-            group = group_page_permission.group
-            # the name has changed so we update the existing group
-            group.name = group_name
-            group.save()
-            return group
 
-    # else create a new auth group
-    return Group.objects.create(name=group_name)
+    if auth_group_types is None:
+        auth_group_types = []
 
-
-def get_or_create_or_update_page_auth_group_for_home_page(page, group_type):
-    from xr_pages.models import HomePage, HomeSubPage
-
-    if not isinstance(page, HomePage):
-        raise ValidationError("Object '%s' must be an instance of Page." % page)
-
-    if group_type not in PAGE_AUTH_GROUP_TYPES:
-        raise ValidationError("Invalid group_type '%s'." % group_type)
-
-    group_name = "%s %s" % (page.group_name, group_type)
-
-    # first check for existing group by name
-    group_qs = Group.objects.filter(name=group_name)
-
-    if group_qs.exists():
-        return group_qs.get()
-
-    # second look for a subpage
-    subpage_qs = HomeSubPage.objects.all()
-
-    if subpage_qs.exists():
-        subpage = subpage_qs.first()
-        # and look for an appropriate group_page_permission
-        group_page_permission_qs = GroupPagePermission.objects.filter(
-            page=subpage, group__name__endswith=group_type
-        )
-        if group_page_permission_qs.exists():
-            group_page_permission = group_page_permission_qs.first()
-            group = group_page_permission.group
-            # the name has changed so we update the existing group
-            group.name = group_name
-            group.save()
-            return group
-
-    # else create a new auth group
-    return Group.objects.create(name=group_name)
-
-
-def get_or_create_or_update_event_auth_group_for_home_page(page, group_type):
-    from xr_pages.models import HomePage
-    from xr_events.models import EventGroupPage
-
-    if not isinstance(page, HomePage):
-        raise ValidationError("Object '%s' must be an instance of Page." % page)
-
-    if group_type not in EVENT_AUTH_GROUP_TYPES:
-        raise ValidationError("Invalid group_type '%s'." % group_type)
-
-    group_name = "%s %s" % (page.group_name, group_type)
-
-    # first check for existing group by name
-    group_qs = Group.objects.filter(name=group_name)
-
-    if group_qs.exists():
-        return group_qs.get()
-
-    # second look for an event_group_page
-    event_group_page_qs = EventGroupPage.objects.filter(is_regional_group=True)
-
-    if event_group_page_qs.exists():
-        event_group_page = event_group_page_qs.first()
-        # and look for an appropriate group_page_permission
-        group_page_permission_qs = GroupPagePermission.objects.filter(
-            page=event_group_page, group__name__endswith=group_type
-        )
-        if group_page_permission_qs.exists():
-            group_page_permission = group_page_permission_qs.first()
-            group = group_page_permission.group
-            # the name has changed so we update the existing group
-            group.name = group_name
-            group.save()
-            return group
-
-    # else create a new auth group
-    return Group.objects.create(name=group_name)
+    for group_type in auth_group_types:
+        group_name = get_auth_group_name(local_group.name, group_type)
+        Group.objects.get(name=group_name).delete()
+    return True
 
 
 def add_group_page_permission(group, page, permission_type):
