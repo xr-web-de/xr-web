@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # Django 3rd Party
     "webpack_loader",
     "django_extensions",
+    "widget_tweaks",
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     # Project
     "xr_pages",
     "xr_events",
+    "xr_newsletter",
 ]
 
 MIDDLEWARE = [

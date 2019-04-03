@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+
+
+<section class="block form-block {% if value.align %}align--{{ value.align }}{% endif %}">
+
+    {% include "xr_pages/forms/form.html" with form=value.form action=value.action form_id=value.form_id %}
+
+</section>
