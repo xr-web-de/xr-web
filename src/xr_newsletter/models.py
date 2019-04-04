@@ -1,23 +1,25 @@
 import json
 
-from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 
-# Create your models here.
 from django.shortcuts import render
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
-from sendy.exceptions import SendyError
 from unidecode import unidecode
-from wagtail.admin.edit_handlers import FieldRowPanel, FieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import (
+    FieldRowPanel,
+    FieldPanel,
+    MultiFieldPanel,
+    InlinePanel,
+)
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Orderable
 
+from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import LocalGroup, HomePage, LocalGroupPage
@@ -45,6 +47,9 @@ class EmailFormField(AbstractFormField):
         ),
     ]
 
+    def __str__(self):
+        return self.label
+
 
 class AbstractEmailFormPage(AbstractEmailForm):
     content = StreamField(ContentBlock, blank=True)
@@ -52,7 +57,7 @@ class AbstractEmailFormPage(AbstractEmailForm):
 
     content_panels = AbstractEmailForm.content_panels + [
         FieldPanel("content", classname="full"),
-        CondensedInlinePanel("form_fields", label=_("Form fields")),
+        InlinePanel("form_fields", label=_("Form fields")),
         FieldPanel("thank_you_text", classname="full"),
     ]
 
@@ -140,6 +145,9 @@ class NewsletterFormField(AbstractFormField):
         # which will be converted to a normal str
         return str(slugify(str(unidecode(self.name))))
 
+    def __str__(self):
+        return self.label
+
 
 class NewsletterFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/newsletter_form.html"
@@ -147,80 +155,16 @@ class NewsletterFormPage(AbstractEmailFormPage):
     group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
     sendy_list_id = models.CharField(max_length=254, null=True, blank=True)
 
-    settings_panels = [
+    settings_panels = AbstractEmailFormPage.settings_panels + [
         MultiFieldPanel(
             [FieldPanel("sendy_list_id")],
             _("Subscribe to Sendy newsletter list on submit"),
         )
-    ] + AbstractEmailFormPage.settings_panels
+    ]
 
     parent_page_types = [LocalGroupPage]
 
-    def get_form_parameters(self):
-        form_parmas = super().get_form_parameters()
-
-        form_fields = (
-            [
-                NewsletterFormField(
-                    page=self,
-                    label=_("Email"),
-                    name="email",
-                    field_type="email",
-                    required=True,
-                ),
-                NewsletterFormField(
-                    page=self,
-                    label=_("Name"),
-                    name="name",
-                    field_type="singleline",
-                    required=False,
-                ),
-                NewsletterFormField(
-                    page=self,
-                    label=_("I agree"),
-                    name="gdpr",
-                    field_type="checkbox",
-                    required=True,
-                    help_text=_(
-                        "GDPR Permission: I give my consent to Extinction Rebellion to get "
-                        "in touch with me using the information I have provided in this "
-                        "form, for the purpose of news, updates, and rebellion"
-                    ),
-                ),
-            ],
-        )
-
-        form_parmas.update({"initial": {"form_fields": form_fields}})
-
-        return form_parmas
-
-    def clean(self):
-        super().clean()
-
-        required_fields = ["email", "gdpr"]
-
-        for field_name in required_fields:
-            form_field_qs = self.form_fields.filter(name=field_name)
-
-            if not form_field_qs.exists():
-                raise ValidationError(
-                    'A form field with the label "%s" is required, '
-                    "in order to allow subscribing to the newsletter." % field_name
-                )
-
-            form_field = form_field_qs.first()
-
-            if form_field.required is False:
-                raise ValidationError(
-                    'The "%s" form field must be set required, '
-                    "in order to allow subscribing to the newsletter." % field_name
-                )
-
-        if not self.form_fields.filter(name="name").exists():
-            raise ValidationError(
-                'A form field with the label "name" or "Name" is required, '
-                "in order to allow subscribing to the newsletter."
-            )
+    base_form_class = WagtailAdminNewsletterFormPageForm
 
     def serve(self, request, *args, **kwargs):
         if request.method == "POST":
@@ -238,15 +182,14 @@ class NewsletterFormPage(AbstractEmailFormPage):
 
                 if self.sendy_list_id:
                     data = {
-                        "list_id": self.sendy_list_id,
                         "email": form.cleaned_data.get("email", None),
                         "name": form.cleaned_data.get("name", None),
                         "gdpr": form.cleaned_data.get("gdpr", None),
                     }
 
-                    sendy_response = sendy_api.subscribe(**data)
+                    sendy_response = sendy_api.subscribe(self.sendy_list_id, **data)
 
-                    if sendy_response == "true":
+                    if sendy_response == "true" or sendy_response == b"\n1":
                         return self.render_landing_page(
                             request, form_submission, *args, **kwargs
                         )
@@ -256,7 +199,7 @@ class NewsletterFormPage(AbstractEmailFormPage):
                     "Please try again later."
                 )
                 messages.error(request, message)
-                form = self.get_form(page=self, user=request.user)
+                # form = self.get_form(page=self, user=request.user)
         else:
             form = self.get_form(page=self, user=request.user)
 

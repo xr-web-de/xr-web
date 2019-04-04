@@ -56,10 +56,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             # response.mustcontain("success")
 
             mock_sendy_subscribe.assert_called_once_with(
-                list_id="sendy_TEST_list_id",
-                email="bob@example.com",
-                name="Bob",
-                gdpr=True,
+                "sendy_TEST_list_id", email="bob@example.com", name="Bob", gdpr=True
             )
             # Test that one message has been sent.
             self.assertEqual(len(mail.outbox), 1)
@@ -87,10 +84,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             # response.mustcontain("success")
 
             mock_sendy_subscribe.assert_called_once_with(
-                list_id="sendy_TEST_list_id",
-                email="bob@example.com",
-                name="Bob",
-                gdpr=True,
+                "sendy_TEST_list_id", email="bob@example.com", name="Bob", gdpr=True
             )
             # Test that one message has been sent.
             self.assertEqual(len(mail.outbox), 0)
