@@ -83,10 +83,10 @@ def delete_local_group_page_auth_groups(sender, instance, **kwargs):
 )
 def create_home_sub_page_permissions(sender, instance, created=False, **kwargs):
     if created:
-        regional_group_page = LocalGroupPage.objects.get(is_regional_group=True)
+        regional_group = LocalGroup.objects.get(is_regional_group=True)
 
         auth_groups = get_auth_groups(
-            local_group=regional_group_page, auth_group_types=PAGE_AUTH_GROUP_TYPES
+            local_group=regional_group, auth_group_types=PAGE_AUTH_GROUP_TYPES
         )
         set_auth_groups_page_permissions(
             auth_groups, instance, MODERATORS_PAGE_PERMISSIONS, EDITORS_PAGE_PERMISSIONS

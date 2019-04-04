@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Collection
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -219,7 +219,7 @@ class LocalGroupSubPage(Page):
         return context
 
     def save(self, *args, **kwargs):
-        if not hasattr(self, "group"):
+        if not hasattr(self, "group") or self.group is None:
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)

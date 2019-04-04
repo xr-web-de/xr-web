@@ -465,8 +465,19 @@ class PagesSignalsTest(PagesBaseTest):
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
         self.assertAuthGroupsExists("Another Group", PAGE_AUTH_GROUP_TYPES)
 
+    def test_home_sub_page_create(self):
+        regional_moderators = Group.objects.get(name="Deutschland Page Moderators")
+        regional_editors = Group.objects.get(name="Deutschland Page Editors")
 
-class PagesLocalGroupSubPageTest(PagesBaseTest):
+        self.assertHasGroupPagePermissions(
+            regional_moderators, self.home_sub_page, MODERATORS_PAGE_PERMISSIONS
+        )
+        self.assertHasGroupPagePermissions(
+            regional_editors, self.home_sub_page, EDITORS_PAGE_PERMISSIONS
+        )
+
+
+class PagesLocalGroupInheritanceTest(PagesBaseTest):
     def setUp(self):
         super().setUp()
         self._setup_local_group_pages()

@@ -28,7 +28,7 @@ def filter_local_group_pages(parent_page, pages, request):
     # Filter local_group_pages (don't list regional_group_pages)
     if issubclass(type(parent_page.specific), LocalGroupListPage):
         pages = LocalGroupPage.objects.child_of(parent_page).specific()
-        pages = pages.filter(is_regional_group=False)
+        pages = pages.filter(group__is_regional_group=False)
 
     return pages
 
@@ -40,5 +40,5 @@ def protect_base_and_local_group_pages(request, page):
         return
 
     if isinstance(page.specific, LocalGroupPage):
-        if page.is_regional_group:
+        if page.group.is_regional_group:
             return permission_denied(request)
