@@ -8,7 +8,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import re
 import os
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # this evaluates to path/to/project/src/
@@ -176,3 +178,67 @@ WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
     ("learn_more", "learn_more"),
 )
 WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = "xr_pages/menus/local_group_submenu.html"
+
+
+# Logging
+# ------------
+def filter_404(record):
+    if getattr(record, "status_code", None) == 404 and re.match(
+        r"^Not Found: ", record.msg
+    ):
+        return False
+    else:
+        return True
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "application_file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(
+                os.path.dirname(os.path.dirname(BASE_DIR)), "log", "application.log"
+            ),
+        },
+        "template_file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(
+                os.path.dirname(os.path.dirname(BASE_DIR)), "log", "template.log"
+            ),
+        },
+        "debug_file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(
+                os.path.dirname(os.path.dirname(BASE_DIR)), "log", "application.log"
+            ),
+        },
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(
+                os.path.dirname(os.path.dirname(BASE_DIR)), "log", "error.log"
+            ),
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "django.request": {"filters": ["filter_404"]},
+        "django.template": {"handlers": ["template_file"], "level": "INFO"},
+        "": {"handlers": ["mail_admins", "error_file"], "level": "ERROR"},
+        "": {"handlers": ["application_file"], "level": "WARNING"},
+        "": {"handlers": ["debug_file"], "level": "DEBUG"},
+    },
+    "filters": {
+        "filter_404": {"()": "django.utils.log.CallbackFilter", "callback": filter_404}
+    },
+    "formatters": {
+        "advanced": {"format": "%(levelname)s %(asctime)s %(module)s %(message)s"}
+    },
+}

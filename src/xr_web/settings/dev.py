@@ -26,15 +26,6 @@ WEBPACK_LOADER = {
 }
 
 
-def filter_404(record):
-    if getattr(record, "status_code", None) == 404 and re.match(
-        r"^Not Found: ", record.msg
-    ):
-        return False
-    else:
-        return True
-
-
 # log everything to console
 LOGGING = {
     "version": 1,
