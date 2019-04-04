@@ -56,7 +56,7 @@ class AbstractEmailFormPage(AbstractEmailForm):
         FieldPanel("thank_you_text", classname="full"),
     ]
 
-    settings_panels = AbstractEmailForm.settings_panels + [
+    settings_panels = Page.settings_panels + [
         MultiFieldPanel(
             [
                 FieldRowPanel(
@@ -75,8 +75,8 @@ class AbstractEmailFormPage(AbstractEmailForm):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if self.group is None:
-            self.group = self.get_parent().group
+        if not hasattr(self, "group") or self.group is None:
+            self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)
 
