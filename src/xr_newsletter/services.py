@@ -15,6 +15,8 @@ class XRSendyAPI(SendyAPI):
 
 
 if settings.DEBUG or settings.TESTING:
-    sendy_api = XRSendyAPI(host=settings.SENDY_HOST_URL, debug=True)
+    sendy_api = XRSendyAPI(
+        host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY, debug=True
+    )
 else:
-    sendy_api = XRSendyAPI(host=settings.SENDY_HOST_URL)
+    sendy_api = XRSendyAPI(host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY)
