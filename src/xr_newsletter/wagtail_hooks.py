@@ -21,7 +21,9 @@ def newsletter_form_page_check_sendy_api(request, page):
             sendy_response = sendy_api.subscriber_count(page.sendy_list_id)
 
             # Sendy will return an integer if the given list_id exists
-            if not isinstance(sendy_response, int):
+            try:
+                int(sendy_response)
+            except ValueError:
                 message = (
                     _(
                         "There was a problem talking to Sendy API: %s. "

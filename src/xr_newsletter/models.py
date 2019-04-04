@@ -189,7 +189,7 @@ class NewsletterFormPage(AbstractEmailFormPage):
 
                     sendy_response = sendy_api.subscribe(self.sendy_list_id, **data)
 
-                    if sendy_response == "true" or sendy_response == b"\n1":
+                    if sendy_response == "true" or int(sendy_response) == 1:
                         return self.render_landing_page(
                             request, form_submission, *args, **kwargs
                         )
