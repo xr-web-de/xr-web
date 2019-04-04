@@ -1,15 +1,10 @@
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F, Min
 from django.utils import formats, timezone
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import (
     FieldPanel,
-    PageChooserPanel,
-    MultiFieldPanel,
     FieldRowPanel,
     HelpPanel,
     StreamFieldPanel,
