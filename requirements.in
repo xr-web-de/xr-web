@@ -8,3 +8,5 @@ wagtailmenus
 wagtail-condensedinlinepanel
 flake8
 selenium
+sendypy
+django-widget-tweaks

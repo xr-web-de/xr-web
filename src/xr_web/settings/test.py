@@ -52,3 +52,6 @@ LOGGING = {
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}}
 
 PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
+
+
+SENDY_HOST_URL = "https://sendy.testhost"
