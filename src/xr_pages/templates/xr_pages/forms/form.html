@@ -1,0 +1,52 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+<form method='POST' action="{% if action %}{{ action }}{% endif %}"
+      {% if form_id %}id="{{ form_id }}"{% endif %}>
+    {% csrf_token %}
+
+    {% block errors %}
+        {% if form.is_bound and not form.is_valid %}
+
+            <div class="alert alert-danger">
+                {% trans "Uups, da stimmt noch etwas nicht..." %}
+            </div>
+
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+
+                <div class="alert alert-danger">
+                     {{ error }}
+                </div>
+
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+
+    {% block fields %}
+        {% for field in form %}
+
+            {# see https://github.com/jazzband/django-widget-tweaks #}
+
+            {% if field.name == "email" %}
+                {% include "xr_pages/forms/field.html" with field=field|attr:"placeholder:xr@example.com" %}
+            {% else %}
+                {% include "xr_pages/forms/field.html" with field=field %}
+            {% endif %}
+
+        {% endfor %}
+    {% endblock %}
+
+    {% block submit_buttons %}
+        <button type="submit">
+            {% if submit_butten_text %}
+                {{ submit_butten_text }}
+            {% else %}
+                {% trans "Absenden" %}
+            {% endif %}
+        </button>
+    {% endblock %}
+</form>
