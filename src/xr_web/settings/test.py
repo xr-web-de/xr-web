@@ -55,3 +55,4 @@ PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
 
 
 SENDY_HOST_URL = "https://sendy.testhost"
+SENDY_API_KEY = "NotSecretAtAll"
