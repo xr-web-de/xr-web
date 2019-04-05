@@ -42,7 +42,7 @@ PAGES_PAGE_CLASSES = {
 class PagesBaseTest(WagtailPageTests):
     def setUp(self):
         site = Site.objects.get()
-        self.home_page = site.root_page
+        self.home_page = site.root_page.specific
         self.root_page = Page.objects.parent_of(self.home_page).get()
         self.home_sub_page = HomeSubPage.objects.get()
 
@@ -200,6 +200,9 @@ class PagesPageTreeTest(PagesBaseTest):
 
         self.assertEqual([self.local_group_sub_page], list(local_group_page_children))
         self.assertEqual(self.local_group_sub_page.group.pk, self.local_group.pk)
+
+        self.assertEqual(self.home_page.group.pk, self.regional_group.pk)
+        self.assertEqual(self.home_sub_page.group.pk, self.regional_group.pk)
 
     def test_can_create_pages_under_home_page(self):
         self.assertCanCreateAt(HomePage, HomeSubPage)

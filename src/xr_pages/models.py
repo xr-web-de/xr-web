@@ -13,28 +13,28 @@ from .blocks import ContentBlock
 class HomePage(Page):
     template = "xr_pages/pages/home.html"
     content = StreamField(ContentBlock, blank=True)
+    group = models.OneToOneField("LocalGroup", editable=False, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = []
     is_creatable = False
 
-    @property
-    def group(self):
-        return LocalGroup.objects.get(is_regional_group=True)
-
 
 class HomeSubPage(Page):
     template = "xr_pages/pages/home_sub.html"
     content = StreamField(ContentBlock, blank=True)
+    group = models.ForeignKey("LocalGroup", editable=False, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["HomePage"]
 
-    @property
-    def group(self):
-        return LocalGroup.objects.get(is_regional_group=True)
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "group") or self.group is None:
+            self.group = self.get_parent().specific.group
+
+        super().save(*args, **kwargs)
 
 
 class LocalGroup(models.Model):
