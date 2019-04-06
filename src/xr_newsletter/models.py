@@ -48,6 +48,9 @@ class EmailFormField(AbstractFormField):
         ),
     ]
 
+    class Meta:
+        ordering = ["sort_order"]
+
     def __str__(self):
         return self.label
 
@@ -138,6 +141,7 @@ class NewsletterFormField(AbstractFormField):
 
     class Meta:
         unique_together = ("page", "name")
+        ordering = ["sort_order"]
 
     @property
     def clean_name(self):
