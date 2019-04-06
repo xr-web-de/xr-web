@@ -1,0 +1,7 @@
+
+
+
+{% block block_content_classes %}{% spaceless %}
+    {% if value.background_color %}bg--{{ value.background_color }}{% endif %}
+    {% if value.font_color %}color--{{ value.font_color }}{% endif %}
+{% endspaceless %}{% endblock %}

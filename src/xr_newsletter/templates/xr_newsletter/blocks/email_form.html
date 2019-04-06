@@ -1,8 +1,13 @@
+{% extends "xr_pages/blocks/text.html" %}
 {% load wagtailcore_tags %}
+{% load xr_newsletter_tags %}
 
 
-<section class="block form-block {% if value.align %}align--{{ value.align }}{% endif %}">
+{% block block_content %}
+    <div class="container">
+        {% get_form_variables_for form_page=value.form_page.specific id=value.block.creation_counter as form_vars %}
 
-    {% include "xr_pages/forms/form.html" with form=value.form action=value.action form_id=value.form_id %}
+        {% include "xr_pages/forms/form.html" with form=form_vars.form action=form_vars.action form_id=form_vars.form_id %}
+    </div>
+{% endblock %}
 
-</section>

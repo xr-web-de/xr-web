@@ -1,4 +1,5 @@
 from django import template
+from django.utils.text import normalize_newlines
 
 from ..models import LocalGroupListPage
 
@@ -42,3 +43,12 @@ def get_local_group_page_for(context, page=None):
     except (KeyError, AttributeError):
         return None
     return local_group_page
+
+
+@register.inclusion_tag("xr_pages/templatetags/inline_svg_text.html")
+def inline_svg_text(message, font_size=30):
+    message = normalize_newlines(message)
+
+    message_lines = message.split("\n")
+
+    return {"message_lines": message_lines, "font_size": font_size}

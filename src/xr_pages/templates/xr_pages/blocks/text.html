@@ -1,6 +1,16 @@
+{% extends "xr_pages/blocks/base.html" %}
 {% load wagtailcore_tags %}
 
 
-<section class="block image-block {% if value.align %}align--{{ value.align }}{% endif %}">
-    {{ value.text|richtext }}
-</section>
+{% block block_classes %}{% spaceless %}
+    {% if value.background_color %}bg--{{ value.background_color }} block--with-bg{% endif %}
+    {% if value.font_color %}color--{{ value.font_color }}{% endif %}
+    clearfix
+{% endspaceless %}{% endblock %}
+
+
+{% block block_content %}
+    <div class="container">
+        {{ value.text|richtext }}
+    </div>
+{% endblock %}

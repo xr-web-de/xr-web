@@ -39,11 +39,65 @@ $colors: (
   }
 }
 
+// base layout
+#header {
+  z-index: 1000;
+}
+
+#main {
+  padding-bottom: 3rem;
+}
+
+a.display--block {
+  display: block;
+}
 
 // Content blocks
 //---------------
-.video-block {
+.block {
   position: relative;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+
+  &.align-right {
+    float: right;
+    margin-left: 2rem;
+  }
+  &.align-left {
+    float: left;
+    margin-right: 2rem;
+  }
+  &.align-right,
+  &.align-left {
+    z-index: 500;
+    width: 346.66px;
+  }
+  &.align-center {
+    width: 800px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.block--with-bg {
+    padding-top: 2em;
+    padding-bottom: 2em;
+  }
+}
+
+.block--content {
+  position: relative;
+
+}
+
+.block--footer {
+  padding-top: 0.5em;
+  p {
+    padding-bottom: 0;
+  }
+}
+
+// Video Block
+.video-block {
   iframe {
     position: absolute;
     top: 0;
@@ -52,13 +106,72 @@ $colors: (
     height: 100%;
   }
 }
+.responsive-object {
+  position: relative;
+}
 
-.message-block {
-  font-size: 4rem;
-  p {
-    margin: 0;
+// Massage Block
+.message-block .block--content {
+  width: 100%;
+  padding-top: 56.25%;
+}
+.message-block--bg-img,
+.inline-svg-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-transform: uppercase;
+  font-family: 'Fucxed', Impact, Arial, sans-serif;
+}
+.inline-svg-text--message {
+  text-anchor: middle;
+}
+
+// Image Block
+.image-block {
+  figure {
+    position: relative;
   }
 }
-.message-block--inner {
-  padding: 30px 50px;
+
+.image-attribution {
+  position: absolute;
+  bottom: .3em;
+  right: .8em;
+  color: #fff;
+  text-shadow: 0 0 1px #000;
+}
+
+// Text Block
+.text-block {
+  ol {
+    clear: left;
+    list-style: none;
+    counter-reset: xr-list-numbering;
+    padding-left: 4em;
+  }
+  ol li {
+    counter-increment: xr-list-numbering;
+    position: relative;
+
+    padding-left: 0.75em;
+    min-height: 4em;
+    border-left: 2px solid #CCCCCC;
+  }
+  ol li + li {
+    margin-top: 2em;
+  }
+  ol li::before {
+    content: counter(xr-list-numbering);
+    font-size: 4em;
+    font-family: 'Fucxed', Impact, Arial, sans-serif;
+    text-align: center;
+    line-height: 1;
+    position: absolute;
+    left: -.8em;
+    top: 0;
+    width: 0.5em;
+  }
 }

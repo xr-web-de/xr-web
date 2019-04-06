@@ -1,0 +1,78 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load xr_pages_tags %}
+
+
+<section class="block {{ block.block_type }}-block {% if value.align %}align-{{ value.align }}{% endif %} {% block block_classes %}{% endblock %}">
+
+    {% block block_header %}
+        {% if value.heading %}
+            {% if block.value.align == "full_page" or block.value.align is None %}
+                <div class="container">
+            {% endif %}
+
+            <header class="block--heading">
+                {% if value.link.external_link or value.link.internal_link %}
+                    {% include_block value.link %}
+                {% endif %}
+
+                <h2 class="h h--2-caps">
+                    {{ value.heading }}
+                </h2>
+
+                {% if value.link.external_link or value.link.internal_link %}
+                    </a>
+                {% endif %}
+            </header>
+
+            {% if block.value.align == "full_page" or block.value.align is None %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endblock %}
+
+    {% block block_body %}
+        <div class="block--content {% block block_content_classes %}{% endblock %}">
+
+            {% if value.link.external_link or value.link.internal_link %}
+                {% include_block value.link %}
+            {% endif %}
+
+            {% block block_content %}
+            {% endblock %}
+
+            {% if value.link.external_link or value.link.internal_link %}
+                </a>
+            {% endif %}
+
+        </div>
+    {% endblock %}
+
+    {% block block_footer %}
+        {% if value.caption or value.description %}
+            {% if block.value.align == "full_page" or block.value.align is None %}
+                <div class="container">
+            {% endif %}
+
+            <footer class="block--footer">
+                {% if value.caption %}
+                    {% if value.link.external_link or value.link.internal_link %}
+                        {% include_block value.link %}
+                    {% endif %}
+                    <h3 class="h h--3-caps">{{ value.caption }}</h3>
+                    {% if value.link.external_link or value.link.internal_link %}
+                        </a>
+                    {% endif %}
+                {% endif %}
+                {% if value.description %}
+                    <p>{{ value.description }}</p>
+                {% endif %}
+            </footer>
+
+            {% if block.value.align == "full_page" or block.value.align is None %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endblock %}
+
+</section>

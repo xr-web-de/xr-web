@@ -2,7 +2,7 @@
 
 
 {% if value.external_link %}
-    <a href="{{ value.external_link }}" target="_blank">
+    <a href="{{ value.external_link }}" target="_blank" class="display--block">
 {% elif value.internal_link %}
-    <a href="{% pageurl value.internal_link %}">
+    <a href="{% pageurl value.internal_link %}" class="display--block">
 {% endif %}

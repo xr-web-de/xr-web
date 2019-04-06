@@ -14,6 +14,7 @@ from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
     InlinePanel,
+    StreamFieldPanel,
 )
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
@@ -56,9 +57,9 @@ class AbstractEmailFormPage(AbstractEmailForm):
     thank_you_text = StreamField(ContentBlock, blank=True)
 
     content_panels = AbstractEmailForm.content_panels + [
-        FieldPanel("content", classname="full"),
+        StreamFieldPanel("content"),
         InlinePanel("form_fields", label=_("Form fields")),
-        FieldPanel("thank_you_text", classname="full"),
+        StreamFieldPanel("thank_you_text"),
     ]
 
     settings_panels = Page.settings_panels + [

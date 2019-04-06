@@ -1,28 +1,27 @@
+{% extends "xr_pages/blocks/base.html" %}
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
 
 
-<figure class="block image-block {% if value.align %}align--{{ value.align }}{% endif %}">
-    {% if value.link.has_link %}
-        {% include_block value.link %}
-    {% endif %}
+{% block block_content_classes %}{% if value.background_color %}bg--{{ value.background_color }}{% endif %}{% endblock %}
 
-    {% if value.align == "full_content" %}
-        {% image value.image width-800 alt="{{ value.get_title }}" %}
-    {% elif value.align == "full_page" %}
-        {% image value.image width-1200 alt="{{ value.get_title }}" %}
-    {% else %} {# align in "left,right" #}
-        {% image value.image width-400 alt="{{ value.get_title }}" %}
-    {% endif %}
 
-    {% if value.link.has_link %}
-        </a>
-    {% endif %}
+{% block block_content %}
 
-    {% if value.caption %}
-        <figcaption>{{ value.caption }}</figcaption>
-    {% endif %}
-    {% if value.attribution %}
-        <small>{{ value.attribution }}</small>
-    {% endif %}
-</figure>
+    <figure>
+        {% if value.align == "full_page" %}
+            {% image value.image width-1920 alt=value.block.get_title class="img-responsive" %}
+        {% elif value.align == "full_content" %}
+            {% image value.image width-1200 alt=value.block.get_title class="img-responsive" %}
+        {% elif value.align == "center" %}
+            {% image value.image width-800 alt=value.block.get_title class="img-responsive" %}
+        {% else %} {# align in "left, right" #}
+            {% image value.image width-400 alt=value.block.get_title class="img-responsive" %}
+        {% endif %}
+
+        {% if value.attribution %}
+            <div class="image-attribution">{{ value.attribution }}</div>
+        {% endif %}
+    </figure>
+
+{% endblock %}

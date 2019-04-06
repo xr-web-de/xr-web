@@ -2,5 +2,11 @@
 
 
 {% for block in value %}
-    {% include_block block %}
+    {% if block.value.align == "full_page" or block.value.align is None %}
+        {% include_block block  %}
+    {% else %} {# aligned blocks #}
+        <div class="container">
+            {% include_block block %}
+        </div>
+    {% endif %}
 {% endfor %}
