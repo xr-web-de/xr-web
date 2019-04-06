@@ -1,0 +1,15 @@
+{% extends "wagtailmenus/mainmenu_edit.html" %}
+{% load i18n %}
+
+{% block header %}
+
+    {{ block.super }}
+
+    <section id="help">
+
+        <div class="help-block help-info">
+            <p>{% trans 'If a menu item is not rendered on the page, check if the page is published and the "show in menus" promote setting is set.' %}</p>
+        </div>
+
+    </section>
+{% endblock %}

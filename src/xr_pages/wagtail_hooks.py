@@ -2,8 +2,10 @@ from django.utils.translation import ugettext as _
 from wagtail.admin.utils import permission_denied
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.core import hooks
+from wagtailmenus.modeladmin import MainMenuAdmin
+from wagtailmenus.views import MainMenuEditView
 
-from .models import LocalGroupListPage, LocalGroupPage, HomePage, LocalGroup
+from .models import LocalGroupListPage, LocalGroupPage, LocalGroup
 
 
 class LocalGroupAdmin(ModelAdmin):
@@ -42,3 +44,16 @@ def protect_base_and_local_group_pages(request, page):
     if isinstance(page.specific, LocalGroupPage):
         if page.group.is_regional_group:
             return permission_denied(request)
+
+
+# WagtailMenus: Show menu edit infos in a custom template
+
+
+class XrMainMenuEditView(MainMenuEditView):
+    def get_template_names(self):
+        return ["modeladmin/wagtailmenus/mainmenu/edit.html"]
+
+
+class XrMainMenuAdmin(MainMenuAdmin):
+    # edit_template_name = "modeladmin/wagtailmenus/mainmenu/edit.html"
+    edit_view_class = XrMainMenuEditView

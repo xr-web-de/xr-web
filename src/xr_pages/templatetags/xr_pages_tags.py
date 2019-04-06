@@ -1,5 +1,6 @@
 from django import template
 from django.utils.text import normalize_newlines
+from wagtailmenus.models import FlatMenu
 
 from ..models import LocalGroupListPage
 
@@ -52,3 +53,13 @@ def inline_svg_text(message, font_size=30):
     message_lines = message.split("\n")
 
     return {"message_lines": message_lines, "font_size": font_size}
+
+
+@register.simple_tag(takes_context=True)
+def get_footer_menus(context):
+    try:
+        site = context["request"].site
+        footer_menus = FlatMenu.objects.filter(handle__startswith="footer_", site=site)
+    except (KeyError, AttributeError):
+        return None
+    return list(footer_menus)

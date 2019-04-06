@@ -1,6 +1,7 @@
 {% extends "xr_pages/layouts/default.html" %}
 {% load wagtailcore_tags %}
 {% load menu_tags %}
+{% load xr_pages_tags %}
 
 {% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
 
@@ -19,16 +20,18 @@
 {% endblock %}
 
 {% block footer %}
-    {% flat_menu "about_us" %}
-    {% flat_menu "for_activists" %}
-    {% flat_menu "learn_more" %}
-    <div class="row">
-        <div class="col-xxs-12 col-sm-4">
-            <ul class="footer-menu">
-                <li><a>Link</a></li>
-                <li><a>Link</a></li>
-                <li><a>Link</a></li>
-            </ul>
+    {% get_footer_menus as footer_menus %}
+
+    {% if footer_menus %}
+        <div class="row">
+            {% for menu in footer_menus %}
+
+                <div class="col-xxs-12 col-sm-4">
+                    {% flat_menu menu.handle %}
+                </div>
+
+            {% endfor %}
         </div>
-    </div>
+    {% endif %}
+
 {% endblock %}
