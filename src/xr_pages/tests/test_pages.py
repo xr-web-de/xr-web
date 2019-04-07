@@ -243,12 +243,17 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
         # root_page
 
         self.assertHasGroupPagePermissions(
-            overall_site_moderators,
-            self.root_page,
-            MODERATORS_PAGE_PERMISSIONS + ["lock"],
+            overall_site_moderators, self.root_page, None
+        )
+        self.assertHasGroupPagePermissions(overall_site_editors, self.root_page, None)
+
+        # home_page
+
+        self.assertHasGroupPagePermissions(
+            overall_site_moderators, self.home_page, MODERATORS_PAGE_PERMISSIONS
         )
         self.assertHasGroupPagePermissions(
-            overall_site_editors, self.root_page, EDITORS_PAGE_PERMISSIONS
+            overall_site_editors, self.home_page, EDITORS_PAGE_PERMISSIONS
         )
 
     def test_regional_group_base_page_permissions(self):
@@ -385,7 +390,7 @@ class PagesGroupCollectionPermissionsTest(PagesBaseTest):
     def test_overall_site_collection_permissions(self):
         overall_site_moderators = Group.objects.get(name="Overall Site Moderators")
         overall_site_editors = Group.objects.get(name="Overall Site Editors")
-        collection = Collection.objects.get(name="Root")
+        collection = Collection.objects.get(name=COMMON_COLLECTION_NAME)
 
         self.assertHasGroupCollectionPermissions(
             overall_site_moderators, collection, MODERATORS_COLLECTION_PERMISSIONS
@@ -393,6 +398,13 @@ class PagesGroupCollectionPermissionsTest(PagesBaseTest):
         self.assertHasGroupCollectionPermissions(
             overall_site_editors, collection, EDITORS_COLLECTION_PERMISSIONS
         )
+
+        collection = Collection.objects.get(name="Root")
+
+        self.assertHasGroupCollectionPermissions(
+            overall_site_moderators, collection, None
+        )
+        self.assertHasGroupCollectionPermissions(overall_site_editors, collection, None)
 
     def test_local_group_collection_permissions(self):
         # create a local group
