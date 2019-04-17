@@ -1,0 +1,34 @@
+
+
+<details class="field-collapsible {{ self.classes|join:" " }}">
+    <summary><span class="button">{{ self.heading }}</span>
+        <p class="help">{% spaceless %}
+            {% for child in children %}
+                {{ child.block.label }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% endspaceless %}</p>
+    </summary>
+    <ul class="fields">
+        {% for child in self.children %}
+            <li class="{{ child.classes|join:" " }}">{{ child.render_as_field }}</li>
+        {% endfor %}
+    </ul>
+</details>
+
+{#<ul class="field-collapsible {{ self.classes|join:" " }}">#}
+{#    {% for child in self.children %}#}
+{#       <li class="field-col {{ child.classes|join:" " }}">#}
+{#           {{ child.render_as_field }}#}
+{#       </li>#}
+{#    {% endfor %}#}
+{#</ul>#}
+{##}
+{##}
+{#<fieldset>#}
+{#    <legend>{{ self.heading }}</legend>#}
+{#    <ul class="fields">#}
+{#        {% for child in self.children %}#}
+{#            <li class="{{ child.classes|join:" " }}">{{ child.render_as_field }}</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#</fieldset>#}

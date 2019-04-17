@@ -23,6 +23,7 @@ from wagtail.core.models import Page, Orderable
 from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
+from xr_pages.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import LocalGroup, HomePage, LocalGroupPage
 
 
@@ -33,18 +34,23 @@ class EmailFormField(AbstractFormField):
 
     panels = [
         FieldRowPanel((FieldPanel("label"),)),
-        FieldPanel("help_text"),
-        FieldRowPanel(
-            (
-                FieldPanel("field_type", classname="formbuilder-type"),
-                FieldPanel("required"),
-            )
-        ),
-        FieldRowPanel(
-            (
-                FieldPanel("choices", classname="formbuilder-choices"),
-                FieldPanel("default_value", classname="formbuilder-default"),
-            )
+        FieldCollapsiblePanel(
+            [
+                FieldPanel("help_text"),
+                FieldRowPanel(
+                    (
+                        FieldPanel("field_type", classname="formbuilder-type"),
+                        FieldPanel("required"),
+                    )
+                ),
+                FieldRowPanel(
+                    (
+                        FieldPanel("choices", classname="formbuilder-choices"),
+                        FieldPanel("default_value", classname="formbuilder-default"),
+                    )
+                ),
+            ],
+            heading=_("Settings"),
         ),
     ]
 
@@ -124,18 +130,23 @@ class NewsletterFormField(AbstractFormField):
 
     panels = [
         FieldRowPanel((FieldPanel("label"), FieldPanel("name"))),
-        FieldPanel("help_text"),
-        FieldRowPanel(
-            (
-                FieldPanel("field_type", classname="formbuilder-type"),
-                FieldPanel("required"),
-            )
-        ),
-        FieldRowPanel(
-            (
-                FieldPanel("choices", classname="formbuilder-choices"),
-                FieldPanel("default_value", classname="formbuilder-default"),
-            )
+        FieldCollapsiblePanel(
+            [
+                FieldPanel("help_text"),
+                FieldRowPanel(
+                    (
+                        FieldPanel("field_type", classname="formbuilder-type"),
+                        FieldPanel("required"),
+                    )
+                ),
+                FieldRowPanel(
+                    (
+                        FieldPanel("choices", classname="formbuilder-choices"),
+                        FieldPanel("default_value", classname="formbuilder-default"),
+                    )
+                ),
+            ],
+            heading=_("Settings"),
         ),
     ]
 
