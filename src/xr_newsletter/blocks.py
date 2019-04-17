@@ -2,7 +2,7 @@ from django.utils.translation import ugettext as _
 from wagtail.core import blocks
 
 
-from xr_pages.block_utils import (
+from xr_web.block_utils import (
     heading_block_kwargs,
     caption_block_kwargs,
     description_block_kwargs,

@@ -89,7 +89,7 @@ class CollapsibleFieldsMixin(blocks.StructBlock):
         return context
 
     class Meta:
-        form_template = "xr_pages/block_forms/collapsible_struct.html"
+        form_template = "xr_web/block_forms/collapsible_struct.html"
 
 
 # Common Block Fields

@@ -23,7 +23,7 @@ from wagtail.core.models import Page, Orderable
 from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
-from xr_pages.edit_handlers import FieldCollapsiblePanel
+from xr_web.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import LocalGroup, HomePage, LocalGroupPage
 
 
