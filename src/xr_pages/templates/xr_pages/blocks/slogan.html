@@ -14,16 +14,16 @@
 
     {% if value.background_image %}
         {% if value.align == "full_page" %}
-            {% image value.background_image width-1920 alt="{{ value.message }}" class="message-block--bg-img" %}
+            {% image value.background_image width-1920 alt="{{ value.text }}" class="slogan-block--bg-img" %}
         {% elif value.align == "full_content" %}
-            {% image value.background_image width-1200 alt="{{ value.message }}" class="message-block--bg-img" %}
+            {% image value.background_image width-1200 alt="{{ value.text }}" class="slogan-block--bg-img" %}
         {% elif value.align == "center" %}
-            {% image value.background_image width-800 alt="{{ value.message }}" class="message-block--bg-img" %}
+            {% image value.background_image width-800 alt="{{ value.text }}" class="slogan-block--bg-img" %}
         {% else %} {# align in "left, right" #}
-            {% image value.background_image width-400 alt="{{ value.message }}" class="message-block--bg-img" %}
+            {% image value.background_image width-400 alt="{{ value.text }}" class="slogan-block--bg-img" %}
         {% endif %}
     {% endif %}
 
-    {% inline_svg_text value.message value.font_size %}
+    {% inline_svg_text value.text value.font_size %}
 
 {% endblock %}

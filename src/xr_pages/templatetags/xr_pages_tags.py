@@ -47,12 +47,12 @@ def get_local_group_page_for(context, page=None):
 
 
 @register.inclusion_tag("xr_pages/templatetags/inline_svg_text.html")
-def inline_svg_text(message, font_size=30):
-    message = normalize_newlines(message)
+def inline_svg_text(text, font_size=30):
+    text = normalize_newlines(text)
 
-    message_lines = message.split("\n")
+    text_lines = text.split("\n")
 
-    return {"message_lines": message_lines, "font_size": font_size}
+    return {"text_lines": text_lines, "font_size": font_size}
 
 
 @register.simple_tag(takes_context=True)

@@ -1,5 +1,4 @@
 from django.utils.translation import ugettext as _
-from wagtail.admin.edit_handlers import FieldRowPanel, FieldPanel
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
@@ -14,6 +13,7 @@ from xr_pages.block_utils import (
     COLOR_XR_YELLOW,
     COLOR_XR_GREEN,
     AlignmentMixin,
+    CollapsibleFieldsMixin,
 )
 from xr_newsletter.blocks import EmailFormBlock
 
@@ -25,7 +25,7 @@ from xr_newsletter.blocks import EmailFormBlock
 # This allows to append additional information later.
 
 
-class TextBlock(blocks.StructBlock):
+class TextBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     heading = blocks.CharBlock(**heading_block_kwargs)
     text = blocks.RichTextBlock(
         features=simple_rich_text_features,
@@ -36,6 +36,16 @@ class TextBlock(blocks.StructBlock):
             "For images and videos use the image and video blocks."
         ),
     )
+    fields = [
+        "heading",
+        "text",
+        # {
+        #     "label": _("Settings"),
+        #     "fields": [
+        #         "align",
+        #     ],
+        # },
+    ]
 
     class Meta:
         icon = "pilcrow"
@@ -54,26 +64,30 @@ class LinkBlock(blocks.StructBlock):
         ),
     )
 
-    panels = [FieldRowPanel([FieldPanel("internal_link"), FieldPanel("external_link")])]
-
     class Meta:
         icon = "link"
         template = "xr_pages/blocks/link.html"
-        form_classname = "struct-block "
 
 
-class VideoBlock(blocks.StructBlock):
+class VideoBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     heading = blocks.CharBlock(**heading_block_kwargs)
     video = EmbedBlock()
     caption = blocks.CharBlock(**caption_block_kwargs)
     description = blocks.TextBlock(**description_block_kwargs)
+
+    fields = [
+        "heading",
+        "video",
+        {"label": _("Card"), "fields": ["caption", "description"]},
+        {"label": _("Settings"), "fields": ["align"]},
+    ]
 
     class Meta:
         icon = "media"
         template = "xr_pages/blocks/video.html"
 
 
-class ImageBlock(blocks.StructBlock):
+class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     heading = blocks.CharBlock(**heading_block_kwargs)
     image = ImageChooserBlock()
     alternative_title = blocks.CharBlock(
@@ -96,20 +110,27 @@ class ImageBlock(blocks.StructBlock):
 
     link = LinkBlock(required=False)
 
+    fields = [
+        "heading",
+        "image",
+        {"label": _("Card"), "fields": ["caption", "description", "link"]},
+        {
+            "label": _("Settings"),
+            "fields": ["align", "alternative_title", "attribution", "background_color"],
+        },
+    ]
+
     class Meta:
         icon = "image"
         template = "xr_pages/blocks/image.html"
 
 
-class MessageBlock(blocks.StructBlock):
+class SloganBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     heading = blocks.CharBlock(**heading_block_kwargs)
-    message = blocks.TextBlock(
+    text = blocks.TextBlock(
         required=False,
         rows=1,
-        help_text=_(
-            "The message to display. Text will be centered and linebreaks will be "
-            "preserved."
-        ),
+        help_text=_("The text is displayed centered and linebreaks will be preserved."),
     )
     font_size = blocks.IntegerBlock(
         default=40,
@@ -125,14 +146,30 @@ class MessageBlock(blocks.StructBlock):
     description = blocks.TextBlock(**description_block_kwargs)
     link = LinkBlock()
 
+    fields = [
+        "heading",
+        "text",
+        {"label": _("Card"), "fields": ["caption", "description", "link"]},
+        {
+            "label": _("Settings"),
+            "fields": [
+                "align",
+                "font_size",
+                "font_color",
+                "background_color",
+                "background_image",
+            ],
+        },
+    ]
+
     class Meta:
         icon = "openquote"
-        template = "xr_pages/blocks/message.html"
+        template = "xr_pages/blocks/slogan.html"
 
 
 class CarouselBlock(blocks.StructBlock):
     items = blocks.StreamBlock(
-        [("image", ImageBlock()), ("video", VideoBlock()), ("message", MessageBlock())]
+        [("image", ImageBlock()), ("video", VideoBlock()), ("slogan", SloganBlock())]
     )
 
 
@@ -145,7 +182,7 @@ class AlignedVideoBlock(AlignmentMixin, VideoBlock):
     pass
 
 
-class AlignedMessageBlock(AlignmentMixin, MessageBlock):
+class AlignedSloganBlock(AlignmentMixin, SloganBlock):
     pass
 
 
@@ -158,7 +195,7 @@ class ContentBlock(blocks.StreamBlock):
     text = TextBlock()
     image = AlignedImageBlock()
     video = AlignedVideoBlock()
-    message = AlignedMessageBlock()
+    slogan = AlignedSloganBlock()
     form = EmailFormBlock()
     # carousel = AlignedCarouselBlock()
 

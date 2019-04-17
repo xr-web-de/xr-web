@@ -111,22 +111,22 @@ a.display--block {
 }
 
 // Massage Block
-.message-block .block--content {
+.slogan-block .block--content {
   width: 100%;
   padding-top: 56.25%;
 }
-.message-block--bg-img,
+.slogan-block--bg-img,
 .inline-svg-text {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+.inline-svg-text text {
+  text-anchor: middle;
   text-transform: uppercase;
   font-family: 'Fucxed', Impact, Arial, sans-serif;
-}
-.inline-svg-text--message {
-  text-anchor: middle;
 }
 
 // Image Block

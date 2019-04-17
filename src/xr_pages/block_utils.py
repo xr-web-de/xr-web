@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.utils.translation import ugettext as _
 from wagtail.core import blocks
 
@@ -57,6 +59,37 @@ class AlignmentMixin(blocks.StructBlock):
         default=ALIGN_FULL_CONTENT,
         help_text=_("Choose the alignment of the block."),
     )
+
+
+class CollapsibleFieldsMixin(blocks.StructBlock):
+    def get_form_context(self, value, prefix="", errors=None):
+        context = super().get_form_context(value, prefix=prefix, errors=errors)
+
+        if self.fields:
+            children = context.get("children", OrderedDict())
+            fields = [
+                children.get(field)
+                for field in self.fields
+                if isinstance(field, str) and field in children
+            ]
+
+            fieldsets = []
+            for fieldset in [f for f in self.fields if isinstance(f, dict)]:
+                fieldset = {
+                    "label": fieldset["label"],
+                    "fields": [
+                        children.get(field)
+                        for field in fieldset["fields"]
+                        if isinstance(field, str) and field in children
+                    ],
+                }
+                fieldsets.append(fieldset)
+
+            context.update({"fields": fields, "fieldsets": fieldsets})
+        return context
+
+    class Meta:
+        form_template = "xr_pages/block_forms/collapsible_struct.html"
 
 
 # Common Block Fields

@@ -1,3 +1,5 @@
+from django.templatetags.static import static
+from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 from wagtail.admin.utils import permission_denied
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
@@ -57,3 +59,20 @@ class XrMainMenuEditView(MainMenuEditView):
 class XrMainMenuAdmin(MainMenuAdmin):
     # edit_template_name = "modeladmin/wagtailmenus/mainmenu/edit.html"
     edit_view_class = XrMainMenuEditView
+
+
+# Editor interface
+
+
+@hooks.register("insert_editor_js")
+def editor_js():
+    return format_html(
+        '<script src="{0}"></script>'.format(static("js/wagtail_editor.js"))
+    )
+
+
+@hooks.register("insert_editor_css")
+def editor_css():
+    return format_html(
+        '<link rel="stylesheet" href="{0}">'.format(static("styles/wagtail_editor.css"))
+    )
