@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load wagtailuserbar %}
 
 {% block layout %}
     <header id="header" class="siteheader">
@@ -45,4 +46,7 @@
             {% endblock %}
         </div>
     </footer>
+
+    {% wagtailuserbar %}
+
 {% endblock %}
