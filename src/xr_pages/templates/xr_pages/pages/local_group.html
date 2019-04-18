@@ -1,9 +1,9 @@
-{% extends "xr_pages/pages/default.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load wagtailcore_tags %}
 {% load menu_tags %}
 
 {% block header %}
-    {% main_menu %}
+    {{ block.super }}
     {% children_menu page %}
 {% endblock %}
 
@@ -14,12 +14,7 @@
         <a class="" href="{% pageurl page.get_parent %}">Link zurück zur Übersicht</a>
     </div>
 
-    <div class="container">
-        <h1 class="h h--1-caps">{{ page.title }}</h1>
-    </div>
-    
-    <div class="container">
-        {% include_block page.content %}
-    </div>
+
+    {% include_block page.content %}
 
 {% endblock %}

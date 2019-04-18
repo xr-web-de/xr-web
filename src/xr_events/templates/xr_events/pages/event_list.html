@@ -1,10 +1,10 @@
-{% extends "xr_pages/pages/events.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 
 {% block content %}
 
-    {{ block.super }}
+    {% include_block page.content %}
 
     {% if event_groups %}
         <section class="container">

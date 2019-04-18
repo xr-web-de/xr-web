@@ -1,35 +1,16 @@
-{% extends "xr_pages/pages/default.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load wagtailcore_tags %}
 {% load menu_tags %}
-{% load xr_pages_tags %}
 
 
 {% block header %}
-    {% main_menu %}
+    {{ block.super }}
     {% children_menu parent_page apply_active_classes=True %}
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="container">
-        {% get_site as site %}
-        {% get_home_page as home_page %}
-        {% get_local_group_list_page as local_group_list_page %}
-        {% get_local_group_page_for page as local_group_page %}
-
-        <a href="{% pageurl local_group_list_page %}">Alle Ortsgruppen</a>
-        <a href="{% pageurl local_group_page %}">{{ local_group_page.xr_name }}</a>
-        <a href="{% pageurl local_group_page %}">{{ local_group_page.name }}</a>
-        <a href="{% pageurl local_group_page %}">{{ local_group_page.title }}</a>
-    </div>
-
-    <div class="container">
-        <h1 class="h h--1-caps">{{ page.title }}</h1>
-    </div>
-    
-    <div class="container">
-        {% include_block page.content %}
-    </div>
+    {% include_block page.content %}
 
 {% endblock %}

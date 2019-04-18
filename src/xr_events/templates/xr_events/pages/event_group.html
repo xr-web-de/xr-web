@@ -1,4 +1,4 @@
-{% extends "xr_pages/pages/default.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 
@@ -8,8 +8,7 @@
         <a class="" href="{% pageurl page.get_parent %}">Zurück zur Übersicht</a>
     </div>
 
-    {{ block.super }}
-
+    {% include_block page.content %}
 
     {% if events %}
 

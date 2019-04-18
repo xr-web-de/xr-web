@@ -1,52 +1,82 @@
 {% extends "base.html" %}
 {% load static %}
-{% load wagtailuserbar %}
+{% load menu_tags %}
+{% load xr_pages_tags %}
+
 
 {% block layout %}
-    <header id="header" class="siteheader">
-            <div class="container main-nav" id="nav">
-                <a href="/" class="siteheader-logo">
-                    <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
-                </a>
-    
-                {% block header %}
+    {% block header %}
+        <header id="header" class="siteheader">
+            {% block navigation %}
+                <nav class="container main-nav" id="nav">
+                    {% block header_logo %}
+                        <a href="/" class="siteheader-logo">
+                            <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
+                        </a>
+                    {% endblock %}
 
+                    {% block main_menu %}
+                        {% main_menu %}
+                    {% endblock %}
+
+                </nav>
+            {% endblock %}
+        </header>
+    {% endblock %}
+
+    {% block main %}
+        <main id="main">
+
+            {% block content_title %}
+            {% endblock %}
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+    {% endblock %}
+
+    {% block footer %}
+        <footer id="footer" class="sitefooter">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-xxs-12 col-xs-7">
+                        <p>Extinction Rebellion Deutschland ist eine Grassroots-Bewegung inspiriert von Extinction Rebellion UK.</p>
+                    </div>
+
+                    <ul class="col-xxs-12 col-xs-5">
+                        <li class="">
+                            <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/" class="icon">
+                                <span>Facebook</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="https://twitter.com/ExtinctionR_DE">
+                                <span>Twitter</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                {% block footer_content %}
+                    {% get_footer_menus as footer_menus %}
+
+                    {% if footer_menus %}
+                        <div class="row">
+                            {% for menu in footer_menus %}
+
+                                <div class="col-xxs-12 col-sm-4">
+                                    {% flat_menu menu.handle %}
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endblock %}
             </div>
-    </header>
-
-    <main id="main">
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <footer id="footer" class="sitefooter">
-        <div class="container">
-            
-            <div class="row">
-                <div class="col-xxs-12 col-xs-7">
-                    <p>Extinction Rebellion Deutschland ist eine Grassroots-Bewegung inspiriert von Extinction Rebellion UK.</p>
-                </div>
-                <ul class="col-xxs-12 col-xs-5">
-                    <li class="">
-                        <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/" class="icon">
-                            <span>Facebook</span>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a href="https://twitter.com/ExtinctionR_DE">
-                            <span>Twitter</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-    
-            {% block footer %}
-
-            {% endblock %}
-        </div>
-    </footer>
-
-    {% wagtailuserbar %}
+        </footer>
+    {% endblock %}
 
 {% endblock %}

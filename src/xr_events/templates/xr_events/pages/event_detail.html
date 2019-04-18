@@ -1,4 +1,4 @@
-{% extends "xr_pages/pages/default.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
@@ -25,7 +25,7 @@
             <p>{{ event.location }}</p>
         {% endif %}
 
-        {{ event.description|richtext }}
+        {% include_block page.content %}
 
         {% if event.organiser %}
             <h2>{% trans "Veranstalter" %}</h2>

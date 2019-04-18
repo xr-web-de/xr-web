@@ -1,4 +1,6 @@
-{% load static i18n %}
+{% load i18n %}
+{% load static %}
+{% load wagtailuserbar %}
 {% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
@@ -6,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>{% block title %}XR de{% endblock %}</title>
+        <title>{% block head_title %}XR de{% endblock %}</title>
         
         {% include "partials/favicons.html" %}
 
@@ -17,12 +19,14 @@
         {% block extrastyles %}{% endblock %}
         {% block extrahead %}{% endblock %}
     </head>
-    <body class="{% block body_classes %}{% endblock %} {% block page_class %} {% endblock %}" data-page="{% block page_type %} {% endblock %}">
+    <body class="{% block body_classes %}{% endblock %}" {% block body_attributes %} {% endblock %}>
 
-        <div id="page" class="page-wrap">
+        <div id="page" class="page-wrap {% block page_classes %} {% endblock %}">
             {% block layout %}
             {% endblock %}
         </div>
+
+        {% wagtailuserbar %}
 
         {% render_bundle 'main' 'js' %}
 

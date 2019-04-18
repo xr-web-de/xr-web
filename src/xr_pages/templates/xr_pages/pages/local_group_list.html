@@ -1,14 +1,11 @@
-{% extends "xr_pages/pages/default.html" %}
+{% extends "xr_pages/layouts/default_page.html" %}
 {% load wagtailcore_tags %}
 
 {% block content %}
 
-    <div class="container">
-        <h1 class="h h--1-caps">{{ page.title }}</h1>
-    </div>
+    {% include_block page.content %}
 
     <div class="container">
-        {% include_block page.content %}
 
         <div class="localgroups-state bt pt--scaled-1">
             <div class="row">

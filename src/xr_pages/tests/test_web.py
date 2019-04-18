@@ -4,8 +4,10 @@ from django.urls import reverse
 from django_dynamic_fixture import G
 from django_webtest import WebTest
 
+from xr_pages.tests.test_pages import PagesBaseTest
 
-class PagesWebTest(WebTest):
+
+class AdminWebTest(WebTest):
     def setUp(self):
         moderators_group = Group.objects.get(name="Overall Site Moderators")
         self.user = G(get_user_model(), is_staff=True)
@@ -23,3 +25,39 @@ class PagesWebTest(WebTest):
         response = self.app.get(reverse("wagtailadmin_home"), user=self.user)
 
         self.assertEqual(response.status_code, 200)
+
+
+class PagesWebTest(PagesBaseTest, WebTest):
+    def setUp(self):
+        super().setUp()
+        self._setup_local_group_pages()
+
+    def test_home_page(self):
+        response = self.app.get(self.home_page.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_home_sub_page(self):
+        response = self.app.get(self.home_sub_page.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_local_group_list_page(self):
+        response = self.app.get(self.local_group_list_page.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_local_group_page(self):
+        response = self.app.get(self.local_group_page.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_local_group_sub_page(self):
+        response = self.app.get(self.local_group_sub_page.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_regional_group_page(self):
+        self.assertEqual(self.regional_group_page.live, False)
+
+        response = self.app.get(self.regional_group_page.url, status=404)
+        self.assertEqual(response.status_code, 404)
+
+    def test_404_page(self):
+        response = self.app.get("/404/", status=404)
+        self.assertEqual(response.status_code, 404)

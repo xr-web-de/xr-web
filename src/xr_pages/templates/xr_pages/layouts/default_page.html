@@ -1,0 +1,23 @@
+{% extends "xr_pages/layouts/default.html" %}
+{% load wagtailcore_tags %}
+
+
+{% block head_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
+
+
+{% block body_classes %}{{ page.content_type.model }}-page{% endblock %}
+
+
+{% block content_title %}
+
+    <div class="container">
+        <h1 class="h h--1-caps h--section-start">{{ page.title }}</h1>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+    {% include_block page.content %}
+
+{% endblock %}

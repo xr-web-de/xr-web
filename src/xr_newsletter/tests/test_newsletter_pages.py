@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from wagtail.core.models import Page
 
-from xr_events.tests.test_event_pages import EVENT_PAGE_CLASSES
+from xr_events.tests.test_events_pages import EVENT_PAGE_CLASSES
 from xr_newsletter.models import NewsletterFormPage, EmailFormPage, NewsletterFormField
 from xr_pages.models import HomePage, LocalGroupPage, LocalGroup
 from xr_pages.services import MODERATORS_PAGE_PERMISSIONS, EDITORS_PAGE_PERMISSIONS
