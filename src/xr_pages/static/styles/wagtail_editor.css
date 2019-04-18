@@ -1,0 +1,25 @@
+.collapsible-struct > h2:first-child {
+    background: #e6e6e6;
+    padding: 1rem 50px;
+    margin: -1.1rem -50px 1em;
+}
+
+details[open] summary {
+    margin-bottom: 1.2em;
+}
+
+summary .button {
+    line-height: 2.2em;
+}
+
+@media screen and (min-width: 50em) {
+    summary .button {
+        line-height: 3em;
+    }
+}
+
+summary .help {
+    display: inline-block;
+    margin-left: 1.5em;
+}
+

@@ -23,6 +23,7 @@ from wagtail.core.models import Page, Orderable
 from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
+from xr_web.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import LocalGroup, HomePage, LocalGroupPage
 
 
@@ -33,18 +34,23 @@ class EmailFormField(AbstractFormField):
 
     panels = [
         FieldRowPanel((FieldPanel("label"),)),
-        FieldPanel("help_text"),
-        FieldRowPanel(
-            (
-                FieldPanel("field_type", classname="formbuilder-type"),
-                FieldPanel("required"),
-            )
-        ),
-        FieldRowPanel(
-            (
-                FieldPanel("choices", classname="formbuilder-choices"),
-                FieldPanel("default_value", classname="formbuilder-default"),
-            )
+        FieldCollapsiblePanel(
+            [
+                FieldPanel("help_text"),
+                FieldRowPanel(
+                    (
+                        FieldPanel("field_type", classname="formbuilder-type"),
+                        FieldPanel("required"),
+                    )
+                ),
+                FieldRowPanel(
+                    (
+                        FieldPanel("choices", classname="formbuilder-choices"),
+                        FieldPanel("default_value", classname="formbuilder-default"),
+                    )
+                ),
+            ],
+            heading=_("Settings"),
         ),
     ]
 
@@ -97,6 +103,10 @@ class EmailFormPage(AbstractEmailFormPage):
 
     parent_page_types = [HomePage, LocalGroupPage]
 
+    class Meta:
+        verbose_name = _("Email Form Page")
+        verbose_name_plural = _("Email Form Pages")
+
     def process_form_submission(self, form):
         submission = self.get_submission_class()(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder), page=self
@@ -124,18 +134,23 @@ class NewsletterFormField(AbstractFormField):
 
     panels = [
         FieldRowPanel((FieldPanel("label"), FieldPanel("name"))),
-        FieldPanel("help_text"),
-        FieldRowPanel(
-            (
-                FieldPanel("field_type", classname="formbuilder-type"),
-                FieldPanel("required"),
-            )
-        ),
-        FieldRowPanel(
-            (
-                FieldPanel("choices", classname="formbuilder-choices"),
-                FieldPanel("default_value", classname="formbuilder-default"),
-            )
+        FieldCollapsiblePanel(
+            [
+                FieldPanel("help_text"),
+                FieldRowPanel(
+                    (
+                        FieldPanel("field_type", classname="formbuilder-type"),
+                        FieldPanel("required"),
+                    )
+                ),
+                FieldRowPanel(
+                    (
+                        FieldPanel("choices", classname="formbuilder-choices"),
+                        FieldPanel("default_value", classname="formbuilder-default"),
+                    )
+                ),
+            ],
+            heading=_("Settings"),
         ),
     ]
 
@@ -170,6 +185,10 @@ class NewsletterFormPage(AbstractEmailFormPage):
     parent_page_types = [LocalGroupPage]
 
     base_form_class = WagtailAdminNewsletterFormPageForm
+
+    class Meta:
+        verbose_name = _("Newsletter Form Page")
+        verbose_name_plural = _("Newsletter Form Pages")
 
     def serve(self, request, *args, **kwargs):
         if request.method == "POST":

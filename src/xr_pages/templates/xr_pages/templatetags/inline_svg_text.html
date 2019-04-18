@@ -1,6 +1,6 @@
 <svg viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet" class="inline-svg-text">
-    <text font-size="{{ font_size }}" y="-0.1em" class="inline-svg-text--message">
-        {% for line in message_lines %}
+    <text font-size="{{ font_size }}" y="-0.1em">
+        {% for line in text_lines %}
             <tspan x="0" dy="{{ forloop.counter0 }}em">{{ line }}</tspan>
         {% endfor %}
     </text>
