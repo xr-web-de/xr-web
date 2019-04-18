@@ -103,6 +103,10 @@ class EmailFormPage(AbstractEmailFormPage):
 
     parent_page_types = [HomePage, LocalGroupPage]
 
+    class Meta:
+        verbose_name = _("Email Form Page")
+        verbose_name_plural = _("Email Form Pages")
+
     def process_form_submission(self, form):
         submission = self.get_submission_class()(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder), page=self
@@ -181,6 +185,10 @@ class NewsletterFormPage(AbstractEmailFormPage):
     parent_page_types = [LocalGroupPage]
 
     base_form_class = WagtailAdminNewsletterFormPageForm
+
+    class Meta:
+        verbose_name = _("Newsletter Form Page")
+        verbose_name_plural = _("Newsletter Form Pages")
 
     def serve(self, request, *args, **kwargs):
         if request.method == "POST":

@@ -36,6 +36,10 @@ class HomeSubPage(Page):
 
         super().save(*args, **kwargs)
 
+    class Meta:
+        verbose_name = _("Content Page")
+        verbose_name_plural = _("Content Pages")
+
 
 class LocalGroup(models.Model):
     is_regional_group = models.BooleanField(editable=False, default=False)
@@ -147,6 +151,10 @@ class LocalGroupListPage(Page):
     parent_page_types = []
     is_creatable = False
 
+    class Meta:
+        verbose_name = _("Local Group List Page")
+        verbose_name_plural = _("Local Group List Pages")
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context["local_groups"] = (
@@ -166,6 +174,10 @@ class LocalGroupPage(Page):
     ]
 
     parent_page_types = ["LocalGroupListPage"]
+
+    class Meta:
+        verbose_name = _("Local Group Page")
+        verbose_name_plural = _("Local Group Pages")
 
     @property
     def name(self):
@@ -211,6 +223,10 @@ class LocalGroupSubPage(Page):
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["LocalGroupPage"]
+
+    class Meta:
+        verbose_name = _("Local Group Content Page")
+        verbose_name_plural = _("Local Group Content Pages")
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

@@ -123,6 +123,10 @@ class EventDate(Orderable):
         FieldPanel("label"),
     ]
 
+    class Meta:
+        verbose_name = _("Date")
+        verbose_name_plural = _("Dates")
+
     def __str__(self):
         start = formats.date_format(self.start, "SHORT_DATETIME_FORMAT")
         if not self.label:
@@ -149,6 +153,10 @@ class EventOrganiser(Orderable):
         FieldRowPanel([FieldPanel("url")]),
     ]
 
+    class Meta:
+        verbose_name = _("Organiser")
+        verbose_name_plural = _("Organisers")
+
     def __str__(self):
         return self.name
 
@@ -161,6 +169,10 @@ class EventListPage(Page):
 
     parent_page_types = []
     is_creatable = False
+
+    class Meta:
+        verbose_name = _("Event List Page")
+        verbose_name_plural = _("Event List Pages")
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -189,6 +201,10 @@ class EventGroupPage(Page):
     ]
 
     parent_page_types = ["EventListPage"]
+
+    class Meta:
+        verbose_name = _("Event Group Page")
+        verbose_name_plural = _("Event Group Pages")
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
