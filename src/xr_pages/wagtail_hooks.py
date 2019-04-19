@@ -24,19 +24,6 @@ class LocalGroupAdmin(ModelAdmin):
 modeladmin_register(LocalGroupAdmin)
 
 
-@hooks.register("construct_explorer_page_queryset")
-def filter_local_group_pages(parent_page, pages, request):
-    if request.user.is_superuser:
-        return pages
-
-    # Filter local_group_pages (don't list regional_group_pages)
-    if issubclass(type(parent_page.specific), LocalGroupListPage):
-        pages = LocalGroupPage.objects.child_of(parent_page).specific()
-        pages = pages.filter(group__is_regional_group=False)
-
-    return pages
-
-
 @hooks.register("before_delete_page")
 @hooks.register("before_copy_page")
 def protect_base_and_local_group_pages(request, page):

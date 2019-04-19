@@ -1,8 +1,8 @@
 from unittest import mock
 
-import wagtail
 from django.core import mail
 from django_webtest import WebTest
+from wagtailmenus.models import MainMenuItem
 
 import xr_newsletter
 from xr_newsletter.models import NewsletterFormPage
@@ -18,11 +18,20 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
         self.newsletter_page.sendy_list_id = "sendy_TEST_list_id"
         self.newsletter_page.to_address = "admin@example.com"
         self.newsletter_page.subject = "TEST Subject"
+        self.newsletter_page.show_in_menus = True
         self.newsletter_page.save()
 
+        MainMenuItem.objects.get_or_create(
+            menu=self.main_menu, link_page=self.newsletter_page
+        )
+
     def test_newsletter_form_page_responds(self):
-        page = self.app.get(self.newsletter_page.url)
-        self.assertEqual(page.status_code, 200)
+        response = self.app.get(self.newsletter_page.url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.home_sub_page)
+        self.assertLinkExists(response, self.newsletter_page)
 
     def _populate_newsletter_form(self, form):
         form["email"] = "bob@example.com"

@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from wagtail.core.models import Page, Collection
+from wagtailmenus.models import MainMenuItem
 
 from xr_events.signals import EVENT_AUTH_GROUP_TYPES
 from xr_pages.models import (
@@ -11,7 +12,6 @@ from xr_pages.models import (
     LocalGroupPage,
     HomePage,
     LocalGroupSubPage,
-    LocalGroup,
 )
 from xr_pages.services import (
     MODERATORS_PAGE_PERMISSIONS,
@@ -33,18 +33,16 @@ class EventsBaseTest(PagesBaseTest):
     def _setup_event_pages(self):
         # create local_group if needed
         self.local_group_list_page = LocalGroupListPage.objects.get()
-        self.local_group, created = LocalGroup.objects.get_or_create(
-            name="Example Group"
-        )
 
-        if created:
+        local_group_page_qs = LocalGroupPage.objects.filter(group=self.local_group)
+        if local_group_page_qs.exists():
+            self.local_group_page = local_group_page_qs.get()
+
+        else:
             self.local_group_page = LocalGroupPage(
                 title="Example Group", group=self.local_group
             )
             self.local_group_list_page.add_child(instance=self.local_group_page)
-
-        else:
-            self.local_group_page = LocalGroupPage.objects.get(group=self.local_group)
 
         # create event pages
         self.event_list_page = EventListPage.objects.get()
@@ -67,6 +65,12 @@ class EventsBaseTest(PagesBaseTest):
             self.event_page,
             self.regional_event_group_page,
         }
+
+        MainMenuItem.objects.get_or_create(
+            menu=self.main_menu, link_page=self.event_list_page
+        )
+        self.event_list_page.show_in_menus = True
+        self.event_list_page.save()
 
 
 class EventsPageTreeTest(EventsBaseTest):
@@ -221,12 +225,12 @@ class EventsSignalsTest(PagesBaseTest):
     def test_event_group_create_doesnt_create_auth_groups(self):
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
     def test_event_group_page_create_creates_event_auth_groups(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
@@ -238,7 +242,7 @@ class EventsSignalsTest(PagesBaseTest):
         self.assertAuthGroupsExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
     def test_event_group_page_delete(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
             title=self.special_group_name, group=special_group
@@ -252,7 +256,7 @@ class EventsSignalsTest(PagesBaseTest):
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
     def test_event_group_name_change(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
             title=self.special_group_name, group=special_group

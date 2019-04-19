@@ -3,14 +3,13 @@
 {% load menu_tags %}
 
 
+{% block body_classes %}{{ block.super }} with-secondary-menu{% endblock %}
+
+
 {% block header %}
     {{ block.super }}
-    {% children_menu parent_page apply_active_classes=True %}
-{% endblock %}
 
-
-{% block content %}
-
-    {% include_block page.content %}
-
+    {% with parent_page=page.group.active_localgrouppage %}
+        {% include "xr_pages/menus/children_menu.html" %}
+    {% endwith %}
 {% endblock %}

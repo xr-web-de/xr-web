@@ -7,10 +7,12 @@ from wagtail.core.models import (
     Page,
     GroupCollectionPermission,
     Collection,
+    Site,
 )
 
 
 # Pages
+from .models import LocalGroupListPage, LocalGroup
 
 PAGE_MODERATORS_SUFFIX = "Page Moderators"
 PAGE_EDITORS_SUFFIX = "Page Editors"
@@ -235,3 +237,36 @@ def add_group_collection_permission(group, collection, permission):
         group=group, collection=collection, permission=permission
     )
     return group_collection_permission
+
+
+def get_site(request=None):
+    try:
+        site = request.site
+    except AttributeError:
+        site = Site.objects.all().get(is_default_site=True)
+    return site
+
+
+def get_home_page(request=None):
+    site = get_site(request=request)
+    return site.root_page.specific
+
+
+def get_local_group_list_page(request=None):
+    home_page = get_home_page(request)
+    try:
+        local_group_list_page = (
+            LocalGroupListPage.objects.child_of(home_page).live().get()
+        )
+    except (KeyError, AttributeError, LocalGroupListPage.DoesNotExist):
+        return None
+    return local_group_list_page
+
+
+def get_local_groups(request=None):
+    site = get_site(request)
+    return (
+        LocalGroup.objects.active()
+        .filter(site=site, is_regional_group=False)
+        .order_by("name")
+    )

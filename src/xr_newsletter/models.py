@@ -210,8 +210,10 @@ class NewsletterFormPage(AbstractEmailFormPage):
                         "name": form.cleaned_data.get("name", None),
                         "gdpr": form.cleaned_data.get("gdpr", None),
                     }
-
-                    sendy_response = sendy_api.subscribe(self.sendy_list_id, **data)
+                    try:
+                        sendy_response = sendy_api.subscribe(self.sendy_list_id, **data)
+                    except ConnectionError:
+                        sendy_response = None
 
                     if sendy_response == "true" or int(sendy_response) == 1:
                         return self.render_landing_page(

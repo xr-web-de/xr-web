@@ -1,25 +1,57 @@
 {% extends "xr_pages/layouts/default_page.html" %}
+{% load i18n %}
 {% load wagtailcore_tags %}
+{% load xr_pages_tags %}
 
 {% block content %}
 
     {% include_block page.content %}
 
+    {% get_local_groups as local_groups %}
+
     <div class="container">
 
         <div class="localgroups-state bt pt--scaled-1">
-            <div class="row">
-                <div class="col-xs-12 col-sm-3">
-                    <h3 class="h h--3-caps">Hamburg</h3>
+            {% for local_group in local_groups %}
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-3">
+                        {% if local_group.url%}
+                            <a href="{{ local_group.url }}">
+                        {% endif %}
+                            <h3 class="h h--3-caps">
+                                {{ local_group.name }}
+                            </h3>
+                        {% if local_group.url %}
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 col-md-9">
+                        {% if local_group.email %}
+                            <p>
+                                <a href="mailto:{{ local_group.email }}">{{ local_group.email }}</a>
+                            </p>
+                        {% endif %}
+
+                        {% if local_group.newly_founded %}
+
+                        {% elif local_group.founding_planned %}
+                            <p>
+                                {% trans "Start" %}: {{ local_group.founding_date|date:"SHORT_DATE_FORMAT" }}
+                            </p>
+                        {% endif %}
+
+                        {% if local_group.looking_for_people %}
+                            <p>
+                                {% trans "Hier werden noch Leute gesucht!" %}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    <ul>
-                        {% for local_group in local_groups %}
-                            <li><a class="link link--large link--block" href="{% pageurl local_group %}">{{ local_group.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+
+            {% endfor %}
         </div>
     </div>
 

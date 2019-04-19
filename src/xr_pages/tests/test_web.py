@@ -36,27 +36,48 @@ class PagesWebTest(PagesBaseTest, WebTest):
         response = self.app.get(self.home_page.url)
         self.assertEqual(response.status_code, 200)
 
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.home_sub_page)
+        self.assertLinkExists(response, self.local_group_list_page)
+
     def test_home_sub_page(self):
         response = self.app.get(self.home_sub_page.url)
         self.assertEqual(response.status_code, 200)
 
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.home_sub_page)
+        self.assertLinkExists(response, self.local_group_list_page)
+
     def test_local_group_list_page(self):
         response = self.app.get(self.local_group_list_page.url)
         self.assertEqual(response.status_code, 200)
+        local_group_page = response.click(href=self.local_group.url)
+        self.assertContains(local_group_page, self.local_group_page.title)
+        self.assertContains(
+            response, 'href="mailto:{0}"'.format(self.local_group.email)
+        )
+
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.local_group_list_page)
+        self.assertLinkExists(response, self.local_group_page)
 
     def test_local_group_page(self):
         response = self.app.get(self.local_group_page.url)
         self.assertEqual(response.status_code, 200)
 
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.local_group_list_page)
+        self.assertLinkExists(response, self.local_group_page)
+        self.assertLinkExists(response, self.local_group_sub_page)
+
     def test_local_group_sub_page(self):
         response = self.app.get(self.local_group_sub_page.url)
         self.assertEqual(response.status_code, 200)
 
-    def test_regional_group_page(self):
-        self.assertEqual(self.regional_group_page.live, False)
-
-        response = self.app.get(self.regional_group_page.url, status=404)
-        self.assertEqual(response.status_code, 404)
+        self.assertLinkExists(response, self.home_page)
+        self.assertLinkExists(response, self.local_group_list_page)
+        self.assertLinkExists(response, self.local_group_page)
+        self.assertLinkExists(response, self.local_group_sub_page)
 
     def test_404_page(self):
         response = self.app.get("/404/", status=404)

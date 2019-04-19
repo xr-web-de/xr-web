@@ -1,12 +1,15 @@
+import datetime
+
 from django.contrib.auth.models import Group
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
-from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Collection
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 
+from xr_web.settings import LOCAL_GROUP_STATE_CHOICES
 from .blocks import ContentBlock
 
 
@@ -41,7 +44,52 @@ class HomeSubPage(Page):
         verbose_name_plural = _("Content Pages")
 
 
+class LocalGroupQuerySet(models.QuerySet):
+    def active(self):
+        return self.exclude(status=LocalGroup.STATUS_IDLE)
+
+    def has_active_localgrouppage(self):
+        return self.filter(localgrouppage__isnull=False).filter(
+            localgrouppage__live=True
+        )
+
+    def has_active_eventgrouppage(self):
+        return self.filter(eventgrouppage__isnull=False).filter(
+            eventgrouppage__live=True
+        )
+
+    def has_active_newsletterformpage(self):
+        return self.filter(newsletterformpage__isnull=False).filter(
+            newsletterformpage__live=True
+        )
+
+    def has_upcoming_events(self):
+        return (
+            self.filter(events__isnull=False)
+            .filter(events__live=True)
+            .filter(events__end_date__gte=datetime.date.today)
+        )
+
+    def has_previous_events(self):
+        return (
+            self.filter(events__isnull=False)
+            .filter(events__live=True)
+            .filter(events__start_date__lte=datetime.date.today)
+        )
+
+
+LocalGroupManager = models.Manager.from_queryset(LocalGroupQuerySet)
+
+
 class LocalGroup(models.Model):
+    site = models.ForeignKey(
+        "wagtailcore.Site",
+        verbose_name=_("site"),
+        db_index=True,
+        editable=False,
+        on_delete=models.PROTECT,
+        related_name="+",
+    )
     is_regional_group = models.BooleanField(editable=False, default=False)
     name = models.CharField(
         max_length=50,
@@ -55,50 +103,27 @@ class LocalGroup(models.Model):
     )
     # old_name field helps with identifying name changes
     old_name = models.CharField(max_length=50, default="", editable=False)
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text=_(
-            "An image that can be used not only for the detail view, but also for "
-            "lists, teasers or social media."
-        ),
+    STATUS_ACTIVE = "active"
+    STATUS_LOOKING_FOR_PEOPLE = "looking_for_people"
+    STATUS_IDLE = "idle"
+    STATUS_CHOICES = (
+        (STATUS_ACTIVE, _("active")),
+        (STATUS_LOOKING_FOR_PEOPLE, _("looking for people")),
+        (STATUS_IDLE, _("idle")),
     )
-    description = models.CharField(
-        max_length=254,
-        default="",
-        blank=True,
-        help_text=_(
-            "A description not only for the detail view, but also for lists, "
-            "teasers or social media."
-        ),
+    status = models.CharField(
+        _("Status"), max_length=50, default=STATUS_ACTIVE, choices=STATUS_CHOICES
     )
+    founding_date = models.DateField(
+        _("Founding date"), default=datetime.date.today, blank=True, null=True
+    )
+
     email = models.EmailField(null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
+    external_url = models.URLField(null=True, blank=True)
     phone = models.CharField(max_length=50, default="", blank=True)
-    # TODO: move state choices to settings
-    GERMANY_STATE_CHOICES = (
-        ("BW", "Baden-Württemberg"),
-        ("BY", "Bayern"),
-        ("BE", "Berlin"),
-        ("BB", "Brandenburg"),
-        ("HB", "Bremen"),
-        ("HH", "Hamburg"),
-        ("HE", "Hessen"),
-        ("MV", "Mecklenburg-Vorpommern"),
-        ("NI", "Niedersachsen"),
-        ("NW", "Nordrhein-Westfalen"),
-        ("RP", "Rheinland-Pfalz"),
-        ("SL", "Saarland"),
-        ("SN", "Sachsen"),
-        ("ST", "Sachsen-Anhalt"),
-        ("SH", "Schleswig-Holstein"),
-        ("TH", "Thüringen"),
-    )
+
     state = models.CharField(
-        max_length=50, choices=GERMANY_STATE_CHOICES, null=True, blank=True
+        max_length=50, choices=LOCAL_GROUP_STATE_CHOICES, null=True, blank=True
     )
     location = models.CharField(
         max_length=255,
@@ -109,6 +134,19 @@ class LocalGroup(models.Model):
         ),
     )
 
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("status"),
+        FieldPanel("founding_date"),
+        FieldPanel("email"),
+        FieldPanel("phone"),
+        FieldPanel("external_url"),
+        FieldPanel("state"),
+        FieldPanel("location"),
+    ]
+
+    objects = LocalGroupManager()
+
     class Meta:
         verbose_name = _("Group")
         verbose_name_plural = _("Groups")
@@ -116,6 +154,66 @@ class LocalGroup(models.Model):
     @property
     def xr_name(self):
         return "XR %s" % self.name
+
+    @property
+    def is_active(self):
+        return self.status != self.STATUS_IDLE
+
+    @property
+    def active_localgrouppage(self):
+        if (
+            hasattr(self, "localgrouppage")
+            and self.localgrouppage
+            and self.localgrouppage.live
+        ):
+            return self.localgrouppage
+
+    @property
+    def active_eventgrouppage(self):
+        if (
+            hasattr(self, "eventgrouppage")
+            and self.eventgrouppage
+            and self.eventgrouppage.live
+        ):
+            return self.eventgrouppage
+
+    @property
+    def active_newsletterformpage(self):
+        if (
+            hasattr(self, "newsletterformpage")
+            and self.newsletterformpage
+            and self.newsletterformpage.live
+            and self.newsletterformpage.sendy_list_id
+        ):
+            return self.newsletterformpage
+
+    @property
+    def upcoming_events(self):
+        if not self.active_eventgrouppage:
+            return []
+        return self.active_eventgrouppage.upcoming_events
+
+    @property
+    def url(self):
+        if self.external_url:
+            return self.external_url
+        if self.is_regional_group:
+            return self.site.root_page.get_url()
+        if self.active_localgrouppage:
+            return self.localgrouppage.get_url()
+        return None
+
+    @property
+    def newly_founded(self):
+        return self.founding_date + datetime.timedelta(90) < datetime.date.today()
+
+    @property
+    def founding_planned(self):
+        return self.founding_date > datetime.date.today()
+
+    @property
+    def looking_for_people(self):
+        return self.status == self.STATUS_LOOKING_FOR_PEOPLE
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -154,13 +252,6 @@ class LocalGroupListPage(Page):
     class Meta:
         verbose_name = _("Local Group List Page")
         verbose_name_plural = _("Local Group List Pages")
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["local_groups"] = (
-            LocalGroupPage.objects.child_of(self).live().order_by("-title")
-        )
-        return context
 
 
 class LocalGroupPage(Page):
@@ -205,13 +296,6 @@ class LocalGroupPage(Page):
     def is_regional_group(self):
         return self.group.is_regional_group
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if self.group and not self.group.url:
-            self.group.url = self.get_full_url()
-            self.group.save()
-
 
 class LocalGroupSubPage(Page):
     template = "xr_pages/pages/local_group_sub.html"
@@ -227,12 +311,6 @@ class LocalGroupSubPage(Page):
     class Meta:
         verbose_name = _("Local Group Content Page")
         verbose_name_plural = _("Local Group Content Pages")
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["parent_page"] = self.get_parent()
-        context["local_group_page"] = self.get_parent()
-        return context
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "group") or self.group is None:

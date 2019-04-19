@@ -7,6 +7,7 @@ from wagtail.core.models import (
     GroupCollectionPermission,
 )
 from wagtail.tests.utils import WagtailPageTests
+from wagtailmenus.models import MainMenu, MainMenuItem
 
 from xr_pages.models import (
     HomePage,
@@ -41,8 +42,8 @@ PAGES_PAGE_CLASSES = {
 
 class PagesBaseTest(WagtailPageTests):
     def setUp(self):
-        site = Site.objects.get()
-        self.home_page = site.root_page.specific
+        self.site = Site.objects.get()
+        self.home_page = self.site.root_page.specific
         self.root_page = Page.objects.parent_of(self.home_page).get()
         self.home_sub_page = HomeSubPage.objects.get()
 
@@ -50,11 +51,26 @@ class PagesBaseTest(WagtailPageTests):
 
         self.regional_group = LocalGroup.objects.get(is_regional_group=True)
 
-    def _setup_local_group_pages(self):
-        # create local_group if needed
-        self.local_group, created = LocalGroup.objects.get_or_create(
-            name="Example Group"
+        self.main_menu = MainMenu.get_for_site(self.site)
+        MainMenuItem.objects.get_or_create(
+            menu=self.main_menu, link_page=self.home_sub_page
         )
+        self.home_sub_page.show_in_menus = True
+        self.home_sub_page.save()
+
+        self.local_group_name = "Example Group"
+        self.local_group = self._create_local_group(self.local_group_name)
+
+    def _create_local_group(self, name):
+        # create local_group if needed
+        local_group, created = LocalGroup.objects.get_or_create(
+            site=self.site, name=name
+        )
+        local_group.email = "info@group.example.com"
+        local_group.save()
+        return local_group
+
+    def _setup_local_group_pages(self):
         self.local_group_list_page = LocalGroupListPage.objects.get()
 
         self.local_group_page = LocalGroupPage(
@@ -62,19 +78,22 @@ class PagesBaseTest(WagtailPageTests):
         )
         self.local_group_list_page.add_child(instance=self.local_group_page)
 
-        self.local_group_sub_page = LocalGroupSubPage(title="Example SubPage")
-        self.local_group_page.add_child(instance=self.local_group_sub_page)
-
-        self.regional_group_page = LocalGroupPage.objects.get(
-            group__is_regional_group=True
+        self.local_group_sub_page = LocalGroupSubPage(
+            title="Example SubPage", show_in_menus=True
         )
+        self.local_group_page.add_child(instance=self.local_group_sub_page)
 
         self.LOCAL_GROUP_PAGES = {
             self.local_group_list_page,
             self.local_group_page,
             self.local_group_sub_page,
-            self.regional_group_page,
         }
+
+        MainMenuItem.objects.get_or_create(
+            menu=self.main_menu, link_page=self.local_group_list_page
+        )
+        self.local_group_list_page.show_in_menus = True
+        self.local_group_list_page.save()
 
     def assertHasGroupPagePermissions(
         self, group, page, permission_types=None, msg=None, exact=True
@@ -167,6 +186,12 @@ class PagesBaseTest(WagtailPageTests):
                 )
                 raise self.failureException(msg)
 
+    def assertLinkExists(self, response, page_or_url):
+        url = page_or_url
+        if isinstance(page_or_url, Page):
+            url = page_or_url.get_url()
+        return self.assertContains(response, 'href="{0}'.format(url))
+
 
 class PagesPageTreeTest(PagesBaseTest):
     def setUp(self):
@@ -187,8 +212,7 @@ class PagesPageTreeTest(PagesBaseTest):
         )
 
         self.assertEqual(
-            set([self.local_group_page, self.regional_group_page]),
-            set(local_group_list_page_children),
+            set([self.local_group_page]), set(local_group_list_page_children)
         )
         self.assertEqual(
             set([self.local_group_page]), set(local_group_list_page_children.live())
@@ -301,15 +325,6 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
             regional_editors, self.local_group_page, None
         )
 
-        # regional_group_page
-
-        self.assertHasGroupPagePermissions(
-            regional_moderators, self.regional_group_page, "edit"
-        )
-        self.assertHasGroupPagePermissions(
-            regional_editors, self.regional_group_page, None
-        )
-
         # local_group_sub_page
 
         self.assertHasGroupPagePermissions(
@@ -348,15 +363,6 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
         )
         self.assertHasGroupPagePermissions(
             local_editors, self.local_group_list_page, None
-        )
-
-        # regional_group_page
-
-        self.assertHasGroupPagePermissions(
-            local_moderators, self.regional_group_page, None
-        )
-        self.assertHasGroupPagePermissions(
-            local_editors, self.regional_group_page, None
         )
 
         # local_group_page
@@ -434,12 +440,12 @@ class PagesSignalsTest(PagesBaseTest):
     def test_local_group_create_doesnt_create_auth_groups(self):
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
     def test_local_group_page_create_creates_page_auth_groups(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
@@ -451,7 +457,7 @@ class PagesSignalsTest(PagesBaseTest):
         self.assertAuthGroupsExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
     def test_local_group_page_delete(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
             title=self.special_group_name, group=special_group
@@ -465,7 +471,7 @@ class PagesSignalsTest(PagesBaseTest):
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
     def test_local_group_name_change(self):
-        special_group = LocalGroup.objects.create(name=self.special_group_name)
+        special_group = self._create_local_group(name=self.special_group_name)
 
         special_group_page = LocalGroupPage(
             title=self.special_group_name, group=special_group

@@ -1,13 +1,13 @@
 from django.template import Context, Template
 from django.test import RequestFactory, TestCase
-from wagtail.core.models import Site
 
+from xr_pages.services import get_site
 from ..models import LocalGroupSubPage, LocalGroupPage, LocalGroup
 
 
 class PagesTemplatetagsTest(TestCase):
     def setUp(self):
-        self.site = Site.objects.all().get()
+        self.site = get_site()
         request_factory = RequestFactory()
         request = request_factory.get("/")
         request.site = self.site
@@ -41,30 +41,15 @@ class PagesTemplatetagsTest(TestCase):
         rendered_template = test_template.render(context)
         self.assertEqual(rendered_template, "Ortsgruppen")
 
-    def test_get_local_group_page_for_page(self):
-        local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
-        local_group_page = LocalGroupPage(title="SubPageTitle", group=local_group)
-        self.site.root_page.add_child(instance=local_group_page)
-        context = Context({"request": self.request, "page": local_group_page})
+    def test_get_local_groups(self):
+        local_group = LocalGroup.objects.create(
+            site=self.site, name="LocalGroup SpecialName"
+        )
+        context = Context({"request": self.request})
         test_template = Template(
             "{% load xr_pages_tags %}"
-            "{% get_local_group_page_for page as local_group_page %}"
-            "{{ local_group_page.title }}"
+            "{% get_local_groups as local_groups %}"
+            "{% for local_group in local_groups %}{{ local_group.name }}{% endfor %}"
         )
         rendered_template = test_template.render(context)
-        self.assertEqual(rendered_template, "SubPageTitle")
-
-    def test_get_local_group_page_for_subpage(self):
-        local_group = LocalGroup.objects.create(name="LocalGroup SpecialName")
-        local_group_page = LocalGroupPage(title="SubPageTitle", group=local_group)
-        self.site.root_page.add_child(instance=local_group_page)
-        local_group_sub_page = LocalGroupSubPage(title="SubPage")
-        local_group_page.add_child(instance=local_group_sub_page)
-        context = Context({"request": self.request, "page": local_group_sub_page})
-        test_template = Template(
-            "{% load xr_pages_tags %}"
-            "{% get_local_group_page_for page as local_group_page %}"
-            "{{ local_group_page.title }}"
-        )
-        rendered_template = test_template.render(context)
-        self.assertEqual(rendered_template, "SubPageTitle")
+        self.assertEqual(rendered_template, "{0}".format(local_group.name))

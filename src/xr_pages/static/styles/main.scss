@@ -20,16 +20,6 @@
 
 
 
-// Theme color palette
-$colors: (
-  xr-green: #00A836,
-  xr-yellow: #F4F07A,
-  xr-light-blue: #75D0F1,
-  xr-dark-blue: #3860AA,
-  xr-white: #FFFFFF,
-  xr-black: #130C0D
-);
-
 @each $key, $value in $colors {
   .bg--#{$key} {
     background: $value;
@@ -48,11 +38,16 @@ $colors: (
   padding-bottom: 3rem;
 }
 
-a.display--block {
+a {
+  text-decoration: underline;
+}
+
+// Helper
+.display--block {
   display: block;
 }
 
-// Content blocks
+// Content block
 //---------------
 .block {
   position: relative;
@@ -110,7 +105,7 @@ a.display--block {
   position: relative;
 }
 
-// Massage Block
+// Slogan Block
 .slogan-block .block--content {
   width: 100%;
   padding-top: 56.25%;
@@ -146,32 +141,36 @@ a.display--block {
 
 // Text Block
 .text-block {
+  // big list numbering
   ol {
     clear: left;
     list-style: none;
     counter-reset: xr-list-numbering;
     padding-left: 4em;
-  }
-  ol li {
-    counter-increment: xr-list-numbering;
-    position: relative;
 
-    padding-left: 0.75em;
-    min-height: 4em;
-    border-left: 2px solid #CCCCCC;
-  }
-  ol li + li {
-    margin-top: 2em;
-  }
-  ol li::before {
-    content: counter(xr-list-numbering);
-    font-size: 4em;
-    font-family: 'Fucxed', Impact, Arial, sans-serif;
-    text-align: center;
-    line-height: 1;
-    position: absolute;
-    left: -.8em;
-    top: 0;
-    width: 0.5em;
+    li {
+      counter-increment: xr-list-numbering;
+      position: relative;
+
+      padding-left: 0.75em;
+      min-height: 4em;
+      border-left: 2px solid #CCCCCC;
+    }
+
+    li + li {
+      margin-top: 2em;
+    }
+
+    li::before {
+      content: counter(xr-list-numbering);
+      font-size: 4em;
+      font-family: 'Fucxed', Impact, Arial, sans-serif;
+      text-align: center;
+      line-height: 1;
+      position: absolute;
+      left: -.8em;
+      top: 0;
+      width: 0.5em;
+    }
   }
 }

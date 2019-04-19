@@ -60,6 +60,19 @@ body.transparent-sideheader {
   }
 }
 
+body.with-secondary-menu {
+  .page-wrap {
+    padding-top: $header-height-mobile * 1.6;
+  }
+
+  @media (min-width: $bp-sm) {
+    .page-wrap {
+      padding-top: $header-height-desktop * 1.6;
+    }
+  }
+}
+
+
 .siteheader-logo {
   display: flex;
   align-items: center;
@@ -85,15 +98,13 @@ body.transparent-sideheader {
 }
 
 .main-nav {
-  @media (max-width: $bp-sm) {
-    
-  }
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
   @media (min-width: $bp-sm) {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
+    flex-direction: row;
   }
 
   &.open {
@@ -149,13 +160,15 @@ body.transparent-sideheader {
   &__toggle {
     height: $nav-toggle-size;
     position: absolute;
-    right: 5%;
+    right: 16px;
     top: 0;
     padding-right: 36px;
+    padding-left: 6px;
     z-index: 9000;
-    font-family: "Crimson Text", sans-serif;
+    font-family: "Fucxed", sans-serif;
     font-weight: 700;
-    line-height: 40px;
+    line-height: 1.25;
+    font-size: 1.6rem;
     vertical-align: middle;
     margin-top: ($header-height-mobile - $nav-toggle-size) / 2;
     margin-bottom: ($header-height-mobile - $nav-toggle-size) / 2;
@@ -163,6 +176,8 @@ body.transparent-sideheader {
     background-image: url('/static/img/xr-menu-toggle.svg');
     background-position: right center;
     background-repeat: no-repeat;
+    background-color: map_get($colors, xr-yellow);
+    border: 2px solid map_get($colors, xr-black);
 
     @media (min-width: $bp-sm) {
       display: none;
@@ -170,23 +185,118 @@ body.transparent-sideheader {
   }
 
   &__item {
+    font-family: "Fucxed", sans-serif;
+    text-transform: uppercase;
+    white-space: nowrap;
     @media (max-width: $bp-sm) {
       transform: translateY(-20px);
       transition: transform .4s ease;
       margin: 24px 0;
-      font-size: 32px;
-      font-family: "Fucxed", sans-serif;
-      text-transform: uppercase;
+      font-size: 2rem;
     }
     @media (min-width: $bp-sm) {
-      margin: 0 16px;
-      font-size: 22px;
+      margin: 0 8px;
+      padding: 0 8px;
+      font-size: 1.3rem;
       font-weight: 700;
     }
-
-    a {
-      text-decoration: underline;
+    &.active,
+    &.ancestor {
+      position: relative;
+      z-index: 50;
+      a:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: map-get($colors, xr-yellow);
+        transform: rotate(-3deg);
+        z-index: -10;
+      }
+      &:nth-child(2n) a:before {
+        transform: rotate(1deg);
+      }
+      &:nth-child(3n) a:before {
+        transform: rotate(-1.5deg);
+      }
     }
   }
+
 }
 
+.secondary-menu {
+  z-index: 1000;
+  position: fixed;
+  top: $header-height-mobile;
+  left: 0;
+  width: 100%;
+  background: map-get($colors, xr-yellow);
+  @media (min-width: $bp-sm) {
+    top: $header-height-desktop;
+  }
+
+  &__nav {
+    //height: $header-height-desktop * 0.6;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    align-content: center;
+    flex-direction: column;
+
+    @media (min-width: $bp-sm) {
+      flex-direction: row;
+    }
+
+    > li:first-child {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+  &__item,
+  &__parent-item {
+    font-family: "Fucxed", sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+    @media (max-width: $bp-sm) {
+      transform: translateY(-20px);
+      transition: transform .4s ease;
+      margin: 24px 0;
+      font-size: 1.2rem;
+    }
+    @media (min-width: $bp-sm) {
+      margin: 0 8px;
+      padding: 12px 8px 8px;
+      font-size: 1.2rem;
+    }
+    &.active,
+    &.ancestor {
+      position: relative;
+      z-index: 50;
+      a:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: map-get($colors, xr-green);
+        transform: rotate(-2deg);
+        z-index: -10;
+      }
+      &:nth-child(2n) a:before {
+        transform: rotate(2deg);
+      }
+      &:nth-child(3n) a:before {
+        transform: rotate(-1deg);
+      }
+    }
+  }
+  &__parent-item {
+    font-size: 1.6rem;
+
+  }
+
+}

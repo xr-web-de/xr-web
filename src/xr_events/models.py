@@ -1,3 +1,5 @@
+import datetime
+
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.db import models
 from django.utils import formats, timezone
@@ -10,12 +12,24 @@ from wagtail.admin.edit_handlers import (
     StreamFieldPanel,
 )
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page, Collection
+from wagtail.core.models import Orderable, Page, Collection, PageManager
+from wagtail.core.query import PageQuerySet
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import HomePage, LocalGroup
+
+
+class EventPageQuerySet(PageQuerySet):
+    def upcoming(self):
+        return self.filter(end_date__gte=datetime.date.today)
+
+    def previous(self):
+        return self.filter(start_date__lte=datetime.date.today)
+
+
+EventPageManager = PageManager.from_queryset(EventPageQuerySet)
 
 
 class EventPage(Page):
@@ -70,6 +84,8 @@ class EventPage(Page):
 
     parent_page_types = ["EventGroupPage"]
 
+    objects = EventPageManager()
+
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
@@ -78,14 +94,6 @@ class EventPage(Page):
         context = super().get_context(request, *args, **kwargs)
         context["event"] = self
         return context
-
-    @property
-    def event_group(self):
-        return self.group.eventgrouppage
-
-    @property
-    def local_group(self):
-        return self.group.localgrouppage
 
     @property
     def organiser(self):
@@ -185,9 +193,17 @@ class EventListPage(Page):
             .order_by("start_date", "title")
         )
         context["event_groups"] = (
-            EventGroupPage.objects.child_of(self).live().order_by("title")
+            EventGroupPage.objects.child_of(self).live().order_by("group__name")
         )
         return context
+
+    @property
+    def upcoming_events(self):
+        return EventPage.objects.live().upcoming().order_by("start_date", "title")
+
+    @property
+    def previous_events(self):
+        return EventPage.objects.live().previous().order_by("-start_date", "title")
 
 
 class EventGroupPage(Page):
@@ -225,3 +241,11 @@ class EventGroupPage(Page):
     @property
     def is_regional_group(self):
         return self.group.is_regional_group
+
+    @property
+    def upcoming_events(self):
+        return EventPage.objects.live().filter(path__startwith=self.path).upcoming()
+
+    @property
+    def previous_events(self):
+        return EventPage.objects.live().filter(path__startwith=self.path).previous()

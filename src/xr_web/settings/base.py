@@ -166,16 +166,40 @@ WEBPACK_LOADER = {
     }
 }
 
+
 # Wagtail
 # ------------
 WAGTAIL_SITE_NAME = "XR de"
 
 # Wagtailmenus
-WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = "xr_pages/menus/main_menu.html"
+WAGTAILMENUS_DEFAULT_MAIN_MENU_TEMPLATE = "xr_pages/menus/main_menu_items.html"
 WAGTAILMENUS_DEFAULT_FLAT_MENU_TEMPLATE = "xr_pages/menus/flat_menu.html"
-WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = "xr_pages/menus/local_group_submenu.html"
+WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = "xr_pages/menus/children_menu_items.html"
 
 WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_pages.wagtail_hooks.XrMainMenuAdmin"
+
+
+# Local Group Settings
+GERMANY_STATE_CHOICES = (
+    ("BW", "Baden-Württemberg"),
+    ("BY", "Bayern"),
+    ("BE", "Berlin"),
+    ("BB", "Brandenburg"),
+    ("HB", "Bremen"),
+    ("HH", "Hamburg"),
+    ("HE", "Hessen"),
+    ("MV", "Mecklenburg-Vorpommern"),
+    ("NI", "Niedersachsen"),
+    ("NW", "Nordrhein-Westfalen"),
+    ("RP", "Rheinland-Pfalz"),
+    ("SL", "Saarland"),
+    ("SN", "Sachsen"),
+    ("ST", "Sachsen-Anhalt"),
+    ("SH", "Schleswig-Holstein"),
+    ("TH", "Thüringen"),
+)
+LOCAL_GROUP_STATE_CHOICES = GERMANY_STATE_CHOICES
+
 
 # Logging
 # ------------

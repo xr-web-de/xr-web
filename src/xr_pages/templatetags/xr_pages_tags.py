@@ -2,48 +2,33 @@ from django import template
 from django.utils.text import normalize_newlines
 from wagtailmenus.models import FlatMenu
 
-from ..models import LocalGroupListPage
+from xr_pages import services
 
 register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
 def get_site(context):
-    try:
-        site = context["request"].site
-    except (KeyError, AttributeError):
-        return None
-    return site
+    request = context.get("request", None)
+    return services.get_site(request)
 
 
 @register.simple_tag(takes_context=True)
 def get_home_page(context):
-    try:
-        home_page = context["request"].site.root_page.specific
-    except (KeyError, AttributeError):
-        return None
-    return home_page
+    request = context.get("request", None)
+    return services.get_home_page(request)
 
 
 @register.simple_tag(takes_context=True)
 def get_local_group_list_page(context):
-    try:
-        home_page = context["request"].site.root_page
-        local_group_list_page = (
-            LocalGroupListPage.objects.child_of(home_page).live().get()
-        )
-    except (KeyError, AttributeError, LocalGroupListPage.DoesNotExist):
-        return None
-    return local_group_list_page
+    request = context.get("request", None)
+    return services.get_local_group_list_page(request)
 
 
 @register.simple_tag(takes_context=True)
-def get_local_group_page_for(context, page=None):
-    try:
-        local_group_page = context.get("page", None).group.localgrouppage.specific
-    except (KeyError, AttributeError):
-        return None
-    return local_group_page
+def get_local_groups(context):
+    request = context.get("request", None)
+    return services.get_local_groups
 
 
 @register.inclusion_tag("xr_pages/templatetags/inline_svg_text.html")

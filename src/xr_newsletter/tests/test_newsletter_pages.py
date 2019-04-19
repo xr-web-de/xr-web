@@ -1,9 +1,10 @@
 from django.contrib.auth.models import Group
 from wagtail.core.models import Page
+from wagtailmenus.models import MainMenuItem
 
 from xr_events.tests.test_events_pages import EVENT_PAGE_CLASSES
 from xr_newsletter.models import NewsletterFormPage, EmailFormPage, NewsletterFormField
-from xr_pages.models import HomePage, LocalGroupPage, LocalGroup
+from xr_pages.models import HomePage, LocalGroupPage
 from xr_pages.services import MODERATORS_PAGE_PERMISSIONS, EDITORS_PAGE_PERMISSIONS
 from xr_pages.tests.test_pages import PagesBaseTest, PAGES_PAGE_CLASSES
 
@@ -34,16 +35,19 @@ class NewsletterBaseTest(PagesBaseTest):
         super().setUp()
 
     def _setup_form_pages(self):
-        self.local_group, created = LocalGroup.objects.get_or_create(
-            name="Example Group"
-        )
         self.newsletter_form_page = NewsletterFormPage.objects.get()
         self.email_form_page = EmailFormPage(
             title="Example Form Page", group=self.local_group
         )
-        self.regional_group_page.add_child(instance=self.email_form_page)
+        self.home_page.add_child(instance=self.email_form_page)
 
         self.FORM_PAGES = {self.newsletter_form_page, self.email_form_page}
+
+        MainMenuItem.objects.get_or_create(
+            menu=self.main_menu, link_page=self.newsletter_form_page
+        )
+        self.newsletter_form_page.show_in_menus = True
+        self.newsletter_form_page.save()
 
 
 class NewsletterPageTreeTest(NewsletterBaseTest):

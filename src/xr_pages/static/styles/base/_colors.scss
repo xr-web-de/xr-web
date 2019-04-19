@@ -1,2 +1,13 @@
-$primary-color: rgb(0, 168, 53);
+// Theme color palette
+$colors: (
+  xr-green: #00A835,
+  xr-yellow: #F4F07A,
+  xr-light-blue: #75D0F1,
+  xr-dark-blue: #3860AA,
+  xr-white: #FFFFFF,
+  xr-black: #130C0D
+);
+
+
+$primary-color: map-get($colors, xr-green);
 $body-color: #222;

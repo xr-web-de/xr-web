@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.utils.translation import ugettext as _
+from urllib3.exceptions import NewConnectionError, MaxRetryError
 from wagtail.admin import messages
 from wagtail.core import hooks
 
@@ -17,18 +19,28 @@ def newsletter_form_page_check_sendy_api(request, page):
                 "Therefore newsletter subscription will not work." % page
             )
             messages.warning(request, message)
-        else:
-            sendy_response = sendy_api.subscriber_count(page.sendy_list_id)
+        elif not settings.DEBUG:
 
-            # Sendy will return an integer if the given list_id exists
+            sendy_response = None
             try:
+                sendy_response = sendy_api.subscriber_count(page.sendy_list_id)
+
+                # Sendy will return an integer if the given list_id exists
+
                 int(sendy_response)
-            except ValueError:
+            except (
+                ConnectionError,
+                NewConnectionError,
+                MaxRetryError,
+                ValueError,
+            ) as e:
                 message = (
                     _(
                         "There was a problem talking to Sendy API: %s. "
                         "Please check the sendy_list_id and try again."
                     )
                     % sendy_response
+                    if sendy_response
+                    else e
                 )
                 messages.warning(request, message)

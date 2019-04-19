@@ -1,5 +1,26 @@
 {% extends "xr_pages/layouts/default_page.html" %}
 {% load wagtailcore_tags %}
+{% load menu_tags %}
+
+
+{% block body_classes %}{% spaceless %}
+    {{ block.super }}
+
+    {% if page.group.active_localgrouppage %}
+        with-secondary-menu
+    {% endif %}
+{% endspaceless %}{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+
+    {% with parent_page=page.group.active_localgrouppage %}
+        {% if parent_page %}
+            {% include "xr_pages/menus/children_menu.html" %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
 
 
 {% block content %}

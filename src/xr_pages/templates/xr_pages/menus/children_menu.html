@@ -1,0 +1,36 @@
+{% load menu_tags %}
+{% load wagtailcore_tags %}
+{% load menu_tags %}
+{% load xr_pages_tags %}
+
+
+<nav class="secondary-menu">
+    <div class="container">
+        <ul class="secondary-menu__nav">
+
+            {% children_menu parent_page apply_active_classes=True as secondary_menu %}
+
+
+            {% if secondary_menu.strip %}
+
+                <li class="secondary-menu__parent-item {% if page == parent_page %}active{% endif %}">
+                    <a href="{% pageurl parent_page %}">{{ parent_page.title }}</a>
+                </li>
+
+                {{ secondary_menu }}
+
+            {% else %}
+                {% get_local_group_list_page as local_group_list_page %}
+
+                <li class="secondary-menu__parent-item">
+                    <a href="{% pageurl local_group_list_page %}">{{ local_group_list_page.title }}</a>
+                </li>
+
+                <li class="secondary-menu__item {% if page == parent_page %}active{% endif %}">
+                    <a href="{% pageurl parent_page %}">{{ parent_page.title }}</a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>
