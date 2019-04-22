@@ -1,36 +1,55 @@
+{% load i18n %}
 {% load menu_tags %}
 {% load wagtailcore_tags %}
 {% load menu_tags %}
 {% load xr_pages_tags %}
 
 
-{% if parent_page %}
-    <ul class="secondary-menu__nav">
 
-        {% children_menu parent_page apply_active_classes=True as secondary_menu %}
+{% with local_group_page=page.group.active_localgrouppage local_group=page.group event_group_page=page.group.active_eventgrouppage %}
+    {% if local_group_page %}
+        <ul class="secondary-menu__nav">
 
+            {% children_menu local_group_page apply_active_classes=True as secondary_menu %}
 
-        {% if secondary_menu.strip %}
+            {% if secondary_menu.strip  %}
 
-            <li class="secondary-menu__parent-item {% if page == parent_page %}active{% endif %}">
-                <a href="{% pageurl parent_page %}">{{ parent_page.title }}</a>
-            </li>
+                <li class="secondary-menu__parent-item {% if page == local_group_page %}active{% endif %}">
+                    <a href="{% pageurl local_group_page %}">{{ local_group.name }}</a>
+                </li>
 
-            {{ secondary_menu }}
+                {% if event_group_page %}
+                    <li class="secondary-menu__item {% if page == event_group_page or page.is_event_page %}active{% endif %}">
+                        <a href="{% pageurl event_group_page %}">{% trans "Veranstaltungen" %}</a>
+                    </li>
+                {% endif %}
 
-        {% else %}
+                {{ secondary_menu }}
 
-            {% get_local_group_list_page as local_group_list_page %}
+            {% elif event_group_page %}
 
-            <li class="secondary-menu__parent-item secondary-menu__repeated-item">
-                <a href="{% pageurl local_group_list_page %}">{{ local_group_list_page.title }}</a>
-            </li>
+                <li class="secondary-menu__parent-item {% if page == local_group_page %}active{% endif %}">
+                    {{ local_group.name }}
+                </li>
 
-            <li class="secondary-menu__item {% if page == parent_page %}active{% endif %}">
-                <a href="{% pageurl parent_page %}">{{ parent_page.title }}</a>
-            </li>
+                <li class="secondary-menu__item {% if page == event_group_page or page.is_event_page %}active{% endif %}">
+                    <a href="{% pageurl event_group_page %}">{% trans "Veranstaltungen" %}</a>
+                </li>
 
-        {% endif %}
+            {% else %}
 
-    </ul>
-{% endif %}
+                {% get_local_group_list_page as local_group_list_page %}
+
+                <li class="secondary-menu__parent-item secondary-menu__repeated-item">
+                    <a href="{% pageurl local_group_list_page %}">{{ local_group_list_page.title }}</a>
+                </li>
+
+                <li class="secondary-menu__item {% if page == local_group_page %}active{% endif %}">
+                    <a href="{% pageurl local_group_page %}">{{ local_group.name }}</a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+    {% endif %}
+{% endwith %}

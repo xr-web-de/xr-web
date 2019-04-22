@@ -1,17 +1,19 @@
-{% extends "xr_pages/layouts/default_page.html" %}
+{% extends "xr_pages/layouts/local_group_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
 
+{% block content_title %}{% endblock %}
+
 {% block content %}
     <article class="container">
+        <h1 class="h h--1 h--caps">{{ event.title }}</h1>
 
         {% if event.image %}
             {% image event.image width-800 alt=event.title class="img-responsive" %}
         {% endif %}
 
-        <h1>{{ event.title }}</h1>
 
         {% if event.dates.exists %}
             <h2>{% trans "Wann?" %}</h2>

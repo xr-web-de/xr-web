@@ -51,12 +51,22 @@ class EventsBaseTest(PagesBaseTest):
             group__is_regional_group=True
         )
 
+        self.regional_event_page = EventPage(title="Example Regional Event Page")
+        self.regional_event_page.dates.add(
+            EventDate(start=datetime.date.today() + datetime.timedelta(1))
+        )
+        self.regional_event_group_page.add_child(instance=self.regional_event_page)
+        self.regional_event_page.save()
+
         self.event_group_page = EventGroupPage(
             title="Example Event Group", group=self.local_group
         )
         self.event_list_page.add_child(instance=self.event_group_page)
 
-        self.event_page = EventPage(title="Example Event")
+        self.event_page = EventPage(title="Example Event Page")
+        self.event_page.dates.add(
+            EventDate(start=datetime.date.today() + datetime.timedelta(1))
+        )
         self.event_group_page.add_child(instance=self.event_page)
 
         self.EVENT_PAGES = {

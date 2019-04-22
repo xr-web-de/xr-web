@@ -1,13 +1,2 @@
-{% extends "xr_pages/layouts/default_page.html" %}
-{% load wagtailcore_tags %}
-{% load menu_tags %}
+{% extends "xr_pages/layouts/local_group_page.html" %}
 
-
-{% block body_classes %}{{ block.super }} with-secondary-menu{% endblock %}
-
-
-{% block secondary_menu %}
-    {% with parent_page=page.group.active_localgrouppage %}
-        {% include "xr_pages/menus/local_group_secondary_menu.html" %}
-    {% endwith %}
-{% endblock %}

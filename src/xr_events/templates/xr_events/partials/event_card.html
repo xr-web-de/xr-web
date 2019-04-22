@@ -2,26 +2,44 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
-<article>
+<article class="block event-block">
+    <div class="block--content">
+        {% if event.image %}
+            <a href="{% pageurl event %}">
+                {% image event.image width-400 alt=event.title class="img-responsive" %}
+            </a>
+        {% endif %}
+    </div>
+    <footer class="block--footer">
+        <h3 class="h h--3 h--caps"><a href="{% pageurl event %}">{{ event.title }}</a></h3>
 
-    {% if event.image %}
-        <a href="{% pageurl event %}">
-            {% image event.image width-400 alt=event.title class="img-responsive" %}
-        </a>
-    {% endif %}
+        <dl>
+            <dt>{% trans "Wer?" %}</dt>
+            <dd>
+                {% if event.organiser.is_regional_group %}
+                    {{ event.organiser.xr_name }}
+                {% else %}
+                    <a href="{{ event.organiser.url }}">
+                        {{ event.organiser.xr_name }}
+                    </a>
+                {% endif %}
+            </dd>
 
-    <h3><a href="{% pageurl event %}">{{ event.title }}</a></h3>
+            {% if event.start_date %}
+                <dt>{% trans "Wann?" %}</dt>
+                <dd>
+                {% for date in event.dates.all %}
+                    {{ date.start|date:"SHORT_DATE_FORMAT" }}{% if date.label %}: {{ date.label }}{% endif %}
+                    {% if not forloop.last %}<br>{% endif %}
+                {% endfor %}
+                </dd>
+            {% endif %}
 
-    {% if event.dates.exists %}
-        <h4>{% trans "Wann?" %}</h4>
-        {% for date in event.dates.all %}
-            <p>{{ date.start }}{% if date.label %}: {{ date.label }}{% endif %}</p>
-        {% endfor %}
-    {% endif %}
+            {% if event.location %}
+                <dt>{% trans "Wo?" %}</dt>
+                <dd>{{ event.location }}</dd>
+            {% endif %}
+        </dl>
 
-    {% if event.location %}
-        <h4>{% trans "Wo?" %}</h4>
-        <p>{{ event.location }}</p>
-    {% endif %}
-
+    </footer>
 </article>

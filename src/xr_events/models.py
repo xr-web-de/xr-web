@@ -23,10 +23,14 @@ from xr_pages.models import HomePage, LocalGroup
 
 class EventPageQuerySet(PageQuerySet):
     def upcoming(self):
-        return self.filter(end_date__gte=datetime.date.today)
+        return self.filter(end_date__isnull=False).filter(
+            end_date__gte=datetime.date.today()
+        )
 
     def previous(self):
-        return self.filter(start_date__lte=datetime.date.today)
+        return self.filter(start_date__isnull=False).filter(
+            start_date__lte=datetime.date.today()
+        )
 
 
 EventPageManager = PageManager.from_queryset(EventPageQuerySet)
@@ -85,6 +89,8 @@ class EventPage(Page):
     parent_page_types = ["EventGroupPage"]
 
     objects = EventPageManager()
+
+    is_event_page = True
 
     class Meta:
         verbose_name = _("Event")
@@ -184,14 +190,6 @@ class EventListPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        today = timezone.now().date()
-        context["events"] = (
-            EventPage.objects.descendant_of(self)
-            .live()
-            .filter(start_date__isnull=False)
-            .filter(start_date__gte=today)
-            .order_by("start_date", "title")
-        )
         context["event_groups"] = (
             EventGroupPage.objects.child_of(self).live().order_by("group__name")
         )
@@ -199,11 +197,21 @@ class EventListPage(Page):
 
     @property
     def upcoming_events(self):
-        return EventPage.objects.live().upcoming().order_by("start_date", "title")
+        return (
+            EventPage.objects.live()
+            .descendant_of(self)
+            .upcoming()
+            .order_by("start_date", "title")
+        )
 
     @property
     def previous_events(self):
-        return EventPage.objects.live().previous().order_by("-start_date", "title")
+        return (
+            EventPage.objects.live()
+            .descendant_of(self)
+            .previous()
+            .order_by("-start_date", "title")
+        )
 
 
 class EventGroupPage(Page):
@@ -222,18 +230,6 @@ class EventGroupPage(Page):
         verbose_name = _("Event Group Page")
         verbose_name_plural = _("Event Group Pages")
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        today = timezone.now().date()
-        context["events"] = (
-            EventPage.objects.child_of(self)
-            .live()
-            .filter(start_date__isnull=False)
-            .filter(start_date__gte=today)
-            .order_by("start_date", "title")
-        )
-        return context
-
     @property
     def organiser(self):
         return self.group
@@ -244,8 +240,18 @@ class EventGroupPage(Page):
 
     @property
     def upcoming_events(self):
-        return EventPage.objects.live().filter(path__startwith=self.path).upcoming()
+        return (
+            EventPage.objects.live()
+            .child_of(self)
+            .upcoming()
+            .order_by("start_date", "title")
+        )
 
     @property
     def previous_events(self):
-        return EventPage.objects.live().filter(path__startwith=self.path).previous()
+        return (
+            EventPage.objects.live()
+            .child_of(self)
+            .previous()
+            .order_by("-start_date", "title")
+        )

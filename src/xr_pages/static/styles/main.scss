@@ -197,3 +197,19 @@ a {
     }
   }
 }
+
+
+
+// definition list
+dl {
+  display: flex;
+  flex-flow: row wrap;
+}
+dt {
+  flex-basis: 20%;
+  font-weight: bold;
+}
+dd {
+  flex-basis: 70%;
+  flex-grow: 1;
+}

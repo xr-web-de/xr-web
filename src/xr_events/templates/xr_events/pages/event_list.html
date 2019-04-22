@@ -8,6 +8,13 @@
 
     {% if event_groups %}
         <section class="container">
+            {% trans "Ortsgruppe" %}:
+            {% for event_group in event_groups %}
+                <a href="{% pageurl event_group %}">{{ event_group.title }}</a>
+            {% endfor %}
+        </section>
+
+        <section class="container">
             <div class="box box--light">
                 <div class="row">
                     <div class="col-sm-4">Filtern nach Ortsgruppe:</div>
@@ -24,11 +31,10 @@
         </section>
     {% endif %}
 
-    {% if events %}
+    {% if page.upcoming_events %}
         <section class="container">
-            <h2>{% trans "Veranstaltungen" %}</h2>
             <div class="row">
-                {% for event in events %}
+                {% for event in page.upcoming_events %}
                     <div class="col-sm-4">
                         {% include "xr_events/partials/event_card.html" with event=event %}
                     </div>

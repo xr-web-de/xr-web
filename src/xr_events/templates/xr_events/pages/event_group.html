@@ -1,21 +1,24 @@
-{% extends "xr_pages/layouts/default_page.html" %}
+{% extends "xr_pages/layouts/local_group_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 
-{% block content %}
-   
-    <div class="container">
-        <a class="" href="{% pageurl page.get_parent %}">Zurück zur Übersicht</a>
+{% block content_title %}
+
+    <div class="page-title container">
+        <h1 class="h h--1 h--caps">{% trans "Veranstaltungen" %} <small><small>{% trans "von" %}</small> {{ page.group.xr_name }}</small></h1>
     </div>
+
+{% endblock %}
+
+{% block content %}
 
     {% include_block page.content %}
 
-    {% if events %}
+    {% if page.upcoming_events %}
 
         <section class="container">
-            <h2>{% trans "Veranstaltungen" %}</h2>
             <div class="row">
-                {% for event in events %}
+                {% for event in page.upcoming_events %}
                     <div class="col-sm-4">
                         {% include "xr_events/partials/event_card.html" %}
                     </div>
