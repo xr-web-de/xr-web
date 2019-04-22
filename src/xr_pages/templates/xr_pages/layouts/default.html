@@ -7,17 +7,28 @@
 {% block layout %}
     {% block header %}
         <header id="header" class="siteheader">
-            <nav class="container main-nav" id="nav">
+            <div class="nav-wrapper" id="nav">
 
-                {% block header_logo %}
-                    <a href="/" class="siteheader-logo">
-                        <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
-                    </a>
-                {% endblock %}
+                <nav class="main-nav">
+                    <div class="container">
+                        <a href="/" class="siteheader-logo">
+                            <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
+                        </a>
 
-                {% main_menu %}
+                        {% main_menu %}
 
-            </nav>
+                        <button class="nav-wrapper__toggle" id="nav-toggle">MENU</button>
+                    </div>
+                </nav>
+
+                <nav class="secondary-menu">
+                    <div class="container">
+                        {% block secondary_menu %}
+                        {% endblock %}
+                    </div>
+                </nav>
+
+            </div>
         </header>
     {% endblock %}
 

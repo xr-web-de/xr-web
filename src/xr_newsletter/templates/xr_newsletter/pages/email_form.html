@@ -6,20 +6,20 @@
 {% block body_classes %}{% spaceless %}
     {{ block.super }}
 
-    {% if page.group.active_localgrouppage %}
-        with-secondary-menu
+    {% if not page.group.is_regional_group %}
+        {% if page.group.active_localgrouppage %}
+            with-secondary-menu
+        {% endif %}
     {% endif %}
 {% endspaceless %}{% endblock %}
 
 
-{% block header %}
-    {{ block.super }}
-
-    {% with parent_page=page.group.active_localgrouppage %}
-        {% if parent_page %}
-            {% include "xr_pages/menus/children_menu.html" %}
-        {% endif %}
-    {% endwith %}
+{% block secondary_menu %}
+    {% if not page.group.is_regional_group %}
+        {% with parent_page=page.group.active_localgrouppage %}
+            {% include "xr_pages/menus/local_group_secondary_menu.html" %}
+        {% endwith %}
+    {% endif %}
 {% endblock %}
 
 

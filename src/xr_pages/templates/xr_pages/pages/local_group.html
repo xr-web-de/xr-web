@@ -8,15 +8,11 @@
 {% block body_classes %}{{ block.super }} with-secondary-menu{% endblock %}
 
 
-{% block header %}
-    {{ block.super }}
-
+{% block secondary_menu %}
     {% with parent_page=page %}
-        {% include "xr_pages/menus/children_menu.html" %}
+        {% include "xr_pages/menus/local_group_secondary_menu.html" %}
     {% endwith %}
 {% endblock %}
-
-
 
 
 
