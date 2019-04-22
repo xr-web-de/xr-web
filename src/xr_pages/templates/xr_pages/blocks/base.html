@@ -16,7 +16,7 @@
                     {% include_block value.link %}
                 {% endif %}
 
-                <h2 class="h h--2-caps">
+                <h2 class="h h--2 h--caps">
                     {{ value.heading }}
                 </h2>
 
@@ -59,7 +59,7 @@
                     {% if value.link.external_link or value.link.internal_link %}
                         {% include_block value.link %}
                     {% endif %}
-                    <h3 class="h h--3-caps">{{ value.caption }}</h3>
+                    <h3 class="h h--3 h--caps">{{ value.caption }}</h3>
                     {% if value.link.external_link or value.link.internal_link %}
                         </a>
                     {% endif %}

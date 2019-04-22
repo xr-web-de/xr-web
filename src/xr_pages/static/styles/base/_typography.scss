@@ -18,38 +18,21 @@ h1, h2, h3, h4, h5, h6 {
 .h {
     &--1 {
         font-size: 3.6rem;
-        &-caps {
-            font-size: 3.6rem;
-            text-transform: uppercase;
-            font-family: 'Fucxed', Impact, Arial, sans-serif;
-        }
     }
 
     &--2 {
         font-size: 2.6rem;
-
-        &-caps {
-            font-size: 2.6rem;
-            text-transform: uppercase;
-            font-family: 'Fucxed', Impact, Arial, sans-serif;
-        }
     }
 
     &--3 {
         font-size: 1.6rem;
-
-        &-caps {
-            font-size: 1.6rem;
-            text-transform: uppercase;
-            font-family: 'Fucxed', Impact, Arial, sans-serif;
-        }
+    }
+    &--caps {
+      text-transform: uppercase;
+      font-family: 'Fucxed', Impact, Arial, sans-serif;
     }
 
     &--center {
         text-align: center;
-    }
-    &--section-start {
-        margin-top: 1em;
-        margin-bottom: -1rem;
     }
 }

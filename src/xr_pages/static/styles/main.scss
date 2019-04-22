@@ -47,6 +47,14 @@ a {
   display: block;
 }
 
+// Content
+
+.page-title  {
+  margin-top: 1em;
+}
+
+
+
 // Content block
 //---------------
 .block {
@@ -88,6 +96,10 @@ a {
     padding-bottom: 2em;
     margin-top: 0;
   }
+}
+
+.page-title + .block {
+  margin-top: 1rem;
 }
 
 .block--content {
