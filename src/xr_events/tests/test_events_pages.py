@@ -289,11 +289,8 @@ class EventsEventPageTest(EventsBaseTest):
         self._setup_event_pages()
 
     def test_event_dates_get_set(self):
-        self.assertFalse(self.event_page.dates.exists())
-
-        date = timezone.now()
-        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
-        self.event_page.dates.add(event_date)
+        date = timezone.now() + datetime.timedelta(1)
+        self.event_page.dates.set([EventDate(start=date)])
 
         self.event_page.save()
 
@@ -302,11 +299,8 @@ class EventsEventPageTest(EventsBaseTest):
         self.assertEqual(self.event_page.end_date, date)
 
     def test_event_dates_get_ordered(self):
-        self.assertFalse(self.event_page.dates.exists())
-
-        date = timezone.now()
-        event_date = EventDate.objects.create(event_page=self.event_page, start=date)
-        self.event_page.dates.add(event_date)
+        date = timezone.now() + datetime.timedelta(1)
+        self.event_page.dates.set([EventDate(start=date)])
 
         date2 = timezone.now() + datetime.timedelta(1)
         event_date2 = EventDate.objects.create(event_page=self.event_page, start=date2)
