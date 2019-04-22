@@ -73,9 +73,20 @@ a {
     margin-left: auto;
     margin-right: auto;
   }
+  &.align-full_page {
+    margin-top: 0;
+    padding-bottom: 0;
+    .block--heading {
+      margin-top: 2rem;
+    }
+    .block--footer {
+      padding-bottom: 1rem;
+    }
+  }
   &.block--with-bg {
     padding-top: 2em;
     padding-bottom: 2em;
+    margin-top: 0;
   }
 }
 
