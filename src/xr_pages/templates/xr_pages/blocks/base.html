@@ -7,7 +7,7 @@
 
     {% block block_header %}
         {% if value.heading %}
-            {% if block.value.align == "full_page" or block.value.align is None %}
+            {% if value.align == "full_page" or value.align is None %}
                 <div class="container">
             {% endif %}
 
@@ -25,7 +25,7 @@
                 {% endif %}
             </header>
 
-            {% if block.value.align == "full_page" or block.value.align is None %}
+            {% if value.align == "full_page" or value.align is None %}
                 </div>
             {% endif %}
         {% endif %}
@@ -50,7 +50,7 @@
 
     {% block block_footer %}
         {% if value.caption or value.description %}
-            {% if block.value.align == "full_page" or block.value.align is None %}
+            {% if value.align == "full_page" or value.align is None %}
                 <div class="container">
             {% endif %}
 
@@ -69,7 +69,7 @@
                 {% endif %}
             </footer>
 
-            {% if block.value.align == "full_page" or block.value.align is None %}
+            {% if value.align == "full_page" or value.align is None %}
                 </div>
             {% endif %}
         {% endif %}

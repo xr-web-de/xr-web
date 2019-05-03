@@ -126,6 +126,6 @@ caption_block_kwargs = {
 description_block_kwargs = {
     "required": False,
     "help_text": _(
-        "An optional description, which is displayed below the block's caption"
+        "An optional description, which is displayed below the block's caption."
     ),
 }

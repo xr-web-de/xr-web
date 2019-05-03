@@ -167,6 +167,35 @@ class SloganBlock(CollapsibleFieldsMixin, blocks.StructBlock):
         template = "xr_pages/blocks/slogan.html"
 
 
+class TeaserBlock(CollapsibleFieldsMixin, blocks.StructBlock):
+    heading = blocks.CharBlock(**heading_block_kwargs)
+    page = blocks.PageChooserBlock()
+    caption = blocks.CharBlock(
+        required=False,
+        help_text=_(
+            "An optional caption, which is displayed below the block's content. "
+            "Overwrites the page title of the linked page."
+        ),
+    )
+    description = blocks.TextBlock(
+        required=False,
+        help_text=_(
+            "An optional description, which is displayed below the block's caption. "
+            "Overwrites the page description of the linked page."
+        ),
+    )
+
+    fields = [
+        "heading",
+        "page",
+        {"label": _("Card"), "fields": ["heading", "align", "caption", "description"]},
+    ]
+
+    class Meta:
+        icon = "link"
+        template = "xr_pages/blocks/teaser.html"
+
+
 class CarouselBlock(blocks.StructBlock):
     items = blocks.StreamBlock(
         [("image", ImageBlock()), ("video", VideoBlock()), ("slogan", SloganBlock())]
@@ -186,6 +215,10 @@ class AlignedSloganBlock(AlignmentMixin, SloganBlock):
     pass
 
 
+class AlignedTeaserBlock(AlignmentMixin, TeaserBlock):
+    pass
+
+
 class AlignedCarouselBlock(AlignmentMixin, CarouselBlock):
     pass
 
@@ -194,6 +227,7 @@ class AlignedCarouselBlock(AlignmentMixin, CarouselBlock):
 class ContentBlock(blocks.StreamBlock):
     text = TextBlock()
     image = AlignedImageBlock()
+    teaser = AlignedTeaserBlock()
     video = AlignedVideoBlock()
     slogan = AlignedSloganBlock()
     form = EmailFormBlock()

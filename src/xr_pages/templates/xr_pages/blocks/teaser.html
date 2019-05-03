@@ -1,7 +1,59 @@
+{% extends "xr_pages/blocks/base.html" %}
+{% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
 
 
+{% block block_content %}
+    {% with page=value.page.specific %}
+        {% if page.image %}
+            <a href="{% pageurl page %}">
+                {% if value.align == "full_page" %}
+                    {% image page.image width-1920 alt=page.title class="img-responsive" %}
+                {% elif value.align == "full_content" %}
+                    {% image page.image width-1200 alt=page.title class="img-responsive" %}
+                {% elif value.align == "center" %}
+                    {% image page.image width-800 alt=page.title class="img-responsive" %}
+                {% else %} {# align in "left, right" #}
+                    {% image page.image width-400 alt=page.title class="img-responsive" %}
+                {% endif %}
+            </a>
+        {% endif %}
+    {% endwith %}
 
-{% block block_content_classes %}{% spaceless %}
-    {% if value.background_color %}bg--{{ value.background_color }}{% endif %}
-    {% if value.font_color %}color--{{ value.font_color }}{% endif %}
-{% endspaceless %}{% endblock %}
+{% endblock %}
+
+
+{% block block_footer %}
+
+    {% if value.align == "full_page" or value.align is None %}
+        <div class="container">
+    {% endif %}
+
+    <footer class="block--footer">
+        {% with page=value.page.specific %}
+            <a href="{% pageurl page %}">
+                <h3 class="h h--3 h--caps">
+                    {% if value.caption %}
+                        {{ value.caption }}
+                    {% else %}
+                        {{ page.title }}
+                    {% endif %}
+                </h3>
+            </a>
+            {% if page.description or value.description %}
+                <p>
+                    {% if value.description %}
+                        {{ value.description }}
+                    {% else %}
+                        {{ page.description }}
+                    {% endif %}
+                </p>
+            {% endif %}
+        {% endwith %}
+    </footer>
+
+    {% if value.align == "full_page" or value.align is None %}
+        </div>
+    {% endif %}
+
+{% endblock %}
