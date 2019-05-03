@@ -510,7 +510,7 @@ class PagesSignalsTest(PagesBaseTest):
         )
 
 
-class PagesLocalGroupInheritanceTest(PagesBaseTest):
+class PagesLocalGroupTest(PagesBaseTest):
     def setUp(self):
         super().setUp()
         self._setup_local_group_pages()
@@ -521,3 +521,9 @@ class PagesLocalGroupInheritanceTest(PagesBaseTest):
 
         self.assertEqual(local_group_sub_page.group.pk, self.local_group_page.group.pk)
         self.assertEqual(local_group_sub_page.group.pk, self.local_group.pk)
+
+    def test_local_group_create(self):
+        local_group = LocalGroup(name="New Local Group")
+        local_group.save()
+
+        self.assertTrue(local_group in LocalGroup.objects.all())

@@ -10,6 +10,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 
+from xr_pages.services import get_site
 from xr_web.settings import LOCAL_GROUP_STATE_CHOICES
 from .blocks import ContentBlock
 
@@ -266,6 +267,9 @@ class LocalGroup(models.Model):
             local_group_name_change.send(sender=self.__class__, instance=self)
 
         self.old_name = self.name
+
+        if not hasattr(self, "site") or not self.site:
+            self.site = get_site()
 
         super().save(*args, **kwargs)
 

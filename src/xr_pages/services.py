@@ -12,7 +12,6 @@ from wagtail.core.models import (
 
 
 # Pages
-from .models import LocalGroupListPage, LocalGroup
 
 PAGE_MODERATORS_SUFFIX = "Page Moderators"
 PAGE_EDITORS_SUFFIX = "Page Editors"
@@ -253,6 +252,8 @@ def get_home_page(request=None):
 
 
 def get_local_group_list_page(request=None):
+    from .models import LocalGroupListPage
+
     home_page = get_home_page(request)
     try:
         local_group_list_page = (
@@ -264,6 +265,8 @@ def get_local_group_list_page(request=None):
 
 
 def get_local_groups(request=None):
+    from .models import LocalGroup
+
     site = get_site(request)
     return (
         LocalGroup.objects.active()
