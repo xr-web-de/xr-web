@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "xr_pages",
     "xr_events",
     "xr_newsletter",
+    "xr_blog",
 ]
 
 MIDDLEWARE = [

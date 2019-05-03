@@ -1,0 +1,22 @@
+{% extends "xr_pages/layouts/default_page.html" %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+
+{% block content_title %}
+    {{ block.super }}
+    <div class="container">
+        <p>
+            {% blocktrans with author=page.author date=page.date %}
+                Published by {{ author }} at {{ date }}
+            {% endblocktrans %}
+        </p>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+    {% include_block page.content %}
+
+{% endblock %}

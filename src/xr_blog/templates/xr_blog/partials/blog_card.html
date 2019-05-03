@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+<article class="block blog-entry-block">
+    <header class="block--heading">
+        <a href="{% pageurl entry %}">
+
+        <h2 class="h h--2 h--caps">
+            {{ entry.title }}
+        </h2>
+
+        </a>
+    </header>
+
+    <div class="block--content">
+        {% if entry.image %}
+            <a href="{% pageurl entry %}">
+                {% image entry.image width-400 alt=blog.title class="img-responsive" %}
+            </a>
+        {% endif %}
+    </div>
+
+
+    <footer class="block--footer">
+        <p class="blog-entry-block--author">{% trans "from" %} {{ entry.author }}</p>
+        <p class="blog-entry-block--date">{{ entry.date|date:"SHORT_DATE_FORMAT" }}</p>
+        {% if entry.description %}
+            <p>{{ entry.description }}</p>
+        {% endif %}
+    </footer>
+
+</article>

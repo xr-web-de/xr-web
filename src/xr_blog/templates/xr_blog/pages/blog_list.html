@@ -1,0 +1,21 @@
+{% extends "xr_pages/layouts/default_page.html" %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    {% include_block page.content %}
+
+    {% if page.entries %}
+        <section class="container">
+            <div class="row">
+                {% for entry in page.entries %}
+                    <div class="col-sm-4">
+                        {% include "xr_blog/partials/blog_card.html" with entry=entry %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+{% endblock %}
