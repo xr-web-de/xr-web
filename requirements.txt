@@ -33,7 +33,7 @@ selenium==3.141.0
 sendypy==0.1.5b0
 six==1.12.0               # via django-dynamic-fixture, django-extensions, html5lib, wagtail, webtest
 unidecode==1.0.23         # via wagtail
-urllib3==1.24.1           # via requests, selenium
+urllib3==1.24.3           # via requests, selenium
 wagtail-condensedinlinepanel==0.5.2
 wagtail==2.4
 wagtailmenus==2.12
