@@ -215,13 +215,17 @@ class NewsletterFormPage(AbstractEmailFormPage):
                     except ConnectionError:
                         sendy_response = None
 
-                    if sendy_response == "true" or int(sendy_response) == 1:
-                        return self.render_landing_page(
-                            request, form_submission, *args, **kwargs
-                        )
+                    try:
+                        if sendy_response == "true" or int(sendy_response) == 1:
+                            return self.render_landing_page(
+                                request, form_submission, *args, **kwargs
+                            )
+                    except ValueError:
+                        pass
 
                 message = _(
-                    "Sorry, there was an error talking to the Newsletter API. "
+                    "Sorry, there was an error talking to the Newsletter API "
+                    "or you have subscribed already. "
                     "Please try again later."
                 )
                 messages.error(request, message)

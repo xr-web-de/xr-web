@@ -71,6 +71,31 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             self.assertEqual(len(mail.outbox), 1)
             self.assertEqual(mail.outbox[0].subject, "TEST Subject")
 
+    def test_newsletter_form_unexpected_api_response(self):
+        with mock.patch.object(
+            xr_newsletter.services.sendy_api, "subscriber_count", return_value=10
+        ) as mock_sendy_subscribe:
+            self.newsletter_page.sendy_list_id = "sendy_TEST_list_id"
+            self.newsletter_page.to_address = "admin@example.com"
+            self.newsletter_page.save()
+
+        page = self.app.get(self.newsletter_page.url)
+        form = page.forms["newsletter_form"]
+
+        self.assertContains(page, 'id="newsletter_form"')
+        self.assertEqual(form.action, self.newsletter_page.url)
+
+        form = self._populate_newsletter_form(form)
+
+        with mock.patch.object(
+            xr_newsletter.services.sendy_api, "subscribe", return_value=b"\nunexpected"
+        ) as mock_sendy_subscribe:
+            response = form.submit()
+
+            self.assertEqual(response.status_code, 200)
+            self.assertNotContains(response, "error")
+            # TODO: test error message
+
     def test_newsletter_form_missing_to_address(self):
         self.newsletter_page.to_address = ""
         self.newsletter_page.save()
