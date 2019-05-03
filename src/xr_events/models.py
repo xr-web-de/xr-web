@@ -1,8 +1,7 @@
-import datetime
-
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.db import models
-from django.utils import formats, timezone
+from django.utils import formats
+from django.utils.timezone import localdate
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -23,14 +22,10 @@ from xr_pages.models import HomePage, LocalGroup
 
 class EventPageQuerySet(PageQuerySet):
     def upcoming(self):
-        return self.filter(end_date__isnull=False).filter(
-            end_date__gte=datetime.date.today()
-        )
+        return self.filter(end_date__isnull=False).filter(end_date__gte=localdate())
 
     def previous(self):
-        return self.filter(start_date__isnull=False).filter(
-            start_date__lte=datetime.date.today()
-        )
+        return self.filter(start_date__isnull=False).filter(start_date__lte=localdate())
 
 
 EventPageManager = PageManager.from_queryset(EventPageQuerySet)

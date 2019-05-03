@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.models import Group
 from django.utils import timezone
+from django.utils.timezone import localtime
 from wagtail.core.models import Page, Collection
 from wagtailmenus.models import MainMenuItem
 
@@ -53,7 +54,7 @@ class EventsBaseTest(PagesBaseTest):
 
         self.regional_event_page = EventPage(title="Example Regional Event Page")
         self.regional_event_page.dates.add(
-            EventDate(start=datetime.date.today() + datetime.timedelta(1))
+            EventDate(start=localtime() + datetime.timedelta(1))
         )
         self.regional_event_group_page.add_child(instance=self.regional_event_page)
         self.regional_event_page.save()
@@ -64,9 +65,7 @@ class EventsBaseTest(PagesBaseTest):
         self.event_list_page.add_child(instance=self.event_group_page)
 
         self.event_page = EventPage(title="Example Event Page")
-        self.event_page.dates.add(
-            EventDate(start=datetime.date.today() + datetime.timedelta(1))
-        )
+        self.event_page.dates.add(EventDate(start=localtime() + datetime.timedelta(1)))
         self.event_group_page.add_child(instance=self.event_page)
 
         self.EVENT_PAGES = {
@@ -244,7 +243,7 @@ class EventsSignalsTest(PagesBaseTest):
 
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
-        special_group_page = LocalGroupPage(
+        special_group_page = EventGroupPage(
             title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
@@ -254,7 +253,7 @@ class EventsSignalsTest(PagesBaseTest):
     def test_event_group_page_delete(self):
         special_group = self._create_local_group(name=self.special_group_name)
 
-        special_group_page = LocalGroupPage(
+        special_group_page = EventGroupPage(
             title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
@@ -268,7 +267,7 @@ class EventsSignalsTest(PagesBaseTest):
     def test_event_group_name_change(self):
         special_group = self._create_local_group(name=self.special_group_name)
 
-        special_group_page = LocalGroupPage(
+        special_group_page = EventGroupPage(
             title=self.special_group_name, group=special_group
         )
         self.event_list_page.add_child(instance=special_group_page)
@@ -302,7 +301,7 @@ class EventsEventPageTest(EventsBaseTest):
         date = timezone.now() + datetime.timedelta(1)
         self.event_page.dates.set([EventDate(start=date)])
 
-        date2 = timezone.now() + datetime.timedelta(1)
+        date2 = timezone.now() + datetime.timedelta(2)
         event_date2 = EventDate.objects.create(event_page=self.event_page, start=date2)
         self.event_page.dates.add(event_date2)
 

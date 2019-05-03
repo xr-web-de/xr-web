@@ -168,8 +168,10 @@ class PagesBaseTest(WagtailPageTests):
                     )
                     raise self.failureException(msg)
 
-    def assertAuthGroupsExists(self, group_name, msg=None):
-        for auth_group_type in PAGE_AUTH_GROUP_TYPES:
+    def assertAuthGroupsExists(
+        self, group_name, group_types=PAGE_AUTH_GROUP_TYPES, msg=None
+    ):
+        for auth_group_type in group_types:
             auth_group_name = get_auth_group_name(group_name, auth_group_type)
             if not Group.objects.filter(name=auth_group_name).exists():
                 msg = self._formatMessage(
@@ -177,8 +179,10 @@ class PagesBaseTest(WagtailPageTests):
                 )
                 raise self.failureException(msg)
 
-    def assertAuthGroupsNotExists(self, group_name, msg=None):
-        for auth_group_type in PAGE_AUTH_GROUP_TYPES:
+    def assertAuthGroupsNotExists(
+        self, group_name, group_types=PAGE_AUTH_GROUP_TYPES, msg=None
+    ):
+        for auth_group_type in group_types:
             auth_group_name = get_auth_group_name(group_name, auth_group_type)
             if Group.objects.filter(name=auth_group_name).exists():
                 msg = self._formatMessage(
