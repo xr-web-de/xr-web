@@ -14,6 +14,9 @@ from xr_web.block_utils import (
     COLOR_XR_GREEN,
     AlignmentMixin,
     CollapsibleFieldsMixin,
+    COLOR_XR_BLACK,
+    COLOR_XR_WHITE,
+    XrStructValue,
 )
 from xr_newsletter.blocks import EmailFormBlock
 
@@ -36,16 +39,7 @@ class TextBlock(CollapsibleFieldsMixin, blocks.StructBlock):
             "For images and videos use the image and video blocks."
         ),
     )
-    fields = [
-        "heading",
-        "text",
-        # {
-        #     "label": _("Settings"),
-        #     "fields": [
-        #         "align",
-        #     ],
-        # },
-    ]
+    fields = ["heading", "text"]
 
     class Meta:
         icon = "pilcrow"
@@ -85,6 +79,7 @@ class VideoBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     class Meta:
         icon = "media"
         template = "xr_pages/blocks/video.html"
+        value_class = XrStructValue
 
 
 class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
@@ -123,6 +118,7 @@ class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     class Meta:
         icon = "image"
         template = "xr_pages/blocks/image.html"
+        value_class = XrStructValue
 
 
 class SloganBlock(CollapsibleFieldsMixin, blocks.StructBlock):
@@ -165,6 +161,7 @@ class SloganBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     class Meta:
         icon = "openquote"
         template = "xr_pages/blocks/slogan.html"
+        value_class = XrStructValue
 
 
 class TeaserBlock(CollapsibleFieldsMixin, blocks.StructBlock):
@@ -186,7 +183,6 @@ class TeaserBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     )
 
     fields = [
-        "heading",
         "page",
         {"label": _("Card"), "fields": ["heading", "align", "caption", "description"]},
     ]
@@ -194,6 +190,34 @@ class TeaserBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     class Meta:
         icon = "link"
         template = "xr_pages/blocks/teaser.html"
+        value_class = XrStructValue
+
+
+class GridBlock(CollapsibleFieldsMixin, blocks.StructBlock):
+    heading = blocks.CharBlock(**heading_block_kwargs)
+    items = blocks.StreamBlock(
+        [
+            ("teaser", TeaserBlock()),
+            ("image", ImageBlock()),
+            ("video", VideoBlock()),
+            ("slogan", SloganBlock()),
+        ]
+    )
+    COLUMN_CHOICES = ((2, _("2")), (3, _("3")), (4, _("4")))
+    columns = blocks.ChoiceBlock(choices=COLUMN_CHOICES, default=3)
+    font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_BLACK)
+    background_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_WHITE)
+
+    fields = [
+        "heading",
+        "columns",
+        "items",
+        {"label": _("Settings"), "fields": ["align", "font_color", "background_color"]},
+    ]
+
+    class Meta:
+        icon = "grip"
+        template = "xr_pages/blocks/grid.html"
 
 
 class CarouselBlock(blocks.StructBlock):
@@ -231,6 +255,7 @@ class ContentBlock(blocks.StreamBlock):
     video = AlignedVideoBlock()
     slogan = AlignedSloganBlock()
     form = EmailFormBlock()
+    grid = GridBlock()
     # carousel = AlignedCarouselBlock()
 
     class Meta:

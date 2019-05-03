@@ -4,6 +4,8 @@ from django.utils.translation import ugettext as _
 from wagtail.core import blocks
 
 # Theme color palette (python constants for css classes)
+from wagtail.core.blocks import StructValue
+
 COLOR_XR_GREEN = "xr-green"
 COLOR_XR_YELLOW = "xr-yellow"
 COLOR_XR_LIGHT_BLUE = "xr-light-blue"
@@ -51,6 +53,14 @@ simple_rich_text_features = [
 
 # Block Mixins
 # ------------------
+
+
+class XrStructValue(StructValue):
+    def align(self):
+        align = self.get("align")
+        if not align:
+            return "default"
+        return align
 
 
 class AlignmentMixin(blocks.StructBlock):

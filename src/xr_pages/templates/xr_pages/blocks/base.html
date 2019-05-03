@@ -3,7 +3,7 @@
 {% load xr_pages_tags %}
 
 
-<section class="block {{ block.block_type }}-block {% if value.align %}align-{{ value.align }}{% endif %} {% block block_classes %}{% endblock %}">
+<section class="block {{ value.block.name }}-block {% if value.align %}align-{{ value.align }}{% endif %} {% block block_classes %}{% endblock %}">
 
     {% block block_header %}
         {% if value.heading %}
