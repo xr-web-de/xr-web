@@ -238,7 +238,8 @@ class PagesPageTreeTest(PagesBaseTest):
             self.assertCanNotCreateAt(HomePage, page_class)
 
     def test_can_create_pages_under_home_sub_page(self):
-        for page_class in PAGES_PAGE_CLASSES:
+        self.assertCanCreateAt(HomeSubPage, HomeSubPage)
+        for page_class in PAGES_PAGE_CLASSES - {HomeSubPage}:
             self.assertCanNotCreateAt(HomeSubPage, page_class)
 
     def test_can_create_pages_under_local_group_list_page(self):
@@ -306,6 +307,13 @@ class PagesGroupPagePermissionsTest(PagesBaseTest):
         self.assertHasGroupPagePermissions(
             regional_editors, self.home_sub_page, EDITORS_PAGE_PERMISSIONS
         )
+
+        # home_sub_page 2nd level
+        home_sub_sub_page = HomeSubPage(title="Example SubSubPage", show_in_menus=True)
+        self.home_sub_page.add_child(instance=home_sub_sub_page)
+
+        self.assertHasGroupPagePermissions(regional_moderators, home_sub_sub_page, None)
+        self.assertHasGroupPagePermissions(regional_editors, home_sub_sub_page, None)
 
     def test_regional_group_local_group_page_permissions(self):
         regional_moderators = Group.objects.get(name="Deutschland Page Moderators")

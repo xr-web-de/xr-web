@@ -67,7 +67,7 @@ class HomeSubPage(XrPage):
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
-    parent_page_types = ["HomePage"]
+    parent_page_types = ["HomePage", "HomeSubPage"]
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "group") or self.group is None:
