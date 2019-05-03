@@ -17,7 +17,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
-from xr_pages.models import HomePage, LocalGroup
+from xr_pages.models import HomePage, LocalGroup, XrPage
 
 
 class EventPageQuerySet(PageQuerySet):
@@ -31,28 +31,8 @@ class EventPageQuerySet(PageQuerySet):
 EventPageManager = PageManager.from_queryset(EventPageQuerySet)
 
 
-class EventPage(Page):
+class EventPage(XrPage):
     template = "xr_events/pages/event_detail.html"
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text=_(
-            "An image that can be used not only for the detail view, but also for "
-            "lists, teasers or social media."
-        ),
-    )
-    description = models.CharField(
-        max_length=254,
-        default="",
-        blank=True,
-        help_text=_(
-            "A description not only for the detail view, but also for lists, "
-            "teasers or social media."
-        ),
-    )
     content = StreamField(
         ContentBlock,
         blank=True,
@@ -73,10 +53,8 @@ class EventPage(Page):
     end_date = models.DateTimeField(null=True, blank=True)
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel("image"),
-        FieldPanel("description", classname="full"),
-        FieldPanel("location"),
         CondensedInlinePanel("dates", label=_("Dates")),
+        FieldPanel("location"),
         CondensedInlinePanel("further_organisers", label=_("Further organisers")),
         StreamFieldPanel("content"),
     ]

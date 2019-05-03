@@ -6,11 +6,43 @@ from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Collection
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 
 from xr_web.settings import LOCAL_GROUP_STATE_CHOICES
 from .blocks import ContentBlock
+
+
+class XrPage(Page):
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_(
+            "An image that can be used not only for the detail view, but also for "
+            "lists, teasers or social media."
+        ),
+    )
+    description = models.CharField(
+        max_length=254,
+        default="",
+        blank=True,
+        help_text=_(
+            "A description not only for the detail view, but also for lists, "
+            "teasers or social media."
+        ),
+    )
+
+    promote_panels = Page.promote_panels + [
+        ImageChooserPanel("image"),
+        FieldPanel("description", classname="full"),
+    ]
+
+    class Meta:
+        abstract = True
 
 
 class HomePage(Page):

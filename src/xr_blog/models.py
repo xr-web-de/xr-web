@@ -4,38 +4,18 @@ from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 from wagtail.core.fields import StreamField
 
 from wagtail.core.models import Page
-from wagtail.images.edit_handlers import ImageChooserPanel
 
 from xr_pages.blocks import ContentBlock
+from xr_pages.models import XrPage
 
 
-class BlogEntryPage(Page):
+class BlogEntryPage(XrPage):
     template = "xr_blog/pages/blog_entry.html"
     group = models.OneToOneField(
         "xr_pages.LocalGroup", editable=False, on_delete=models.PROTECT
     )
     date = models.DateField(_("Post date"))
     author = models.CharField(max_length=200)
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text=_(
-            "An image that can be used not only for the detail view, but also for "
-            "lists, teasers or social media."
-        ),
-    )
-    description = models.CharField(
-        max_length=254,
-        default="",
-        blank=True,
-        help_text=_(
-            "A description not only for the detail view, but also for lists, "
-            "teasers or social media."
-        ),
-    )
     content = StreamField(
         ContentBlock,
         blank=True,
@@ -47,11 +27,6 @@ class BlogEntryPage(Page):
         FieldPanel("date"),
         FieldPanel("author"),
         StreamFieldPanel("content"),
-    ]
-
-    promote_panels = Page.promote_panels + [
-        ImageChooserPanel("image"),
-        FieldPanel("description", classname="full"),
     ]
 
     parent_page_types = ["BlogListPage"]
