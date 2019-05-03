@@ -24,7 +24,7 @@ from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_web.edit_handlers import FieldCollapsiblePanel
-from xr_pages.models import LocalGroup, HomePage, LocalGroupPage
+from xr_pages.models import LocalGroup, HomePage, LocalGroupPage, XrPage
 
 
 class EmailFormField(AbstractFormField):
@@ -61,7 +61,7 @@ class EmailFormField(AbstractFormField):
         return self.label
 
 
-class AbstractEmailFormPage(AbstractEmailForm):
+class AbstractEmailFormPage(AbstractEmailForm, XrPage):
     content = StreamField(ContentBlock, blank=True)
     thank_you_text = StreamField(ContentBlock, blank=True)
 

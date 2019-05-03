@@ -42,7 +42,7 @@ class BlogEntryPage(XrPage):
         super().save(*args, **kwargs)
 
 
-class BlogListPage(Page):
+class BlogListPage(XrPage):
     template = "xr_blog/pages/blog_list.html"
     group = models.OneToOneField(
         "xr_pages.LocalGroup", editable=False, on_delete=models.PROTECT

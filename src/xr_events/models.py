@@ -13,7 +13,6 @@ from wagtail.admin.edit_handlers import (
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Collection, PageManager
 from wagtail.core.query import PageQuerySet
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
@@ -148,7 +147,7 @@ class EventOrganiser(Orderable):
         return self.name
 
 
-class EventListPage(Page):
+class EventListPage(XrPage):
     template = "xr_events/pages/event_list.html"
     content = StreamField(ContentBlock, blank=True)
 
@@ -187,7 +186,7 @@ class EventListPage(Page):
         )
 
 
-class EventGroupPage(Page):
+class EventGroupPage(XrPage):
     template = "xr_events/pages/event_group.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)

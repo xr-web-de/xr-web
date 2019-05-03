@@ -45,7 +45,7 @@ class XrPage(Page):
         abstract = True
 
 
-class HomePage(Page):
+class HomePage(XrPage):
     template = "xr_pages/pages/home.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField("LocalGroup", editable=False, on_delete=models.PROTECT)
@@ -55,8 +55,12 @@ class HomePage(Page):
     parent_page_types = []
     is_creatable = False
 
+    class Meta:
+        verbose_name = _("Home Page")
+        verbose_name_plural = _("Home Pages")
 
-class HomeSubPage(Page):
+
+class HomeSubPage(XrPage):
     template = "xr_pages/pages/home_sub.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.ForeignKey("LocalGroup", editable=False, on_delete=models.PROTECT)
@@ -272,7 +276,7 @@ class LocalGroup(models.Model):
 register_snippet(LocalGroup)
 
 
-class LocalGroupListPage(Page):
+class LocalGroupListPage(XrPage):
     template = "xr_pages/pages/local_group_list.html"
     content = StreamField(ContentBlock, blank=True)
 
@@ -286,7 +290,7 @@ class LocalGroupListPage(Page):
         verbose_name_plural = _("Local Group List Pages")
 
 
-class LocalGroupPage(Page):
+class LocalGroupPage(XrPage):
     template = "xr_pages/pages/local_group.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
@@ -329,7 +333,7 @@ class LocalGroupPage(Page):
         return self.group.is_regional_group
 
 
-class LocalGroupSubPage(Page):
+class LocalGroupSubPage(XrPage):
     template = "xr_pages/pages/local_group_sub.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.ForeignKey(
