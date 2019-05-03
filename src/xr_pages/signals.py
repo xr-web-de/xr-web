@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_delete, ModelSignal, post_save, pre_save
+from django.db.models.signals import pre_delete, ModelSignal, post_save
 from django.dispatch import receiver
 
 from .services import (
@@ -15,7 +15,7 @@ from .services import (
     EDITORS_COLLECTION_PERMISSIONS,
     get_auth_groups,
 )
-from .models import LocalGroup, LocalGroupPage, HomeSubPage, LocalGroupSubPage
+from .models import LocalGroup, LocalGroupPage, HomeSubPage
 
 # Custom Signals
 
