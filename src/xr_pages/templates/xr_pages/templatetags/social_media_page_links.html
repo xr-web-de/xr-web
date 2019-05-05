@@ -1,0 +1,14 @@
+{% load xr_pages_tags %}
+
+{% if social_media_links %}
+    <ul class="icon-list icon-list--icons-vertical float-right">
+        {% for link in social_media_links %}
+            <li>
+                <a href="{{ link.url }}">
+                    {% svg_icon link.icon_name aria_label=link.verbose_name %}
+                    <span aria-hidden="true">{{ link.verbose_name }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

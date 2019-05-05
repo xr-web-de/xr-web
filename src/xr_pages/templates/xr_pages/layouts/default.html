@@ -57,20 +57,8 @@
                     </div>
 
                     <div class="col-xxs-12 col-xs-4">
-                        <ul class="icon-list icon-list--icons-vertical float-right">
-                            <li>
-                                <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/">
-                                    {% svg_icon "facebook" aria_label="Facebook" %}
-                                    <span aria-hidden="true">Facebook</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com/ExtinctionR_DE">
-                                    {% svg_icon "twitter" aria_label="Twitter" %}
-                                    <span aria-hidden="true">Twitter</span>
-                                </a>
-                            </li>
-                        </ul>
+                        {% get_home_page as home_page %}
+                        {% render_social_media_links_for_page home_page %}
                     </div>
 
                 </div>

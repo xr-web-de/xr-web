@@ -67,7 +67,7 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
     if not os.path.isfile(icon_path):
         return ""
 
-    template = Template(
+    svg_template = Template(
         """
         <i class="svg-container {{ css_classes }}"
             style="width:{{ size }}px; height:{{ size }}px"
@@ -89,6 +89,32 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
             }
         )
 
-    html = template.render(context)
+    html = svg_template.render(context)
 
     return html
+
+
+@register.inclusion_tag("xr_pages/templatetags/social_media_page_links.html")
+def render_social_media_links_for_page(page):
+    try:
+        group = page.specific.group
+    except AttributeError:
+        return {}
+
+    social_media_links = []
+
+    for attr_name in ["facebook", "twitter", "youtube", "instagram"]:
+        url = None
+        if hasattr(group, attr_name):
+            url = getattr(group, attr_name)
+
+        if url:
+            social_media_links.append(
+                {
+                    "url": url,
+                    "icon_name": attr_name,
+                    "verbose_name": attr_name.capitalize(),
+                }
+            )
+
+    return {"social_media_links": social_media_links}
