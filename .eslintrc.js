@@ -4,12 +4,9 @@ module.exports = {
         browser: true,
         es6: true,
     },
-    extends: ['eslint:recommended', 'prettier'],
+    extends: ['eslint:recommended', 'prettier', 'prettier/babel'],
     parserOptions: {
         sourceType: 'module',
     },
-    rules: {
-        'linebreak-style': ['error', 'unix'],
-        semi: ['error', 'never'],
-    },
+    rules: {},
 }
