@@ -1,11 +1,10 @@
 import datetime
 
-from django.contrib.auth.models import Group
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Collection
+from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
@@ -170,16 +169,36 @@ class LocalGroup(models.Model):
             'e.g. "Berlin", "Somestreet 84, 12345 Samplecity".'
         ),
     )
+    facebook = models.URLField(null=True, blank=True, help_text=_("Facebook page URL"))
+    instagram = models.URLField(
+        null=True, blank=True, help_text=_("Instagram page URL")
+    )
+    twitter = models.URLField(null=True, blank=True, help_text=_("Twitter page URL"))
+    youtube = models.URLField(
+        null=True, blank=True, help_text=_("YouTube channel or user account URL")
+    )
 
     panels = [
-        FieldPanel("name"),
-        FieldPanel("status"),
-        FieldPanel("founding_date"),
-        FieldPanel("email"),
-        FieldPanel("phone"),
-        FieldPanel("external_url"),
-        FieldPanel("state"),
-        FieldPanel("location"),
+        FieldPanel("name", classname="full"),
+        MultiFieldPanel(
+            [FieldPanel("status"), FieldPanel("founding_date")], heading=_("Status")
+        ),
+        MultiFieldPanel(
+            [FieldPanel("email"), FieldPanel("phone"), FieldPanel("external_url")],
+            heading=_("Contact"),
+        ),
+        MultiFieldPanel(
+            [FieldPanel("state"), FieldPanel("location")], heading=_("Location")
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("facebook"),
+                FieldPanel("youtube"),
+                FieldPanel("twitter"),
+                FieldPanel("instagram"),
+            ],
+            heading=_("Social media"),
+        ),
     ]
 
     objects = LocalGroupManager()
@@ -283,6 +302,7 @@ register_snippet(LocalGroup)
 class LocalGroupListPage(XrPage):
     template = "xr_pages/pages/local_group_list.html"
     content = StreamField(ContentBlock, blank=True)
+    group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
@@ -292,6 +312,12 @@ class LocalGroupListPage(XrPage):
     class Meta:
         verbose_name = _("Local Group List Page")
         verbose_name_plural = _("Local Group List Pages")
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "group") or self.group is None:
+            self.group = self.get_parent().specific.group
+
+        super().save(*args, **kwargs)
 
 
 class LocalGroupPage(XrPage):

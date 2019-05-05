@@ -150,6 +150,7 @@ class EventOrganiser(Orderable):
 class EventListPage(XrPage):
     template = "xr_events/pages/event_list.html"
     content = StreamField(ContentBlock, blank=True)
+    group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
 
