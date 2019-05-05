@@ -4,7 +4,7 @@ module.exports = {
         browser: true,
         es6: true,
     },
-    extends: ['eslint:recommended', 'prettier', 'prettier/babel'],
+    extends: ['eslint:recommended', 'prettier'],
     parserOptions: {
         sourceType: 'module',
     },
