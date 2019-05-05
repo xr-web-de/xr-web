@@ -1,13 +1,20 @@
 // Theme color palette
+
 $colors: (
-  xr-green: #00A835,
-  xr-yellow: #F4F07A,
-  xr-light-blue: #75D0F1,
-  xr-dark-blue: #3860AA,
-  xr-white: #FFFFFF,
-  xr-black: #130C0D
+    xr-green: #00a835,
+    xr-yellow: #f4f07a,
+    xr-light-blue: #75d0f1,
+    xr-dark-blue: #3860aa,
+    xr-pink: #ed9bc4,
+    xr-purple: #986297,
+    xr-red: #b51f09,
+    xr-white: #ffffff,
+    xr-light-grey: #e6e6e6,
+    xr-grey: #aaaaaa,
+    xr-dark-grey: #404040,
+    xr-black: #130c0d,
 );
 
-
 $primary-color: map-get($colors, xr-green);
+$error-color: map_get($colors, xr-red);
 $body-color: #222;

@@ -1,1 +1,18 @@
-{"status":"done","publicPath":"/static/dist/","chunks":{"main":[{"name":"main-2eecb6374acca09e32a7.css","publicPath":"/static/dist/main-2eecb6374acca09e32a7.css","path":"/home/hannes/Hobby/xr-web/webpack/static/dist/main-2eecb6374acca09e32a7.css"},{"name":"main-2eecb6374acca09e32a7.js","publicPath":"/static/dist/main-2eecb6374acca09e32a7.js","path":"/home/hannes/Hobby/xr-web/webpack/static/dist/main-2eecb6374acca09e32a7.js"}]}}
+{
+    "status": "done",
+    "publicPath": "/static/dist/",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-9afaa0760b646a6e47f9.css",
+                "publicPath": "/static/dist/main-9afaa0760b646a6e47f9.css",
+                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-9afaa0760b646a6e47f9.css"
+            },
+            {
+                "name": "main-9afaa0760b646a6e47f9.js",
+                "publicPath": "/static/dist/main-9afaa0760b646a6e47f9.js",
+                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-9afaa0760b646a6e47f9.js"
+            }
+        ]
+    }
+}

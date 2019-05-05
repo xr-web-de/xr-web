@@ -8,12 +8,21 @@ p {
     padding-bottom: 1em;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin-bottom: 0.2em;
     //margin-top: 0.2em;
     line-height: 1.1;
 }
 
+@mixin fucxed {
+    text-transform: uppercase;
+    font-family: 'Fucxed', Impact, Arial, sans-serif;
+}
 
 .h {
     &--1 {
@@ -28,8 +37,7 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 1.6rem;
     }
     &--caps {
-      text-transform: uppercase;
-      font-family: 'Fucxed', Impact, Arial, sans-serif;
+        @include fucxed;
     }
 
     &--center {

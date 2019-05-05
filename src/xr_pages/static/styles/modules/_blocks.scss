@@ -1,0 +1,141 @@
+// Content block
+//---------------
+.block {
+    position: relative;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+
+    &.align-right {
+        float: right;
+        margin-left: 2rem;
+    }
+    &.align-left {
+        float: left;
+        margin-right: 2rem;
+    }
+    &.align-right,
+    &.align-left {
+        z-index: 500;
+        width: 346.66px;
+    }
+    &.align-center {
+        width: 800px;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    &.align-full_page {
+        margin-top: 0;
+        padding-bottom: 0;
+        .block--heading {
+            margin-top: 2rem;
+        }
+        .block--footer {
+            padding-bottom: 1rem;
+        }
+    }
+    &.block--with-bg {
+        padding-top: 2em;
+        padding-bottom: 2em;
+        margin-top: 0;
+    }
+}
+
+.grid-block .block {
+    margin-top: 1rem;
+}
+
+.block--content {
+    position: relative;
+}
+
+.block--footer {
+    padding-top: 0.5em;
+    p {
+        padding-bottom: 0;
+    }
+}
+
+// Video Block
+.video-block {
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+.responsive-object {
+    position: relative;
+}
+
+// Slogan Block
+.slogan-block .block--content {
+    width: 100%;
+    padding-top: 56.25%;
+}
+.slogan-block--bg-img,
+.inline-svg-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.inline-svg-text text {
+    text-anchor: middle;
+    text-transform: uppercase;
+    font-family: 'Fucxed', Impact, Arial, sans-serif;
+}
+
+// Image Block
+.image-block {
+    figure {
+        position: relative;
+    }
+}
+
+.image-attribution {
+    position: absolute;
+    bottom: 0.3em;
+    right: 0.8em;
+    color: #fff;
+    text-shadow: 0 0 1px #000;
+}
+
+// Text Block
+.text-block {
+    // big list numbering
+    ol {
+        clear: left;
+        list-style: none;
+        counter-reset: xr-list-numbering;
+        padding-left: 4em;
+
+        li {
+            counter-increment: xr-list-numbering;
+            position: relative;
+
+            padding-left: 0.75em;
+            min-height: 4em;
+            border-left: 2px solid #cccccc;
+        }
+
+        li + li {
+            margin-top: 2em;
+        }
+
+        li::before {
+            content: counter(xr-list-numbering);
+            font-size: 4em;
+            font-family: 'Fucxed', Impact, Arial, sans-serif;
+            text-align: center;
+            line-height: 1;
+            position: absolute;
+            left: -0.8em;
+            top: 0;
+            width: 0.5em;
+        }
+    }
+}

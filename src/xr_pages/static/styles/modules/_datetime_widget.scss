@@ -1,0 +1,22 @@
+@import '~flatpickr/dist/themes/confetti.css';
+
+.flatpickr-calendar {
+    border-radius: 0;
+    @include fucxed;
+}
+
+.flatpickr-months {
+    .flatpickr-month {
+        border-radius: 0;
+    }
+}
+
+.flatpickr-months .flatpickr-prev-month svg path,
+.flatpickr-months .flatpickr-next-month svg path {
+    stroke: #fff;
+    stroke-width: 5px;
+}
+
+.flatpickr-time {
+    border-radius: 0;
+}

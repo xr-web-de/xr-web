@@ -1,13 +1,191 @@
+$input-color: black;
+$input-bg: white;
+$placeholder-color: map_get($colors, xr-grey);
+
+.form {
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.controls {
+    //display: inline-block;
+}
+
+.control-label {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    @include fucxed;
+
+    &--inline {
+        display: inline-block;
+        font-weight: normal;
+        margin-left: 0.5rem;
+    }
+}
+
 .form-control {
+    appearance: none;
+    color: $input-color;
+    background-color: $input-bg;
+    border: 2px solid #444;
+    //border-radius: .4rem;
+    box-shadow: none;
+    box-sizing: inherit;
+    height: 3rem;
+    padding: 0.5rem 1rem;
+    width: 20rem;
+    max-width: 100%;
+    //font-size: 1.3rem;
+
+    &:focus {
+        border-color: $primary-color;
+        outline: 0;
+    }
+
+    &::placeholder {
+        color: $placeholder-color;
+        opacity: 1;
+    }
+    &:disabled,
+    &[readonly] {
+        background-color: #ccc;
+        opacity: 1;
+    }
     &--fullwidth {
         width: 100%;
     }
 }
 
-.input {
+select.form-control {
+    &::-ms-expand {
+        background-color: white;
+        border: 0;
+    }
+    &:focus::-ms-value {
+        color: black;
+        background-color: white;
+    }
+    &[size],
+    &[multiple] {
+        height: auto;
+    }
+    &[multiple] {
+        padding: 0 1rem;
+    }
 
+    option {
+        padding: 0 1rem;
+        margin: 0 -1rem;
+    }
 }
 
-.textarea {
-    
+textarea.form-control {
+    min-height: 6.5rem;
+}
+
+.help-block {
+    display: block;
+}
+
+fieldset {
+    border-width: 0;
+    padding: 0;
+}
+
+// checkboxes
+.form-group--checkboxinput,
+.form-group--radioselect,
+.form-group--checkboxselectmultiple {
+    input[type='checkbox'],
+    input[type='radio'] {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 1.5rem;
+    }
+
+    label {
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .fake-checkbox,
+    .fake-radio {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -0.9rem;
+
+        &:before {
+            content: '';
+            display: inline-block;
+            box-sizing: border-box;
+
+            width: 1.8rem;
+            height: 1.8rem;
+
+            background: $input-bg;
+            border: 0.15rem solid #444;
+        }
+
+        &:after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            box-sizing: border-box;
+
+            opacity: 0;
+        }
+    }
+    .fake-radio {
+        &:before {
+            border-radius: 50%;
+        }
+        &:after {
+            top: 0.3rem;
+            left: 0.3rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            background: #444;
+            border-radius: 50%;
+        }
+    }
+    .fake-checkbox {
+        &:after {
+            top: 0.04rem;
+            left: 0.5rem;
+            width: 0.8rem;
+            height: 1.3rem;
+
+            background: transparent;
+            border: 0.4rem solid #444;
+            border-top: none;
+            border-left: none;
+
+            transform: rotate(45deg);
+        }
+    }
+
+    input[type='checkbox']:checked + .fake-checkbox:after,
+    input[type='radio']:checked + .fake-radio:after {
+        opacity: 1;
+    }
+}
+
+.form-group--checkboxinput {
+    .fake-checkbox {
+        margin-top: -1.05rem;
+    }
+}
+.form-group--radioselect,
+.form-group--checkboxselectmultiple {
+    .controls label {
+        padding-bottom: 0.2rem;
+        margin-bottom: 0.6rem;
+    }
 }
