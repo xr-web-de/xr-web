@@ -8,13 +8,13 @@
         {% if page.image %}
             <a href="{% pageurl page %}">
                 {% if value.align == "full_page" %}
-                    {% image page.image width-1920 alt=page.title class="img-responsive" %}
+                    {% image page.image fill-1920x1080-c75 alt=page.title class="img-responsive" %}
                 {% elif value.align == "full_content" %}
-                    {% image page.image width-1200 alt=page.title class="img-responsive" %}
+                    {% image page.image fill-1280x720-c75 alt=page.title class="img-responsive" %}
                 {% elif value.align == "center" %}
-                    {% image page.image width-800 alt=page.title class="img-responsive" %}
+                    {% image page.image fill-768x432-c75 alt=page.title class="img-responsive" %}
                 {% else %} {# align in "left, right" #}
-                    {% image page.image width-400 alt=page.title class="img-responsive" %}
+                    {% image page.image fill-512x288-c75 alt=page.title class="img-responsive" %}
                 {% endif %}
             </a>
         {% endif %}

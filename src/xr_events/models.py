@@ -13,6 +13,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, PageManager
 from wagtail.core.query import PageQuerySet
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
@@ -72,6 +73,17 @@ class EventPage(XrPage):
         context = super().get_context(request, *args, **kwargs)
         context["event"] = self
         return context
+
+    def get_image(self):
+        if self.image:
+            return self.image
+        event_group_page = EventGroupPage.objects.ancestor_of(self).last()
+        if event_group_page.default_event_image:
+            return event_group_page.default_event_image
+        event_list_page = EventListPage.objects.ancestor_of(self).last()
+        if event_list_page.default_event_image:
+            return event_list_page.default_event_image
+        return None
 
     @property
     def organiser(self):
@@ -151,8 +163,20 @@ class EventListPage(XrPage):
     template = "xr_events/pages/event_list.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
+    default_event_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("A default image as Fallback for events, that have no image."),
+    )
 
     content_panels = Page.content_panels + [StreamFieldPanel("content")]
+
+    settings_panels = XrPage.settings_panels + [
+        ImageChooserPanel("default_event_image")
+    ]
 
     parent_page_types = []
     is_creatable = False
@@ -184,10 +208,22 @@ class EventGroupPage(XrPage):
     template = "xr_events/pages/event_group.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
+    default_event_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text=_("A default image as Fallback for events, that have no image."),
+    )
 
     content_panels = Page.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
+    ]
+
+    settings_panels = XrPage.settings_panels + [
+        ImageChooserPanel("default_event_image")
     ]
 
     parent_page_types = ["EventListPage"]

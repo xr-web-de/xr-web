@@ -15,6 +15,10 @@ $colors: (
     xr-black: #130c0d,
 );
 
+@function xrColor($key) {
+    @return map_get($colors, xr-#{$key});
+}
+
 $primary-color: map-get($colors, xr-green);
 $error-color: map_get($colors, xr-red);
 $body-color: #222;

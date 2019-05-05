@@ -19,7 +19,7 @@
         width: 346.66px;
     }
     &.align-center {
-        width: 800px;
+        width: 768px;
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -98,10 +98,11 @@
 
 .image-attribution {
     position: absolute;
-    bottom: 0.3em;
-    right: 0.8em;
+    bottom: 0;
+    right: 0;
+    padding: 0 0.6rem 0.1rem;
     color: #fff;
-    text-shadow: 0 0 1px #000;
+    background: xrColor('black');
 }
 
 // Text Block

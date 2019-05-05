@@ -4,9 +4,9 @@
 
 <article class="block event-block">
     <div class="block--content">
-        {% if event.image %}
+        {% if event.get_image %}
             <a href="{% pageurl event %}">
-                {% image event.image width-400 alt=event.title class="img-responsive" %}
+                {% image event.get_image fill-512x288-c75 alt=event.title class="img-responsive" %}
             </a>
         {% endif %}
     </div>

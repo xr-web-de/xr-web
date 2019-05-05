@@ -10,13 +10,21 @@
 
     <figure>
         {% if value.align == "full_page" %}
-            {% image value.image width-1920 alt=value.block.get_title class="img-responsive" %}
+            {% image value.image fill-1920x1080-c75 alt=value.block.get_title class="img-responsive" %}
         {% elif value.align == "full_content" %}
-            {% image value.image width-1200 alt=value.block.get_title class="img-responsive" %}
+            {% image value.image fill-1280x720-c75 alt=value.block.get_title class="img-responsive" %}
         {% elif value.align == "center" %}
-            {% image value.image width-800 alt=value.block.get_title class="img-responsive" %}
+            {% if value.image.is_landscape  %}
+                {% image value.image fill-768x432-c75 alt=value.block.get_title class="img-responsive" %}
+            {% else %}
+                {% image value.image fill-768x960-c75 alt=value.block.get_title class="img-responsive" %}
+            {% endif %}
         {% else %} {# align in "left, right" #}
-            {% image value.image width-400 alt=value.block.get_title class="img-responsive" %}
+            {% if value.image.is_landscape %}
+                {% image value.image fill-512x288-c75 alt=value.block.get_title class="img-responsive" %}
+            {% else %}
+                {% image value.image fill-512x640-c75 alt=value.block.get_title class="img-responsive" %}
+            {% endif %}
         {% endif %}
 
         {% if value.attribution %}
