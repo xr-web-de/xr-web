@@ -1,4 +1,4 @@
-exclude: (\.svg$|^(webpack/static/dist/.*$))
+exclude: (^(webpack/static/dist/.*$))
 
 repos:
     - repo: https://github.com/ambv/black
