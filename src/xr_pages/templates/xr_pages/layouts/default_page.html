@@ -5,6 +5,9 @@
 {% block head_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
 
 
+{% block page_type %}{{ page.content_type.model }}{% endblock %}
+
+
 {% block body_classes %}{{ page.content_type.model }}-page{% endblock %}
 
 

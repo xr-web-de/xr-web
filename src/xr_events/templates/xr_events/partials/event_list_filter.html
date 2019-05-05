@@ -1,0 +1,32 @@
+{% load wagtailcore_tags %}
+{% load xr_events_tags %}
+
+<section class="container">
+    <div class="box box--light">
+
+        <div class="form form--inline">
+            <div class="form-group form-group--select">
+                <label for="filter-by-groups" class="control-label">
+                    Filtern
+                </label>
+                <div class="controls">
+                    <select id="filter-by-groups" class="form-control">
+                        {% get_event_list_page as event_list_page %}
+
+                        <option value="{% pageurl event_list_page %}">Alle Ortsgruppen</option>
+
+                        {% get_event_group_pages as event_group_pages %}
+
+                        {% for event_group_page in event_group_pages %}
+                            <option value="{% pageurl event_group_page %}"
+                                    {% if event_group_page == page %} selected="selected"{% endif %}>
+                                {{ event_group_page.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

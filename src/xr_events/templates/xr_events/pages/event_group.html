@@ -14,6 +14,8 @@
 
     {% include_block page.content %}
 
+    {% include "xr_events/partials/event_list_filter.html" %}
+
     {% if page.upcoming_events %}
 
         <section class="container">

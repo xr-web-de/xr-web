@@ -11,12 +11,12 @@ from wagtail.admin.edit_handlers import (
     StreamFieldPanel,
 )
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page, Collection, PageManager
+from wagtail.core.models import Orderable, Page, PageManager
 from wagtail.core.query import PageQuerySet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
-from xr_pages.models import HomePage, LocalGroup, XrPage
+from xr_pages.models import LocalGroup, XrPage
 
 
 class EventPageQuerySet(PageQuerySet):
@@ -159,13 +159,6 @@ class EventListPage(XrPage):
     class Meta:
         verbose_name = _("Event List Page")
         verbose_name_plural = _("Event List Pages")
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["event_groups"] = (
-            EventGroupPage.objects.child_of(self).live().order_by("group__name")
-        )
-        return context
 
     @property
     def upcoming_events(self):

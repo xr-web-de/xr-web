@@ -6,30 +6,17 @@
 
     {% include_block page.content %}
 
-    {% if event_groups %}
-        <section class="container">
-            {% trans "Ortsgruppe" %}:
-            {% for event_group in event_groups %}
-                <a href="{% pageurl event_group %}">{{ event_group.title }}</a>
-            {% endfor %}
-        </section>
+{#    {% if event_groups %}#}
+{#        <section class="container">#}
+{#            {% trans "Ortsgruppe" %}:#}
+{#            {% for event_group in event_groups %}#}
+{#                <a href="{% pageurl event_group %}">{{ event_group.title }}</a>#}
+{#            {% endfor %}#}
+{#        </section>#}
 
-        <section class="container">
-            <div class="box box--light">
-                <div class="row">
-                    <div class="col-sm-4">Filtern nach Ortsgruppe:</div>
-                    <div class="col-sm-8">
-                        <select id="filter-by-groups" class="select" style="display: block;">
-                            <option value="">Kein Filter</option>
-                            {% for event_group in event_groups %}
-                                <option value="{% pageurl event_group %}">{{ event_group.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-    {% endif %}
+{#    {% endif %}#}
+
+    {% include "xr_events/partials/event_list_filter.html" %}
 
     {% if page.upcoming_events %}
         <section class="container">

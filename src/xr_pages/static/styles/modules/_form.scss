@@ -10,8 +10,21 @@ $placeholder-color: map_get($colors, xr-grey);
     margin-bottom: 1rem;
 }
 
-.controls {
-    //display: inline-block;
+.form--inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    margin-left: -2rem;
+    margin-bottom: -1rem;
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-left: 2rem;
+    }
+    .control-label {
+        margin-right: 1rem;
+    }
 }
 
 .control-label {

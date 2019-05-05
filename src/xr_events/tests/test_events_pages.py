@@ -115,11 +115,6 @@ class EventsPageTreeTest(EventsBaseTest):
         self.assertCanNotCreateAt(HomePage, EventGroupPage)
         self.assertCanNotCreateAt(HomePage, EventPage)
 
-    def test_can_create_pages_under_home_page(self):
-        self.assertCanCreateAt(HomePage, HomeSubPage)
-        for page_class in EVENT_PAGE_CLASSES:
-            self.assertCanNotCreateAt(HomePage, page_class)
-
     def test_can_create_pages_under_home_sub_page(self):
         for page_class in EVENT_PAGE_CLASSES:
             self.assertCanNotCreateAt(HomeSubPage, page_class)
@@ -234,7 +229,7 @@ class EventsSignalsTest(PagesBaseTest):
     def test_event_group_create_doesnt_create_auth_groups(self):
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 
-        special_group = self._create_local_group(name=self.special_group_name)
+        self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, EVENT_AUTH_GROUP_TYPES)
 

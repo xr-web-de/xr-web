@@ -19,7 +19,10 @@ export const init = () => {
     const page = document.body.dataset.page || 'default'
 
     switch (page) {
-        case 'events':
+        case 'eventlistpage':
+            initEvents()
+            break
+        case 'eventgrouppage':
             initEvents()
             break
         case 'groups':

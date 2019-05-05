@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% block head_title %}XR de{% endblock %}</title>
-        
+
         {% include "partials/favicons.html" %}
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -19,7 +19,7 @@
         {% block extrastyles %}{% endblock %}
         {% block extrahead %}{% endblock %}
     </head>
-    <body class="{% block body_classes %}{% endblock %}" {% block body_attributes %} {% endblock %}>
+    <body class="{% block body_classes %}{% endblock %}" {% block body_attributes %} {% endblock %} data-page="{% block page_type %}{% endblock %}">
 
         <div id="page" class="page-wrap {% block page_classes %} {% endblock %}">
             {% block layout %}
