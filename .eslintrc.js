@@ -8,5 +8,6 @@ module.exports = {
     parserOptions: {
         sourceType: 'module',
     },
+    plugins: ['prettier'],
     rules: {},
 }
