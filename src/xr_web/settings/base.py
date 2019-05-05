@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import re
 import os
+import django
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -85,7 +86,10 @@ ROOT_URLCONF = "xr_web.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "xr_web", "templates")],
+        "DIRS": [
+            os.path.join(BASE_DIR, "xr_web", "templates"),
+            os.path.join(django.__path__[0], "forms", "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -98,6 +102,8 @@ TEMPLATES = [
         },
     }
 ]
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "xr_web.wsgi.application"
 
@@ -254,8 +260,7 @@ LOGGING = {
         "django.request": {"filters": ["filter_404"]},
         "django.template": {"handlers": ["template_file"], "level": "INFO"},
         "": {"handlers": ["mail_admins", "error_file"], "level": "ERROR"},
-        "": {"handlers": ["application_file"], "level": "WARNING"},
-        "": {"handlers": ["debug_file"], "level": "DEBUG"},
+        "app": {"handlers": ["application_file"], "level": "DEBUG"},
     },
     "filters": {
         "filter_404": {"()": "django.utils.log.CallbackFilter", "callback": filter_404}

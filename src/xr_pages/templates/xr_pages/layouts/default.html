@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% load menu_tags %}
 {% load xr_pages_tags %}
 
@@ -49,22 +50,27 @@
             <div class="container">
 
                 <div class="row">
-                    <div class="col-xxs-12 col-xs-7">
+
+                    <div class="col-xxs-12 col-xs-8">
                         <p>Extinction Rebellion Deutschland ist eine Grassroots-Bewegung inspiriert von Extinction Rebellion UK.</p>
                     </div>
 
-                    <ul class="col-xxs-12 col-xs-5">
-                        <li class="">
-                            <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/" class="icon">
-                                <span>Facebook</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="https://twitter.com/ExtinctionR_DE">
-                                <span>Twitter</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="col-xxs-12 col-xs-4">
+                        <ul class="icon-list icon-list--icons-vertical float-right">
+                            <li>
+                                <a href="https://www.facebook.com/ExtinctionRebellionDeutschland/">
+                                    {% svg_icon "facebook" aria_label="Facebook" %}
+                                    <span aria-hidden="true">Facebook</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/ExtinctionR_DE">
+                                    {% svg_icon "twitter" aria_label="Twitter" %}
+                                    <span aria-hidden="true">Twitter</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
                 </div>
 
@@ -83,7 +89,31 @@
                         </div>
                     {% endif %}
                 {% endblock %}
+
+
+                <h3 class="h h--3 h--caps">{% trans "Disclaimer" %}</h3>
+
+                <div class="row">
+                    <div class="col-xxs-12 col-sm-4">
+                        All of our work is free to use non-commercially in the full
+                        spirit of DIY. Do not use the work for commercial purposes,
+                        however well meaning, without prior consent from the originators.
+                    </div>
+                    <div class="col-xxs-12 col-sm-4">
+                        The Extinction Symbol was designed prior to Extinction Rebellion.
+                        Using the symbol on commercial merchandise is strictly forbidden.
+                        For more information visit
+                        <a href="https://www.extinctionsymbol.info/" target="_blank">
+                            www.extinctionsymbol.info
+                        </a>.
+                    </div>
+                    <div class="col-xxs-12 col-sm-4">
+                        {% include "partials/icon_credits.html" %}
+                    </div>
+                </div>
+
             </div>
+
         </footer>
     {% endblock %}
 

@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 
 
-<form method='POST' action="{% if action %}{{ action }}{% endif %}"
+<form method='POST' action="{% if action %}{{ action }}{% endif %}" class="form"
       {% if form_id %}id="{{ form_id }}"{% endif %}>
     {% csrf_token %}
 
@@ -26,27 +26,29 @@
         {% endif %}
     {% endblock %}
 
-    {% block fields %}
-        {% for field in form %}
+    <div class="row">
+        {% block fields %}
+            {% for field in form %}
 
-            {# see https://github.com/jazzband/django-widget-tweaks #}
+                {# see https://github.com/jazzband/django-widget-tweaks #}
 
-            {% if field.name == "email" %}
-                {% include "xr_pages/forms/field.html" with field=field|attr:"placeholder:xr@example.com" %}
-            {% else %}
-                {% include "xr_pages/forms/field.html" with field=field %}
-            {% endif %}
+                <div class="col-xxs-12 col-sm-6 col-md-4">
+                    {% include "xr_pages/forms/field.html" with field=field %}
+                </div>
 
-        {% endfor %}
-    {% endblock %}
+            {% endfor %}
+        {% endblock %}
 
-    {% block submit_buttons %}
-        <button type="submit">
-            {% if submit_butten_text %}
-                {{ submit_butten_text }}
-            {% else %}
-                {% trans "Absenden" %}
-            {% endif %}
-        </button>
-    {% endblock %}
+        {% block submit_buttons %}
+            <div class="col-xxs-12 col-sm-6 col-md-4">
+                <button type="submit">
+                    {% if submit_butten_text %}
+                        {{ submit_butten_text }}
+                    {% else %}
+                        {% trans "Absenden" %}
+                    {% endif %}
+                </button>
+            </div>
+        {% endblock %}
+    </div>
 </form>

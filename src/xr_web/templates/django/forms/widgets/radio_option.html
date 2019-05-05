@@ -1,0 +1,4 @@
+{% if widget.wrap_label %}<label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>{% endif %}
+{% include "django/forms/widgets/input.html" %}
+<span class="fake-radio"></span>
+{% if widget.wrap_label %} {{ widget.label }}</label>{% endif %}
