@@ -1,4 +1,4 @@
-exclude: (^(webpack/static/dist/.*$))
+exclude: (\.svg$|^(webpack/static/dist/.*$))
 
 repos:
     - repo: https://github.com/ambv/black
@@ -27,6 +27,7 @@ repos:
           - id: end-of-file-fixer
           - id: check-yaml
           - id: flake8
+          - id: mixed-line-ending
 
     - repo: https://github.com/prettier/prettier
       rev: master
