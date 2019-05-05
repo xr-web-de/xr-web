@@ -1,9 +1,27 @@
--   repo: https://github.com/ambv/black
-    rev: stable
-    hooks:
-    - id: black
-      language_version: python3.6
--   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 'master'
-    hooks:
-    -   id: eslint
+exclude: (\.svg$|^(webpack/static/dist/.*$))
+
+repos:
+    - repo: https://github.com/ambv/black
+      rev: stable
+      hooks:
+          - id: black
+            language_version: python3.6
+
+    - repo: https://github.com/pre-commit/mirrors-eslint
+      rev: 'master'
+      hooks:
+          - id: eslint
+
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v2.0.0
+      hooks:
+          - id: trailing-whitespace
+          - id: debug-statements
+          - id: end-of-file-fixer
+          - id: check-yaml
+          - id: flake8
+
+    - repo: https://github.com/prettier/prettier
+      rev: master
+      hooks:
+          - id: prettier
