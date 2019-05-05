@@ -3,4 +3,4 @@ max-line-length = 120
 max-complexity = 18
 exclude = env/*,deployment/*,docs/*,*migrations,*static/assets/vendor/*,node_modules/*
 select = C,E,F,W,B,T4,B9
-ignore = W292,W391,W503
+ignore = W292,W391,W503,E501
