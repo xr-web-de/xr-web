@@ -18,10 +18,14 @@ from wagtail.admin.edit_handlers import (
 )
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable
+from wagtail.core.models import Page
 
 from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
-from xr_newsletter.services import sendy_api
+
+try:
+    from xr_newsletter.services import sendy_api
+except ImportError as e:
+    print("Warnung: sendy scheint nicht installiert zu sein." + str(e))
 from xr_pages.blocks import ContentBlock
 from xr_web.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import LocalGroup, HomePage, LocalGroupPage, XrPage

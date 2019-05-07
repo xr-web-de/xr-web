@@ -14,9 +14,14 @@ class XRSendyAPI(SendyAPI):
     )
 
 
-if settings.DEBUG or settings.TESTING:
-    sendy_api = XRSendyAPI(
-        host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY, debug=True
-    )
-else:
-    sendy_api = XRSendyAPI(host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY)
+try:
+    if settings.DEBUG or settings.TESTING:
+        sendy_api = XRSendyAPI(
+            host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY, debug=True
+        )
+    else:
+        sendy_api = XRSendyAPI(
+            host=settings.SENDY_HOST_URL, api_key=settings.SENDY_API_KEY
+        )
+except (ImportError, AttributeError) as e:
+    print("Warnung: sendy scheint nicht installiert zu sein." + str(e))

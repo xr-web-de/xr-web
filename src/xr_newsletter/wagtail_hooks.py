@@ -3,9 +3,12 @@ from django.utils.translation import ugettext as _
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 from wagtail.admin import messages
 from wagtail.core import hooks
-
 from xr_newsletter.models import NewsletterFormPage
-from xr_newsletter.services import sendy_api
+
+try:
+    from xr_newsletter.services import sendy_api
+except ImportError as e:
+    print("Warnung: sendy scheint nicht installiert zu sein." + str(e))
 
 
 @hooks.register("after_create_page")
