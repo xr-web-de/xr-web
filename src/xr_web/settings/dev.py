@@ -1,6 +1,5 @@
 from .base import *  # noqa
 import os
-import re
 
 SECRET_KEY = "not secret at all"
 
@@ -32,10 +31,17 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {"console": {"level": "DEBUG", "class": "logging.StreamHandler"}},
     "filters": {
-        "filter_404": {"()": "django.utils.log.CallbackFilter", "callback": filter_404}
+        "filter_404": {
+            "()": "django.utils.log.CallbackFilter",
+            "callback": filter_404,  # noqa
+        }
     },
     "loggers": {
         "django.request": {"filters": ["filter_404"]},
         "": {"handlers": ["console"], "level": "DEBUG"},
     },
 }
+
+
+SENDY_HOST_URL = "https://sendy.testhost"
+SENDY_API_KEY = "NotSecretAtAll"
