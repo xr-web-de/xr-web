@@ -8,14 +8,14 @@
 
     {% if not page.group.is_regional_group %}
         {% if page.group.active_localgrouppage %}
-            with-secondary-menu
+            with-secondary-nav
         {% endif %}
     {% endif %}
 {% endspaceless %}{% endblock %}
 
 
-#{% block secondary_menu %}
+#{% block secondary_nav %}
     {% if not page.group.is_regional_group %}
-        {% include "xr_pages/menus/local_group_secondary_menu.html" %}
+        {% include "xr_pages/menus/local_group_level_2.html" %}
     {% endif %}
 {% endblock %}

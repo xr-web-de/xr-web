@@ -8,7 +8,7 @@
 {% block page_type %}{{ page.content_type.model }}{% endblock %}
 
 
-{% block body_classes %}{{ page.content_type.model }}-page{% endblock %}
+{% block body_classes %}{{ block.super }} {{ page.content_type.model }}-page{% endblock %}
 
 
 {% block content_title %}

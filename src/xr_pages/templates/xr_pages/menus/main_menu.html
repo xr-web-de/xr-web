@@ -1,0 +1,15 @@
+{% load menu_tags %}
+{% load static %}
+
+<ul class="navbar-nav primary-nav__menu">
+    {% for item in menu_items %}
+        <li class="primary-nav__item {{ item.active_class }} {% if item.has_children_in_menu %}{% endif %}">
+            <a href="{{ item.href }}" id="menu_item_{{ item.link_page.pk }}" >
+                {{ item.text }}
+                {% if item.has_children_in_menu %}
+                    <span class="css-icon-plus"></span>
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

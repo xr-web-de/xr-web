@@ -6,12 +6,18 @@
 
 {% block page_type %}default{% endblock %}
 
+{% block body_classes %}{% spaceless %}
+    {{ block.super }}
+
+    {% main_menu template="xr_pages/menus/main_menu_body_classes.html" %}
+{% endspaceless %}{% endblock %}
+
 {% block layout %}
     {% block header %}
         <header id="header" class="siteheader">
             <div class="nav-wrapper" id="nav">
 
-                <nav class="main-nav">
+                <nav class="primary-nav">
                     <div class="container">
                         <a href="/" class="siteheader-logo">
                             <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
@@ -23,9 +29,10 @@
                     </div>
                 </nav>
 
-                <nav class="secondary-menu">
+                <nav class="secondary-nav">
                     <div class="container">
-                        {% block secondary_menu %}
+                        {% block secondary_nav %}
+                            {% main_menu template="xr_pages/menus/main_menu_level_2.html" %}
                         {% endblock %}
                     </div>
                 </nav>

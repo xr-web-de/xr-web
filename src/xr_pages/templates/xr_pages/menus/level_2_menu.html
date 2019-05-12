@@ -1,0 +1,23 @@
+{% load menu_tags %}
+{% if menu_items %}
+	<ul aria-labelledby="menu_item_{{ parent_page.pk }}" class="secondary-nav__menu">
+	{% for item in menu_items %}
+        {% if item.has_children_in_menu and item.active_class %}
+            <li class="{{ item.active_class }} secondary-nav__item ">
+                <a href="{{ item.href }}" id="menu_item_{{ item.pk }}" >
+                    {{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}
+                </a>
+            </li>
+{#            {% if item.active_class %}#}
+{#                {% sub_menu item template="xr_pages/menus/level_3_menu.html" %}#}
+{#            {% endif %}#}
+        {% else %}
+            <li class="{{ item.active_class }} secondary-nav__item">
+                <a href="{{ item.href }}" id="menu_item_{{ item.pk }}" >
+                    {{ item.text }}{% if item.has_children_in_menu %} <span class="caret"></span>{% endif %}
+                </a>
+            </li>
+        {% endif %}
+	{% endfor %}
+	</ul>
+{% endif %}
