@@ -23,3 +23,6 @@ summary .help {
     margin-left: 1.5em;
 }
 
+body.ready textarea {
+    resize: both !important;
+}

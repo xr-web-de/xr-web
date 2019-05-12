@@ -2,10 +2,11 @@
   All header elements
 */
 
-$header-height-desktop: 94px;
-$header-height-mobile: 64px;
-$logo-height: 72px;
-$nav-toggle-size: 32px;
+$header-height-desktop: 5.875rem; // 94px;
+$header-height-mobile: 4rem; // 64px;
+$secondary-nav-height: 1.2rem * 1.6 + 1.25rem;
+$logo-height: 4.5rem; // 72px;
+$nav-toggle-size: 2rem; // 32px;
 
 $mobile-breakpoint: $bp-md;
 
@@ -23,7 +24,6 @@ body {
 
 .siteheader {
     background-color: $primary-color;
-    //box-shadow: 0 3px 0 hsla(0, 0%, 0%, 0.1);
     width: 100%;
     position: fixed;
     top: 0;
@@ -69,7 +69,7 @@ body.with-secondary-nav {
 
     @media (min-width: $mobile-breakpoint) {
         .page-wrap {
-            padding-top: $header-height-desktop * 1.6;
+            padding-top: $header-height-desktop + $secondary-nav-height;
         }
     }
 }
@@ -205,6 +205,7 @@ body.with-secondary-nav {
         top: 0;
         padding-right: 36px;
         padding-left: 6px;
+        padding-top: 1px;
         z-index: 9000;
         font-family: 'Fucxed', sans-serif;
         font-weight: 700;
@@ -256,37 +257,49 @@ body.with-secondary-nav {
         font-family: 'Fucxed', sans-serif;
         text-transform: uppercase;
         white-space: nowrap;
-        padding: 0 8px;
+        padding: 0 0.5rem;
         @media (max-width: $mobile-breakpoint) {
-            margin: 12px 0;
+            margin: 0.75rem 0;
             font-size: 2rem;
         }
         @media (min-width: $mobile-breakpoint) {
-            margin: 0 8px;
+            margin: 0 0.5rem;
             font-weight: 700;
             font-size: 1.3rem;
         }
+
+        // active / hover effects
+        position: relative;
+        z-index: 50;
+        & > a:before {
+            content: ' ';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            transform: rotate(-3deg);
+            z-index: -10;
+        }
+        &:nth-child(2n) > a:before {
+            transform: rotate(1deg);
+        }
+        &:nth-child(3n) > a:before {
+            transform: rotate(-1.5deg);
+        }
+
+        & > a:hover,
+        & > a:focus,
+        & > a:active {
+            &:before {
+                background: rgba(map-get($colors, xr-yellow), 0.7);
+            }
+        }
         &.active,
         &.ancestor {
-            //border-bottom: 10px solid map-get($colors, xr-yellow);
-            position: relative;
-            z-index: 50;
-            a:before {
-                content: ' ';
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
+            & > a:before {
                 background: map-get($colors, xr-yellow);
-                transform: rotate(-3deg);
-                z-index: -10;
-            }
-            &:nth-child(2n) a:before {
-                transform: rotate(1deg);
-            }
-            &:nth-child(3n) a:before {
-                transform: rotate(-1.5deg);
             }
         }
     }
@@ -312,6 +325,7 @@ body.with-secondary-nav {
         @media (min-width: $mobile-breakpoint) {
             flex-direction: row;
             align-items: baseline;
+            height: $secondary-nav-height;
         }
 
         > li:first-child {
@@ -325,41 +339,53 @@ body.with-secondary-nav {
         text-transform: uppercase;
         font-weight: 700;
         white-space: nowrap;
-        padding: 12px 8px 8px;
+        padding: 0.75rem 0.5rem 0.5rem;
         @media (max-width: $mobile-breakpoint) {
-            margin: 12px 0;
+            margin: 0.75rem 0;
             font-size: 1.2rem;
         }
         @media (min-width: $mobile-breakpoint) {
-            margin: 0 8px;
+            margin: 0 0.5rem;
             font-size: 1.2rem;
+        }
+
+        // active / hover
+        position: relative;
+        z-index: 50;
+        & > a:before {
+            content: ' ';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            transform: rotate(-2deg);
+            z-index: -10;
+        }
+        &:nth-child(2n) > a:before {
+            transform: rotate(2deg);
+        }
+        &:nth-child(3n) > a:before {
+            transform: rotate(-1deg);
+        }
+        & > a:hover,
+        & > a:focus,
+        & > a:active {
+            &:before {
+                background: rgba(map-get($colors, xr-green), 0.5);
+            }
         }
         &.active,
         &.ancestor {
-            //border-bottom: 10px solid map-get($colors, xr-green);
-            position: relative;
-            z-index: 50;
-            a:before {
-                content: ' ';
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
+            & > a:before {
                 background: map-get($colors, xr-green);
-                transform: rotate(-2deg);
-                z-index: -10;
-            }
-            &:nth-child(2n) a:before {
-                transform: rotate(2deg);
-            }
-            &:nth-child(3n) a:before {
-                transform: rotate(-1deg);
             }
         }
     }
     &__parent-item {
         font-size: 1.6rem;
+        line-height: 1.2;
     }
     @media (max-width: $mobile-breakpoint) {
         &__repeated-item {

@@ -113,8 +113,7 @@
 .text-block {
     // headings
     h2,
-    h3,
-    h4 {
+    h3 {
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         line-height: 1.1;
@@ -127,7 +126,8 @@
         font-size: 1.6rem;
     }
     h4 {
-        font-size: 1.2rem;
+        font-size: 1.6rem;
+        font-weight: bold;
     }
     // big list numbering
     ol {
@@ -164,9 +164,13 @@
     }
 }
 
-.title-block .align-center .h {
-    text-align: center;
-    margin: 0;
+// Title Block
+.title-block {
+    padding-bottom: 0;
+    .align-center .h {
+        text-align: center;
+        margin: 0;
+    }
 }
 .title-container + .container .block,
 .title-container + .block {
