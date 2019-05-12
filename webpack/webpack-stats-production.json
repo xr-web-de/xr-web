@@ -4,14 +4,14 @@
     "chunks": {
         "main": [
             {
-                "name": "main-9c6fb8928e7c0b666938.css",
-                "publicPath": "/static/dist/main-9c6fb8928e7c0b666938.css",
-                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-9c6fb8928e7c0b666938.css"
+                "name": "main-bb52156aa9c7daa7e6d5.css",
+                "publicPath": "/static/dist/main-bb52156aa9c7daa7e6d5.css",
+                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-bb52156aa9c7daa7e6d5.css"
             },
             {
-                "name": "main-9c6fb8928e7c0b666938.js",
-                "publicPath": "/static/dist/main-9c6fb8928e7c0b666938.js",
-                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-9c6fb8928e7c0b666938.js"
+                "name": "main-bb52156aa9c7daa7e6d5.js",
+                "publicPath": "/static/dist/main-bb52156aa9c7daa7e6d5.js",
+                "path": "/home/hannes/Hobby/xr-web/webpack/static/dist/main-bb52156aa9c7daa7e6d5.js"
             }
         ]
     }

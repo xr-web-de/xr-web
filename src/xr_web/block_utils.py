@@ -39,6 +39,7 @@ ALIGN_CHOICES = (
 
 # RichText defaults
 simple_rich_text_features = [
+    "h2",
     "h3",
     "h4",
     "bold",

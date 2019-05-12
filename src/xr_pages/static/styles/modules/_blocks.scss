@@ -111,12 +111,31 @@
 
 // Text Block
 .text-block {
+    // headings
+    h2,
+    h3,
+    h4 {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.1;
+        @include fucxed;
+    }
+    h2 {
+        font-size: 2.6rem;
+    }
+    h3 {
+        font-size: 1.6rem;
+    }
+    h4 {
+        font-size: 1.2rem;
+    }
     // big list numbering
     ol {
         clear: left;
         list-style: none;
         counter-reset: xr-list-numbering;
         padding-left: 4em;
+        padding-top: 0.5rem;
 
         li {
             counter-increment: xr-list-numbering;
