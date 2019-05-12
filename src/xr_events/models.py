@@ -11,7 +11,7 @@ from wagtail.admin.edit_handlers import (
     StreamFieldPanel,
 )
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page, PageManager
+from wagtail.core.models import Orderable, PageManager
 from wagtail.core.query import PageQuerySet
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -52,7 +52,7 @@ class EventPage(XrPage):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
 
-    content_panels = Page.content_panels + [
+    content_panels = XrPage.content_panels + [
         CondensedInlinePanel("dates", label=_("Dates")),
         FieldPanel("location"),
         CondensedInlinePanel("further_organisers", label=_("Further organisers")),
@@ -172,7 +172,7 @@ class EventListPage(XrPage):
         help_text=_("A default image as Fallback for events, that have no image."),
     )
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     settings_panels = XrPage.settings_panels + [
         ImageChooserPanel("default_event_image")
@@ -217,7 +217,7 @@ class EventGroupPage(XrPage):
         help_text=_("A default image as Fallback for events, that have no image."),
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = XrPage.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
     ]

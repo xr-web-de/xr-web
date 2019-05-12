@@ -47,6 +47,10 @@
 
 .block--content {
     position: relative;
+    img {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 .block--footer {
@@ -139,4 +143,13 @@
             width: 0.5em;
         }
     }
+}
+
+.title-block .align-center .h {
+    text-align: center;
+    margin: 0;
+}
+.title-container + .container .block,
+.title-container + .block {
+    margin-top: 1rem;
 }

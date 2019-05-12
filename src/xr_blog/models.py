@@ -1,9 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import StreamField
-
-from wagtail.core.models import Page
 
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import XrPage
@@ -23,7 +21,14 @@ class BlogEntryPage(XrPage):
     )
 
     # Panels (Editor interface)
-    content_panels = Page.content_panels + [
+    content_panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("title", classname="title"),
+                # FieldPanel("show_page_title", classname=""),  # without "show_page_title"
+            ],
+            heading=_("Title"),
+        ),
         FieldPanel("date"),
         FieldPanel("author"),
         StreamFieldPanel("content"),
@@ -55,7 +60,7 @@ class BlogListPage(XrPage):
 
     parent_page_types = ["xr_pages.HomePage", "xr_pages.LocalGroupPage"]
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     class Meta:
         verbose_name = _("Blog List Page")

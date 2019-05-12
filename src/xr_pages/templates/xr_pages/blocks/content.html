@@ -5,7 +5,7 @@
     {% if block.value.align == "full_page" or block.value.align is None %}
         {% include_block block  %}
     {% else %} {# aligned blocks #}
-        <div class="container">
+        <div class="container {{ block.block_type }}-container">
             {% include_block block %}
         </div>
     {% endif %}

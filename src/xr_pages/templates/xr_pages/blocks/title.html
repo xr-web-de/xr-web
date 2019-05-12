@@ -1,0 +1,13 @@
+{% load wagtailcore_tags %}
+
+
+<section class="block {{ value.block.name }}-block">
+    <div class="{% spaceless %}
+                block--content clearfix
+                align-{{ value.align }}
+                {% if value.background_color %}bg--{{ value.background_color }} block--with-bg{% endif %}
+                {% if value.font_color %}color--{{ value.font_color }}{% endif %}
+            {% endspaceless %}">
+        <h1 class="h h--1 h--caps">{{ value.title }}</h1>
+    </div>
+</section>

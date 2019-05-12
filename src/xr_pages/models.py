@@ -35,6 +35,17 @@ class XrPage(Page):
             "teasers or social media."
         ),
     )
+    show_page_title = models.BooleanField(default=True)
+
+    content_panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("title", classname="title"),
+                FieldPanel("show_page_title", classname=""),
+            ],
+            heading=_("Title"),
+        )
+    ]
 
     promote_panels = Page.promote_panels + [
         ImageChooserPanel("image"),
@@ -50,7 +61,7 @@ class HomePage(XrPage):
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField("LocalGroup", editable=False, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = []
     is_creatable = False
@@ -65,7 +76,7 @@ class HomeSubPage(XrPage):
     content = StreamField(ContentBlock, blank=True)
     group = models.ForeignKey("LocalGroup", editable=False, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["HomePage", "HomeSubPage"]
 
@@ -304,7 +315,7 @@ class LocalGroupListPage(XrPage):
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = []
     is_creatable = False
@@ -325,7 +336,7 @@ class LocalGroupPage(XrPage):
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
 
-    content_panels = Page.content_panels + [
+    content_panels = XrPage.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
     ]
@@ -370,7 +381,7 @@ class LocalGroupSubPage(XrPage):
         LocalGroup, on_delete=models.PROTECT, editable=False, related_name="+"
     )
 
-    content_panels = Page.content_panels + [StreamFieldPanel("content")]
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
     parent_page_types = ["LocalGroupPage"]
 

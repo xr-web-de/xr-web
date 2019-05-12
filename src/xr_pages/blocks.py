@@ -17,6 +17,8 @@ from xr_web.block_utils import (
     COLOR_XR_BLACK,
     COLOR_XR_WHITE,
     XrStructValue,
+    ALIGN_CENTER,
+    ALIGN_LEFT,
 )
 from xr_newsletter.blocks import EmailFormBlock
 
@@ -44,6 +46,23 @@ class TextBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     class Meta:
         icon = "pilcrow"
         template = "xr_pages/blocks/text.html"
+
+
+class TitleBlock(CollapsibleFieldsMixin, blocks.StructBlock):
+    title = blocks.CharBlock()
+    font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_BLACK)
+    ALIGN_CHOICES = ((ALIGN_CENTER, _("Center")), (ALIGN_LEFT, _("Left")))
+    align = blocks.ChoiceBlock(
+        choices=ALIGN_CHOICES,
+        default=ALIGN_LEFT,
+        help_text=_("Choose the alignment of the block."),
+    )
+
+    fields = ["title", {"label": _("Appearance"), "fields": ["align", "font_color"]}]
+
+    class Meta:
+        icon = "title"
+        template = "xr_pages/blocks/title.html"
 
 
 class LinkBlock(blocks.StructBlock):
@@ -249,6 +268,7 @@ class AlignedCarouselBlock(AlignmentMixin, CarouselBlock):
 
 # Page content StreamField
 class ContentBlock(blocks.StreamBlock):
+    title = TitleBlock()
     text = TextBlock()
     image = AlignedImageBlock()
     teaser = AlignedTeaserBlock()
