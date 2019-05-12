@@ -10,6 +10,11 @@ COLOR_XR_GREEN = "xr-green"
 COLOR_XR_YELLOW = "xr-yellow"
 COLOR_XR_LIGHT_BLUE = "xr-light-blue"
 COLOR_XR_DARK_BLUE = "xr-dark-blue"
+COLOR_XR_PURPLE = "xr-purple"
+COLOR_XR_PINK = "xr-pink"
+COLOR_XR_LIGHT_GREY = "xr-light-grey"
+COLOR_XR_GREY = "xr-grey"
+COLOR_XR_DARK_GREY = "xr-dark-grey"
 COLOR_XR_WHITE = "xr-white"
 COLOR_XR_BLACK = "xr-black"
 COLOR_CHOICES = (
@@ -17,6 +22,11 @@ COLOR_CHOICES = (
     (COLOR_XR_YELLOW, _("XR yellow")),
     (COLOR_XR_LIGHT_BLUE, _("XR light blue")),
     (COLOR_XR_DARK_BLUE, _("XR dark blue")),
+    (COLOR_XR_PURPLE, _("XR purple")),
+    (COLOR_XR_PINK, _("XR pink")),
+    (COLOR_XR_LIGHT_GREY, _("XR light grey")),
+    (COLOR_XR_GREY, _("XR grey")),
+    (COLOR_XR_DARK_GREY, _("XR dark grey")),
     (COLOR_XR_WHITE, _("XR white")),
     (COLOR_XR_BLACK, _("XR black")),
 )
