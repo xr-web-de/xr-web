@@ -151,21 +151,27 @@ class LocalGroup(models.Model):
     # old_name field helps with identifying name changes
     old_name = models.CharField(max_length=50, default="", editable=False)
     STATUS_ACTIVE = "active"
+    STATUS_IN_FOUNDATION = "in_foundation"
     STATUS_LOOKING_FOR_PEOPLE = "looking_for_people"
     STATUS_IDLE = "idle"
     STATUS_CHOICES = (
         (STATUS_ACTIVE, _("active")),
+        (STATUS_IN_FOUNDATION, _("in foundation")),
         (STATUS_LOOKING_FOR_PEOPLE, _("looking for people")),
         (STATUS_IDLE, _("idle")),
+    )
+    area_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text=_("More information about the area the group is active in."),
     )
     status = models.CharField(
         _("Status"), max_length=50, default=STATUS_ACTIVE, choices=STATUS_CHOICES
     )
-    founding_date = models.DateField(
-        _("Founding date"), default=datetime.date.today, blank=True, null=True
-    )
+    founding_date = models.DateField(_("Founding date"), blank=True, null=True)
 
     email = models.EmailField(null=True, blank=True)
+    gpg_key = models.TextField(null=True, blank=True)
     external_url = models.URLField(null=True, blank=True)
     phone = models.CharField(max_length=50, default="", blank=True)
 
@@ -272,10 +278,14 @@ class LocalGroup(models.Model):
 
     @property
     def newly_founded(self):
+        if not self.founding_date:
+            return None
         return self.founding_date + datetime.timedelta(90) < datetime.date.today()
 
     @property
     def founding_planned(self):
+        if not self.founding_date:
+            return None
         return self.founding_date > datetime.date.today()
 
     @property

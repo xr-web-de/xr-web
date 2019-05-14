@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-17 17:45+0200\n"
+"POT-Creation-Date: 2019-05-14 23:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,116 +18,159 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: xr_events/models.py:30 xr_pages/models.py:65
-msgid ""
-"An image that can be used not only for the detail view, but also for lists, "
-"teasers or social media."
-msgstr "Ein Bild, nicht nur für die Detail-Ansicht, sondern auch für Social Media, "
-"Teaser und Listen."
+#: xr_blog/models.py:15
+msgid "Post date"
+msgstr ""
 
-#: xr_events/models.py:39 xr_pages/models.py:74
-msgid ""
-"A description not only for the detail view, but also for lists, teasers or "
-"social media."
-msgstr "Ein Beschreibung, nicht nur für die Detail-Ansicht, sondern auch für "
-"Social Media, Teaser und Listen."
-
-#: xr_events/models.py:46
+#: xr_blog/models.py:20 xr_blog/models.py:58 xr_events/models.py:39
 msgid "The content is only visible on the detail page."
 msgstr "Der Inhalt ist nur auf der Detail-Ansicht sichtbar."
 
-#: xr_events/models.py:52 xr_pages/models.py:107
+#: xr_blog/models.py:30 xr_pages/models.py:46
+msgid "Title"
+msgstr ""
+
+#: xr_blog/models.py:40
+msgid "Blog Entry Page"
+msgstr ""
+
+#: xr_blog/models.py:41
+#, fuzzy
+#| msgid "Content Pages"
+msgid "Blog Entry Pages"
+msgstr "Inhalts-Seiten"
+
+#: xr_blog/models.py:66
+#, fuzzy
+#| msgid "Event List Page"
+msgid "Blog List Page"
+msgstr "Veranstaltungs Übersicht Seite"
+
+#: xr_blog/models.py:67
+#, fuzzy
+#| msgid "Event List Pages"
+msgid "Blog List Pages"
+msgstr "Veranstaltungs Übersicht Seiten"
+
+#: xr_blog/templates/xr_blog/pages/blog_entry.html:10
+#, python-format
+msgid ""
+"\n"
+"                Published by %(author)s at %(date)s\n"
+"            "
+msgstr ""
+
+#: xr_blog/templates/xr_blog/partials/blog_card.html:27
+msgid "from"
+msgstr ""
+
+#: xr_events/models.py:45 xr_pages/models.py:187
 msgid ""
 "Some city or address, like you would enter in GMaps or OpenStreetMap, e.g. "
 "\"Berlin\", \"Somestreet 84, 12345 Samplecity\"."
-msgstr "Eine Stadt oder Adresse, wie du sie bei GoogleMaps oder OpenStreetMap "
+msgstr ""
+"Eine Stadt oder Adresse, wie du sie bei GoogleMaps oder OpenStreetMap "
 "eingeben würdest (z.B. \"Berlin\", \"Musterstraße 5, 54321 Musterstadt\""
 
-#: xr_events/models.py:66 xr_events/models.py:128 xr_events/wagtail_hooks.py:46
+#: xr_events/models.py:56 xr_events/models.py:126 xr_events/wagtail_hooks.py:46
 msgid "Dates"
 msgstr "Termine"
 
-#: xr_events/models.py:67
+#: xr_events/models.py:58
 msgid "Further organisers"
 msgstr "Weitere Veranstalter"
 
-#: xr_events/models.py:74
+#: xr_events/models.py:69
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: xr_events/models.py:75
+#: xr_events/models.py:70
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: xr_events/models.py:118
+#: xr_events/models.py:116
 msgid "Optional label like \"Part I\" or \"Meeting point\""
 msgstr "Optionale Bezeichnung, z.B. \"Teil I\" oder \"Treffpunkt\""
 
-#: xr_events/models.py:127
+#: xr_events/models.py:125
 msgid "Date"
 msgstr "Termin"
 
-#: xr_events/models.py:149
+#: xr_events/models.py:147
 msgid ""
 "If the event is organised in cooperation with other groups, name them here."
-msgstr "Falls die Veranstaltung in Kooperation mit weiteren Veranstaltern "
+msgstr ""
+"Falls die Veranstaltung in Kooperation mit weiteren Veranstaltern "
 "organisiert wird, kannst du sie hier benennen."
 
-#: xr_events/models.py:157
+#: xr_events/models.py:155
 msgid "Organiser"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:158 xr_events/wagtail_hooks.py:55
+#: xr_events/models.py:156 xr_events/wagtail_hooks.py:55
 msgid "Organisers"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:174
+#: xr_events/models.py:172 xr_events/models.py:217
+msgid "A default image as Fallback for events, that have no image."
+msgstr ""
+
+#: xr_events/models.py:185
 msgid "Event List Page"
 msgstr "Veranstaltungs Übersicht Seite"
 
-#: xr_events/models.py:175
+#: xr_events/models.py:186
 msgid "Event List Pages"
 msgstr "Veranstaltungs Übersicht Seiten"
 
-#: xr_events/models.py:206
+#: xr_events/models.py:232
 msgid "Event Group Page"
 msgstr "Veranstaltungs Gruppen Seite"
 
-#: xr_events/models.py:207
+#: xr_events/models.py:233
 msgid "Event Group Pages"
 msgstr "Veranstaltungs Gruppen Seiten"
 
-#: xr_events/templates/xr_events/pages/event_detail.html:17
-#: xr_events/templates/xr_events/partials/event_card.html:16
+#: xr_events/templates/xr_events/pages/event_detail.html:19
+#: xr_events/templates/xr_events/partials/event_card.html:29
 msgid "Wann?"
 msgstr ""
 
-#: xr_events/templates/xr_events/pages/event_detail.html:24
-#: xr_events/templates/xr_events/partials/event_card.html:23
+#: xr_events/templates/xr_events/pages/event_detail.html:26
+#: xr_events/templates/xr_events/partials/event_card.html:39
 msgid "Wo?"
 msgstr ""
 
-#: xr_events/templates/xr_events/pages/event_detail.html:31
+#: xr_events/templates/xr_events/pages/event_detail.html:33
 msgid "Veranstalter"
 msgstr ""
 
-#: xr_events/templates/xr_events/pages/event_detail.html:40
+#: xr_events/templates/xr_events/pages/event_detail.html:42
 msgid "in Kooperation mit"
 msgstr ""
 
-#: xr_events/templates/xr_events/pages/event_group.html:17
-#: xr_events/templates/xr_events/pages/event_list.html:29
+#: xr_events/templates/xr_events/pages/event_group.html:9
+#: xr_pages/templates/xr_pages/menus/local_group_level_2.html:22
+#: xr_pages/templates/xr_pages/menus/local_group_level_2.html:35
 msgid "Veranstaltungen"
 msgstr ""
 
-#: xr_newsletter/blocks.py:29 xr_pages/blocks.py:81 xr_pages/blocks.py:116
-#: xr_pages/blocks.py:152
+#: xr_events/templates/xr_events/pages/event_group.html:9
+msgid "von"
+msgstr ""
+
+#: xr_events/templates/xr_events/partials/event_card.html:17
+msgid "Wer?"
+msgstr ""
+
+#: xr_newsletter/blocks.py:29 xr_pages/blocks.py:94 xr_pages/blocks.py:130
+#: xr_pages/blocks.py:167 xr_pages/blocks.py:206
 msgid "Card"
 msgstr ""
 
 #: xr_newsletter/blocks.py:30 xr_newsletter/models.py:53
-#: xr_newsletter/models.py:153 xr_pages/blocks.py:82 xr_pages/blocks.py:118
-#: xr_pages/blocks.py:154
+#: xr_newsletter/models.py:153 xr_pages/blocks.py:95 xr_pages/blocks.py:132
+#: xr_pages/blocks.py:169 xr_pages/blocks.py:234
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -191,109 +234,245 @@ msgstr "Newsletter-Formular Seite"
 msgid "Newsletter Form Pages"
 msgstr "Newsletter-Formular Seiten"
 
-#: xr_newsletter/models.py:222
+#: xr_newsletter/models.py:227
+#, fuzzy
+#| msgid ""
+#| "Sorry, there was an error talking to the Newsletter API. Please try again "
+#| "later."
 msgid ""
-"Sorry, there was an error talking to the Newsletter API. Please try again "
-"later."
-msgstr "Upps, es gab einen Fehler bei der Kommunikation mit der Newsletter-API. "
+"Sorry, there was an error talking to the Newsletter API or you have "
+"subscribed already. Please try again later."
+msgstr ""
+"Upps, es gab einen Fehler bei der Kommunikation mit der Newsletter-API. "
 "Bitte versuche es später noch einmal."
 
-#: xr_newsletter/wagtail_hooks.py:16
+#: xr_newsletter/wagtail_hooks.py:18
 #, python-format
 msgid ""
 "There is no sendy_list_id set for page \"%s\". Therefore newsletter "
 "subscription will not work."
-msgstr "Es ist keine \"Newsletter Listen ID\" für die Seite \"%s\" angegeben. "
-"Das abonnieren des Newsletters wird nicht funktionieren ohne Listen ID."
+msgstr ""
+"Es ist keine \"Newsletter Listen ID\" für die Seite \"%s\" angegeben. Das "
+"abonnieren des Newsletters wird nicht funktionieren ohne Listen ID."
 
-#: xr_newsletter/wagtail_hooks.py:29
+#: xr_newsletter/wagtail_hooks.py:39
 #, python-format
 msgid ""
 "There was a problem talking to Sendy API: %s. Please check the sendy_list_id "
 "and try again."
-msgstr "Es gab ein Problem bei der Kommunikation mit der Newsletter-API: %s. "
-"Bitte überprüfe die \"Newsletter Listen ID\"."
+msgstr ""
+"Es gab ein Problem bei der Kommunikation mit der Newsletter-API: %s. Bitte "
+"überprüfe die \"Newsletter Listen ID\"."
 
-#: xr_pages/blocks.py:33
+#: xr_pages/blocks.py:38
 msgid ""
 "Simple richtext with basic formatting. Use links in order to connect related "
 "pages frequently. Ordered lists are rendered with big numbers.For images and "
 "videos use the image and video blocks."
 msgstr ""
 
-#: xr_pages/blocks.py:58
+#: xr_pages/blocks.py:54 xr_web/block_utils.py:42
+msgid "Center"
+msgstr ""
+
+#: xr_pages/blocks.py:54 xr_web/block_utils.py:44
+msgid "Left"
+msgstr ""
+
+#: xr_pages/blocks.py:58 xr_web/block_utils.py:81 xr_web/block_utils.py:122
+#: xr_web/block_utils.py:128
+msgid "Choose the alignment of the block."
+msgstr ""
+
+#: xr_pages/blocks.py:61
+msgid "Appearance"
+msgstr ""
+
+#: xr_pages/blocks.py:71
 msgid "Link to an internal page. Is overwritten by \"external link\"."
 msgstr ""
 
-#: xr_pages/blocks.py:63
+#: xr_pages/blocks.py:76
 msgid "Link to an external page (https://...). Overwrites \"internal link\"."
 msgstr ""
 
-#: xr_pages/blocks.py:96
+#: xr_pages/blocks.py:110
 msgid ""
 "An optional alternative title, which is displayed on hover. If not given, "
 "the image's title attribute will be used instead."
 msgstr ""
 
-#: xr_pages/blocks.py:104
+#: xr_pages/blocks.py:118
 msgid ""
 "An optional copyright or attribution text, which is displayed at the bottom "
 "right of the image."
 msgstr ""
 
-#: xr_pages/blocks.py:133
+#: xr_pages/blocks.py:148
 msgid "The text is displayed centered and linebreaks will be preserved."
 msgstr ""
 
-#: xr_pages/blocks.py:138
+#: xr_pages/blocks.py:153
 msgid ""
 "Adjust the font size to fit your needs. Use the preview feature to see how "
 "big the font will be rendered."
 msgstr ""
 
-#: xr_pages/models.py:40
+#: xr_pages/blocks.py:192
+msgid ""
+"An optional caption, which is displayed below the block's content. "
+"Overwrites the page title of the linked page."
+msgstr ""
+
+#: xr_pages/blocks.py:199
+msgid ""
+"An optional description, which is displayed below the block's caption. "
+"Overwrites the page description of the linked page."
+msgstr ""
+
+#: xr_pages/blocks.py:225
+msgid "2"
+msgstr ""
+
+#: xr_pages/blocks.py:225
+msgid "3"
+msgstr ""
+
+#: xr_pages/blocks.py:225
+msgid "4"
+msgstr ""
+
+#: xr_pages/models.py:25
+msgid ""
+"An image that can be used not only for the detail view, but also for lists, "
+"teasers or social media."
+msgstr ""
+"Ein Bild, nicht nur für die Detail-Ansicht, sondern auch für Social Media, "
+"Teaser und Listen."
+
+#: xr_pages/models.py:34
+msgid ""
+"A description not only for the detail view, but also for lists, teasers or "
+"social media."
+msgstr ""
+"Ein Beschreibung, nicht nur für die Detail-Ansicht, sondern auch für Social "
+"Media, Teaser und Listen."
+
+#: xr_pages/models.py:70
+#, fuzzy
+#| msgid "Content Page"
+msgid "Home Page"
+msgstr "Inhalts-Seite"
+
+#: xr_pages/models.py:71
+#, fuzzy
+#| msgid "Content Pages"
+msgid "Home Pages"
+msgstr "Inhalts-Seiten"
+
+#: xr_pages/models.py:90
 msgid "Content Page"
 msgstr "Inhalts-Seite"
 
-#: xr_pages/models.py:41
+#: xr_pages/models.py:91
 msgid "Content Pages"
 msgstr "Inhalts-Seiten"
 
-#: xr_pages/models.py:51
+#: xr_pages/models.py:134
+msgid "site"
+msgstr ""
+
+#: xr_pages/models.py:146
 msgid ""
 "The unique name for the local group. Used as label for links referring to "
 "this page. Enter a name without leading \"XR \"."
 msgstr ""
 
-#: xr_pages/models.py:113
+#: xr_pages/models.py:158
+msgid "active"
+msgstr "aktiv"
+
+#: xr_pages/models.py:159
+msgid "in foundation"
+msgstr "im Aufbau"
+
+#: xr_pages/models.py:160
+msgid "looking for people"
+msgstr "Rebell*innen gesucht"
+
+#: xr_pages/models.py:161
+msgid "idle"
+msgstr "inaktiv"
+
+#: xr_pages/models.py:166
+msgid "More information about the area the group is active in."
+msgstr ""
+
+#: xr_pages/models.py:169 xr_pages/models.py:203
+msgid "Status"
+msgstr "Status"
+
+#: xr_pages/models.py:172
+msgid "Founding date"
+msgstr "Gründungsdatum"
+
+#: xr_pages/models.py:191
+msgid "Facebook page URL"
+msgstr ""
+
+#: xr_pages/models.py:193
+msgid "Instagram page URL"
+msgstr ""
+
+#: xr_pages/models.py:195
+msgid "Twitter page URL"
+msgstr ""
+
+#: xr_pages/models.py:197
+msgid "YouTube channel or user account URL"
+msgstr ""
+
+#: xr_pages/models.py:207
+msgid "Contact"
+msgstr "Kontakt"
+
+#: xr_pages/models.py:210
+msgid "Location"
+msgstr ""
+
+#: xr_pages/models.py:219
+msgid "Social media"
+msgstr ""
+
+#: xr_pages/models.py:226
 msgid "Group"
 msgstr "Gruppe"
 
-#: xr_pages/models.py:114 xr_pages/wagtail_hooks.py:15
+#: xr_pages/models.py:227 xr_pages/wagtail_hooks.py:15
 msgid "Groups"
 msgstr "Gruppen"
 
-#: xr_pages/models.py:155
+#: xr_pages/models.py:336
 msgid "Local Group List Page"
 msgstr "Ortsgruppen Übersicht Seite"
 
-#: xr_pages/models.py:156
+#: xr_pages/models.py:337
 msgid "Local Group List Pages"
 msgstr "Ortsgruppen Übersicht Seiten"
 
-#: xr_pages/models.py:179
+#: xr_pages/models.py:359
 msgid "Local Group Page"
 msgstr "Ortsgruppen Seite"
 
-#: xr_pages/models.py:180
+#: xr_pages/models.py:360
 msgid "Local Group Pages"
 msgstr "Ortsgruppen Seiten"
 
-#: xr_pages/models.py:228
+#: xr_pages/models.py:401
 msgid "Local Group Content Page"
 msgstr "Ortsgruppen Inhalts-Seite"
 
-#: xr_pages/models.py:229
+#: xr_pages/models.py:402
 msgid "Local Group Content Pages"
 msgstr "Ortsgruppen Inhalts-Seiten"
 
@@ -320,62 +499,82 @@ msgstr ""
 msgid "Absenden"
 msgstr ""
 
-#: xr_web/block_utils.py:14
+#: xr_pages/templates/xr_pages/layouts/default.html:90
+msgid "Disclaimer"
+msgstr ""
+
+#: xr_pages/templates/xr_pages/pages/local_group_list.html:40
+msgid "Start"
+msgstr ""
+
+#: xr_pages/templates/xr_pages/pages/local_group_list.html:46
+msgid "Hier werden noch Leute gesucht!"
+msgstr ""
+
+#: xr_web/block_utils.py:21
 msgid "XR green"
 msgstr ""
 
-#: xr_web/block_utils.py:15
+#: xr_web/block_utils.py:22
 msgid "XR yellow"
 msgstr ""
 
-#: xr_web/block_utils.py:16
+#: xr_web/block_utils.py:23
 msgid "XR light blue"
 msgstr ""
 
-#: xr_web/block_utils.py:17
+#: xr_web/block_utils.py:24
 msgid "XR dark blue"
 msgstr ""
 
-#: xr_web/block_utils.py:18
-msgid "XR white"
+#: xr_web/block_utils.py:25
+msgid "XR purple"
 msgstr ""
 
-#: xr_web/block_utils.py:19
-msgid "XR black"
+#: xr_web/block_utils.py:26
+msgid "XR pink"
+msgstr ""
+
+#: xr_web/block_utils.py:27
+msgid "XR light grey"
+msgstr ""
+
+#: xr_web/block_utils.py:28
+msgid "XR grey"
+msgstr ""
+
+#: xr_web/block_utils.py:29
+msgid "XR dark grey"
 msgstr ""
 
 #: xr_web/block_utils.py:30
-msgid "Center"
+msgid "XR white"
 msgstr ""
 
 #: xr_web/block_utils.py:31
+msgid "XR black"
+msgstr ""
+
+#: xr_web/block_utils.py:43
 msgid "Full content"
 msgstr ""
 
-#: xr_web/block_utils.py:32
-msgid "Left"
-msgstr ""
-
-#: xr_web/block_utils.py:33
+#: xr_web/block_utils.py:45
 msgid "Right"
 msgstr ""
 
-#: xr_web/block_utils.py:34
+#: xr_web/block_utils.py:46
 msgid "Full page"
 msgstr ""
 
-#: xr_web/block_utils.py:60 xr_web/block_utils.py:101 xr_web/block_utils.py:107
-msgid "Choose the alignment of the block."
-msgstr ""
-
-#: xr_web/block_utils.py:114
+#: xr_web/block_utils.py:135
 msgid "An optional heading, which is displayed above the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:122
+#: xr_web/block_utils.py:143
 msgid "An optional caption, which is displayed below the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:129
-msgid "An optional description, which is displayed below the block's caption"
+#: xr_web/block_utils.py:150
+msgid "An optional description, which is displayed below the block's caption."
 msgstr ""

@@ -7,7 +7,7 @@ from wagtail.core import hooks
 from wagtailmenus.modeladmin import MainMenuAdmin
 from wagtailmenus.views import MainMenuEditView
 
-from .models import LocalGroupListPage, LocalGroupPage, LocalGroup
+from .models import LocalGroupPage, LocalGroup
 
 
 class LocalGroupAdmin(ModelAdmin):
@@ -16,9 +16,17 @@ class LocalGroupAdmin(ModelAdmin):
     menu_icon = "group"
     menu_order = 200
     add_to_settings_menu = False
-    list_display = ("name", "email", "url", "location")
-    # list_filter = ()
-    search_fields = ("name", "email", "url", "location")
+    list_display = (
+        "name",
+        "email",
+        "url",
+        "state",
+        "location",
+        "status",
+        "founding_date",
+    )
+    list_filter = ("status", "founding_date", "state")
+    search_fields = ("name", "email", "area_description", "location")
 
 
 modeladmin_register(LocalGroupAdmin)
