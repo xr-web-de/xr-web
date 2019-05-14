@@ -171,7 +171,7 @@ class LocalGroup(models.Model):
     founding_date = models.DateField(_("Founding date"), blank=True, null=True)
 
     email = models.EmailField(null=True, blank=True)
-    gpg_key = models.TextField(null=True, blank=True)
+    pgp_key_id = models.CharField(null=True, blank=True, max_length=250)
     external_url = models.URLField(null=True, blank=True)
     phone = models.CharField(max_length=50, default="", blank=True)
 
