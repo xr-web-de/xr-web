@@ -1,0 +1,60 @@
+.letter-list {
+    display: flex;
+
+    &__grouper {
+        @include fucxed();
+        font-size: 4rem;
+        //text-align: center;
+        line-height: 1;
+        width: 5rem;
+        flex-shrink: 0;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+
+    &__entry {
+        display: flex;
+
+        //background: #e6e6e6;
+        //padding: 0.5rem 1rem;
+        //margin-right: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    @media screen and (max-width: $bp-sm) {
+        &__entry {
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+    }
+}
+
+.local-group {
+    &--idle {
+        color: #aaa;
+    }
+    &__title {
+        display: flex;
+        .h {
+            margin-right: 0.3rem;
+        }
+        margin-right: 1rem;
+    }
+    &__info {
+        //display: flex;
+    }
+    .icon-list {
+        margin-left: 0.3rem;
+        margin-top: -0.25rem;
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        &__title .h {
+            margin-bottom: 0;
+        }
+    }
+}

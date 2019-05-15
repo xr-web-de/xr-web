@@ -1,4 +1,5 @@
 import datetime
+from urllib.parse import unquote
 
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
@@ -93,7 +94,7 @@ class HomeSubPage(XrPage):
 
 class LocalGroupQuerySet(models.QuerySet):
     def active(self):
-        return self.exclude(status=LocalGroup.STATUS_IDLE)
+        return self.filter(status=LocalGroup.STATUS_ACTIVE)
 
     def has_active_localgrouppage(self):
         return self.filter(localgrouppage__isnull=False).filter(
@@ -197,11 +198,17 @@ class LocalGroup(models.Model):
 
     panels = [
         FieldPanel("name", classname="full"),
+        FieldPanel("area_description"),
         MultiFieldPanel(
             [FieldPanel("status"), FieldPanel("founding_date")], heading=_("Status")
         ),
         MultiFieldPanel(
-            [FieldPanel("email"), FieldPanel("phone"), FieldPanel("external_url")],
+            [
+                FieldPanel("email"),
+                FieldPanel("pgp_key_id"),
+                FieldPanel("phone"),
+                FieldPanel("external_url"),
+            ],
             heading=_("Contact"),
         ),
         MultiFieldPanel(
@@ -229,8 +236,12 @@ class LocalGroup(models.Model):
         return "XR %s" % self.name
 
     @property
+    def first_letter(self):
+        return self.name[0]
+
+    @property
     def is_active(self):
-        return self.status != self.STATUS_IDLE
+        return self.status == self.STATUS_ACTIVE
 
     @property
     def active_localgrouppage(self):
@@ -277,6 +288,20 @@ class LocalGroup(models.Model):
         return None
 
     @property
+    def full_url(self):
+        if self.external_url:
+            return self.external_url
+        if self.is_regional_group:
+            return self.site.root_page.get_full_url()
+        if self.active_localgrouppage:
+            return unquote(self.localgrouppage.get_full_url())
+        return None
+
+    @property
+    def has_any_social_media_urls(self):
+        return any([self.facebook, self.twitter, self.youtube, self.instagram])
+
+    @property
     def newly_founded(self):
         if not self.founding_date:
             return None
@@ -289,8 +314,12 @@ class LocalGroup(models.Model):
         return self.founding_date > datetime.date.today()
 
     @property
-    def looking_for_people(self):
+    def is_looking_for_people(self):
         return self.status == self.STATUS_LOOKING_FOR_PEOPLE
+
+    @property
+    def is_in_foundation(self):
+        return self.status == self.STATUS_IN_FOUNDATION
 
     @transaction.atomic
     def save(self, *args, **kwargs):

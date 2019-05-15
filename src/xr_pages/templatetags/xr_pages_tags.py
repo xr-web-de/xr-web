@@ -95,11 +95,9 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
 
 
 @register.inclusion_tag("xr_pages/templatetags/social_media_page_links.html")
-def render_social_media_links_for_page(page):
-    try:
-        group = page.specific.group
-    except AttributeError:
-        return {}
+def render_social_media_links_for_group(
+    group, size=32, css_classes="", show_label=False
+):
 
     social_media_links = []
 
@@ -117,4 +115,9 @@ def render_social_media_links_for_page(page):
                 }
             )
 
-    return {"social_media_links": social_media_links}
+    return {
+        "social_media_links": social_media_links,
+        "size": size,
+        "css_classes": css_classes,
+        "show_label": show_label,
+    }

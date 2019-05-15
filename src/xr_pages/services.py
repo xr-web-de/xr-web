@@ -269,7 +269,7 @@ def get_local_groups(request=None):
 
     site = get_site(request)
     return (
-        LocalGroup.objects.active()
+        LocalGroup.objects.all()
         .filter(site=site, is_regional_group=False)
         .order_by("name")
     )

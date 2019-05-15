@@ -22,6 +22,7 @@
 @import 'modules/svg_icons';
 @import 'modules/blocks';
 @import 'modules/datetime_widget';
+@import 'modules/letter_list';
 
 @each $key, $value in $colors {
     .bg--#{$key} {
