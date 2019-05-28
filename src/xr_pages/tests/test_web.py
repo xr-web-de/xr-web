@@ -51,7 +51,9 @@ class PagesWebTest(PagesBaseTest, WebTest):
     def test_local_group_list_page(self):
         response = self.app.get(self.local_group_list_page.url)
         self.assertEqual(response.status_code, 200)
-        local_group_page = response.click(href=self.local_group.url)
+        local_group_page = response.click(
+            linkid="local_group_link_{}".format(self.local_group.pk)
+        )
         self.assertContains(local_group_page, self.local_group_page.title)
         self.assertContains(
             response, 'href="mailto:{0}"'.format(self.local_group.email)
