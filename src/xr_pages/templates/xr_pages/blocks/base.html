@@ -12,17 +12,9 @@
             {% endif %}
 
             <header class="block__header">
-                {% if value.link.external_link or value.link.internal_link %}
-                    {% include_block value.link %}
-                {% endif %}
-
                 <h2 class="h h--2 h--caps">
                     {{ value.heading }}
                 </h2>
-
-                {% if value.link.external_link or value.link.internal_link %}
-                    </a>
-                {% endif %}
             </header>
 
             {% if value.align == "full_page" or value.align is None %}
@@ -31,20 +23,16 @@
         {% endif %}
     {% endblock %}
 
+    {% block open_block_link %}
+        {% if value.get_link %}
+            {% include_block value.link %}
+        {% endif %}
+    {% endblock %}
+
     {% block block_body %}
         <div class="block__content {% block block_content_classes %}{% endblock %}">
-
-            {% if value.link.external_link or value.link.internal_link %}
-                {% include_block value.link %}
-            {% endif %}
-
             {% block block_content %}
             {% endblock %}
-
-            {% if value.link.external_link or value.link.internal_link %}
-                </a>
-            {% endif %}
-
         </div>
     {% endblock %}
 
@@ -56,13 +44,7 @@
 
             <footer class="block__footer">
                 {% if value.caption %}
-                    {% if value.link.external_link or value.link.internal_link %}
-                        {% include_block value.link %}
-                    {% endif %}
                     <h3 class="h h--3 h--caps">{{ value.caption }}</h3>
-                    {% if value.link.external_link or value.link.internal_link %}
-                        </a>
-                    {% endif %}
                 {% endif %}
                 {% if value.description %}
                     <p>{{ value.description }}</p>
@@ -72,6 +54,12 @@
             {% if value.align == "full_page" or value.align is None %}
                 </div>
             {% endif %}
+        {% endif %}
+    {% endblock %}
+
+    {% block close_block_link %}
+        {% if value.get_link %}
+            </a>
         {% endif %}
     {% endblock %}
 

@@ -3,7 +3,7 @@
 
 
 {% block block_classes %}{% spaceless %}
-    {% if value.background_color %}bg--{{ value.background_color }} block--with-bg{% endif %}
+    {% if value.background_color %}bg--{{ value.background_color }} align-full_page{% endif %}
     {% if value.font_color %}color--{{ value.font_color }}{% endif %}
     clearfix
 {% endspaceless %}{% endblock %}
@@ -16,9 +16,9 @@
                 {% if value.columns == "4" %}
                     <div class="col-xxs-12 col-xs-6 col-sm-3 col-md-3 col-lg-3">
                 {% elif value.columns == "3" %}
-                    <div class="col-xxs-12 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 {% else %}
-                    <div class="col-xxs-12 col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 {% endif %}
 
                 {% include_block item %}

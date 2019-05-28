@@ -73,6 +73,18 @@ class XrStructValue(StructValue):
             return "default"
         return align
 
+    def get_link(self):
+        link_block = self.get("link")
+        if link_block:
+            external_link = link_block.get("external_link")
+            if external_link:
+                return external_link
+
+            internal_link = link_block.get("internal_link")
+            if internal_link:
+                return internal_link
+        return ""
+
 
 class AlignmentMixin(blocks.StructBlock):
     align = blocks.ChoiceBlock(

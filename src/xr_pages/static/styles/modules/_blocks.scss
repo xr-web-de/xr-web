@@ -2,21 +2,22 @@
 //---------------
 .block {
     position: relative;
-    margin-top: 2rem;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
 
-    &.align-right {
-        float: right;
-        margin-left: 2rem;
-    }
-    &.align-left {
-        float: left;
-        margin-right: 2rem;
-    }
-    &.align-right,
-    &.align-left {
-        z-index: 500;
-        width: 346.66px;
+    @media screen and (min-width: $bp-sm) {
+        &.align-right {
+            float: right;
+            margin-left: 2rem;
+        }
+        &.align-left {
+            float: left;
+            margin-right: 2rem;
+        }
+        &.align-right,
+        &.align-left {
+            z-index: 500;
+            width: 346.66px;
+        }
     }
     &.align-center {
         width: 768px;
@@ -25,24 +26,16 @@
         margin-right: auto;
     }
     &.align-full_page {
-        margin-top: 0;
-        padding-bottom: 0;
-        .block__header {
-            margin-top: 2rem;
-        }
+        clear: both;
+        padding-top: 2rem;
+        margin-bottom: 2rem;
         .block__footer {
             padding-bottom: 1rem;
         }
     }
-    &.block--with-bg {
-        padding-top: 2em;
-        padding-bottom: 2em;
-        margin-top: 0;
+    &.grid-block {
+        margin-bottom: 0;
     }
-}
-
-.grid-block .block {
-    margin-top: 1rem;
 }
 
 .block__content,
@@ -51,13 +44,20 @@
     img {
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 0.5em;
     }
 }
 
 .block__footer {
+    padding: 0.5rem 0;
+    .h--caps {
+        margin-top: 0.25rem;
+        margin-bottom: 0;
+    }
     p {
-        padding-bottom: 0;
+        margin-bottom: 0.5rem;
+    }
+    p:last-child {
+        margin-bottom: 0;
     }
 }
 
@@ -106,8 +106,8 @@
     bottom: 0;
     right: 0;
     padding: 0 0.6rem 0.1rem;
-    color: #fff;
-    background: xrColor('black');
+    color: xrColor(white);
+    background: xrColor(black);
 }
 
 // Text Block
@@ -181,26 +181,15 @@
     margin-top: 1rem;
 }
 
-// full-link block
+// full block link
 .block__link {
     display: block;
     text-decoration: none;
     background: xrColor(light-grey);
 
-    .block__image-placeholder {
-        width: 100%;
-        padding-top: 56.25%;
-        background: xrColor(grey);
-    }
-    .block__header img {
-        margin-bottom: 0.75rem;
-    }
-
-    .block__content,
     .block__footer {
         padding-left: 1rem;
         padding-right: 1rem;
-        padding-bottom: 0.5rem;
     }
     &:hover,
     &:focus,
@@ -214,7 +203,8 @@
             transition: 0.5s filter;
             filter: saturate(4) hue-rotate(-45deg);
         }
-        .short-date {
+        .short-date,
+        .image-attribution {
             transition: 0.5s background, 0.5s color;
             background: xrColor(light-grey);
             color: xrColor(black);
@@ -255,5 +245,28 @@
         font-size: 2.2em;
         margin-top: -1em;
         left: -0.15em;
+    }
+}
+
+// image placeholder
+.image-placeholder {
+    width: 100%;
+    padding-top: 56.25%;
+    background: xrColor(grey);
+    position: relative;
+
+    &__text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.1;
+        font-size: 2.6rem;
+        @include fucxed;
     }
 }

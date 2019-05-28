@@ -9,6 +9,9 @@
 .img-responsive {
     max-width: 100%;
     height: auto;
+    @media screen and (max-width: $bp-sm) {
+        width: 100%;
+    }
 }
 
 .modal-open {

@@ -1,12 +1,18 @@
 {% extends "xr_pages/blocks/base.html" %}
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
+{% load xr_pages_tags %}
+
+
+{% block open_block_link %}
+    <a href="{% pageurl page %}" class="block__link">
+{% endblock %}
 
 
 {% block block_content %}
     {% with page=value.page.specific %}
-        {% if page.image %}
-            <a href="{% pageurl page %}">
+{#        <a href="{% pageurl page %}" class="link--block">#}
+            {% if page.image %}
                 {% if value.align == "full_page" %}
                     {% image page.image fill-1920x1080-c75 alt=page.title class="img-responsive" %}
                 {% elif value.align == "full_content" %}
@@ -16,8 +22,14 @@
                 {% else %} {# align in "left, right" #}
                     {% image page.image fill-512x288-c75 alt=page.title class="img-responsive" %}
                 {% endif %}
-            </a>
-        {% endif %}
+            {% else %}
+                <div class="image-placeholder bg--xr-light-blue color--xr-purple">
+                    <div class="image-placeholder__text">
+                        <span>{{ page.title }}</span>
+                    </div>
+                </div>
+            {% endif %}
+{#        </a>#}
     {% endwith %}
 
 {% endblock %}
@@ -29,31 +41,38 @@
         <div class="container">
     {% endif %}
 
-    <footer class="block__footer">
-        {% with page=value.page.specific %}
-            <a href="{% pageurl page %}">
-                <h3 class="h h--3 h--caps">
-                    {% if value.caption %}
-                        {{ value.caption }}
-                    {% else %}
-                        {{ page.title }}
-                    {% endif %}
-                </h3>
-            </a>
-            {% if page.description or value.description %}
-                <p>
-                    {% if value.description %}
-                        {{ value.description }}
-                    {% else %}
-                        {{ page.description }}
-                    {% endif %}
-                </p>
-            {% endif %}
-        {% endwith %}
-    </footer>
+    {% with page=value.page.specific %}
+        {% if page.image or value.caption or page.description or value.description %}
+            <footer class="block__footer">
+                {% if page.image or value.caption %}
+                    <h3 class="h h--3 h--caps">
+                        {% if value.caption %}
+                            {{ value.caption }}
+                        {% else %}
+                            {{ page.title }}
+                        {% endif %}
+                    </h3>
+                {% endif %}
+                {% if page.description or value.description %}
+                    <p>
+                        {% if value.description %}
+                            {{ value.description }}
+                        {% else %}
+                            {{ page.description }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </footer>
+        {% endif %}
+    {% endwith %}
 
     {% if value.align == "full_page" or value.align is None %}
         </div>
     {% endif %}
 
+{% endblock %}
+
+
+{% block close_block_link %}
+    </a>
 {% endblock %}

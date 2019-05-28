@@ -37,7 +37,7 @@ def get_local_groups(context):
 
 
 @register.inclusion_tag("xr_pages/templatetags/inline_svg_text.html")
-def inline_svg_text(text, font_size=30):
+def inline_svg_text(text, font_size=None):
     text = normalize_newlines(text)
 
     text_lines = text.split("\n")

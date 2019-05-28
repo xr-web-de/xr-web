@@ -31,6 +31,18 @@
     .color--#{$key} {
         color: $value;
     }
+
+    @each $cKey, $cValue in $colors {
+        a:hover,
+        a:focus,
+        a:active {
+            .bg--#{$key}.color--#{$cKey} {
+                background: $cValue;
+                color: $value;
+                transition: 0.5s background, 0.5s color;
+            }
+        }
+    }
 }
 
 // base layout
@@ -59,10 +71,7 @@ a {
 
 .page-title {
     margin-top: 1em;
-}
-
-.page-title + .block {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 // definition list

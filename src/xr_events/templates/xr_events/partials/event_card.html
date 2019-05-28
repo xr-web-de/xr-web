@@ -5,7 +5,7 @@
 
 <article class="block event-block">
     <a href="{% pageurl event %}" class="block__link">
-        <header class="block__header">
+        <div class="block__content">
             {% if event.start_date %}
                 <div class="short-date">
                     <span class="short-date__start">
@@ -23,10 +23,11 @@
             {% if event.get_image %}
                 {% image event.get_image fill-512x288-c75 alt=event.title class="img-responsive" %}
             {% else %}
-                <div class="block__image-placeholder"></div>
+                <div class="image-placeholder"></div>
             {% endif %}
-        </header>
-        <div class="block__content">
+        </div>
+
+        <div class="block__footer">
             <h3 class="h h--3 h--caps">{{ event.title }}</h3>
 
             <dl>
