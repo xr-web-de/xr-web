@@ -20,3 +20,11 @@
 .flatpickr-time {
     border-radius: 0;
 }
+
+.form-control.flatpickr-input {
+    &:disabled,
+    &[readonly] {
+        background-color: $input-bg;
+        opacity: 1;
+    }
+}

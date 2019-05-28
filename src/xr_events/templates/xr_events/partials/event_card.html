@@ -2,44 +2,61 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
+
 <article class="block event-block">
-    <div class="block--content">
-        {% if event.get_image %}
-            <a href="{% pageurl event %}">
-                {% image event.get_image fill-512x288-c75 alt=event.title class="img-responsive" %}
-            </a>
-        {% endif %}
-    </div>
-    <footer class="block--footer">
-        <h3 class="h h--3 h--caps"><a href="{% pageurl event %}">{{ event.title }}</a></h3>
-
-        <dl>
-            <dt>{% trans "Wer?" %}</dt>
-            <dd>
-                {% if event.organiser.is_regional_group %}
-                    {{ event.organiser.xr_name }}
-                {% else %}
-                    <a href="{{ event.organiser.url }}">
-                        {{ event.organiser.xr_name }}
-                    </a>
-                {% endif %}
-            </dd>
-
+    <a href="{% pageurl event %}" class="block__link">
+        <header class="block__header">
             {% if event.start_date %}
-                <dt>{% trans "Wann?" %}</dt>
+                <div class="short-date">
+                    <span class="short-date__start">
+                        <span class="short-date__day">{{ event.start_date|date:"d" }}</span>
+                        <span class="short-date__month">{{ event.start_date|date:"M" }}</span>
+                    </span>
+                    {% if event.start_date != event.end_date %}
+                        <span class="short-date__end">
+                            <span class="short-date__day">{{ event.end_date|date:"d" }}</span>
+                            <span class="short-date__month">{{ event.end_date|date:"M" }}</span>
+                        </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if event.get_image %}
+                {% image event.get_image fill-512x288-c75 alt=event.title class="img-responsive" %}
+            {% else %}
+                <div class="block__image-placeholder"></div>
+            {% endif %}
+        </header>
+        <div class="block__content">
+            <h3 class="h h--3 h--caps">{{ event.title }}</h3>
+
+            <dl>
+                <dt>{% trans "Wer?" %}</dt>
                 <dd>
-                {% for date in event.dates.all %}
-                    {{ date.start|date:"SHORT_DATE_FORMAT" }}{% if date.label %}: {{ date.label }}{% endif %}
-                    {% if not forloop.last %}<br>{% endif %}
-                {% endfor %}
+                    {% if event.organiser.is_regional_group %}
+                        {{ event.organiser.xr_name }}
+                    {% else %}
+{#                        <a href="{{ event.organiser.url }}">#}
+                            {{ event.organiser.xr_name }}
+{#                        </a>#}
+                    {% endif %}
                 </dd>
-            {% endif %}
 
-            {% if event.location %}
-                <dt>{% trans "Wo?" %}</dt>
-                <dd>{{ event.location }}</dd>
-            {% endif %}
-        </dl>
+                {% if event.start_date %}
+                    <dt>{% trans "Wann?" %}</dt>
+                    <dd>
+                        {% for date in event.dates.all %}
+                            {{ date.start|date:"SHORT_DATE_FORMAT" }}{% if date.label %}: {{ date.label }}{% endif %}
+                            {% if not forloop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </dd>
+                {% endif %}
 
-    </footer>
+                {% if event.location %}
+                    <dt>{% trans "Wo?" %}</dt>
+                    <dd>{{ event.location }}</dd>
+                {% endif %}
+            </dl>
+
+        </div>
+    </a>
 </article>

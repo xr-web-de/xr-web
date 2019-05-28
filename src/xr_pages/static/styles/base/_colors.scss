@@ -19,6 +19,6 @@ $colors: (
     @return map_get($colors, xr-#{$key});
 }
 
-$primary-color: map-get($colors, xr-green);
+$primary-color: xrColor(green);
 $error-color: map_get($colors, xr-red);
 $body-color: #222;

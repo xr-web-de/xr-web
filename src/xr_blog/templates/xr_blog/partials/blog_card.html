@@ -4,7 +4,7 @@
 
 
 <article class="block blog-entry-block">
-    <header class="block--heading">
+    <header class="block__header">
         <a href="{% pageurl entry %}">
 
         <h2 class="h h--2 h--caps">
@@ -14,7 +14,7 @@
         </a>
     </header>
 
-    <div class="block--content">
+    <div class="block__content">
         {% if entry.image %}
             <a href="{% pageurl entry %}">
                 {% image entry.image fill-512x288-c75 alt=blog.title class="img-responsive" %}
@@ -23,7 +23,7 @@
     </div>
 
 
-    <footer class="block--footer">
+    <footer class="block__footer">
         <p class="blog-entry-block--author">{% trans "from" %} {{ entry.author }}</p>
         <p class="blog-entry-block--date">{{ entry.date|date:"SHORT_DATE_FORMAT" }}</p>
         {% if entry.description %}

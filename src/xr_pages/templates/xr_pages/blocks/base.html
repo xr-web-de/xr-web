@@ -11,7 +11,7 @@
                 <div class="container">
             {% endif %}
 
-            <header class="block--heading">
+            <header class="block__header">
                 {% if value.link.external_link or value.link.internal_link %}
                     {% include_block value.link %}
                 {% endif %}
@@ -32,7 +32,7 @@
     {% endblock %}
 
     {% block block_body %}
-        <div class="block--content {% block block_content_classes %}{% endblock %}">
+        <div class="block__content {% block block_content_classes %}{% endblock %}">
 
             {% if value.link.external_link or value.link.internal_link %}
                 {% include_block value.link %}
@@ -54,7 +54,7 @@
                 <div class="container">
             {% endif %}
 
-            <footer class="block--footer">
+            <footer class="block__footer">
                 {% if value.caption %}
                     {% if value.link.external_link or value.link.internal_link %}
                         {% include_block value.link %}

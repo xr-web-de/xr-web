@@ -27,10 +27,10 @@
     &.align-full_page {
         margin-top: 0;
         padding-bottom: 0;
-        .block--heading {
+        .block__header {
             margin-top: 2rem;
         }
-        .block--footer {
+        .block__footer {
             padding-bottom: 1rem;
         }
     }
@@ -45,16 +45,17 @@
     margin-top: 1rem;
 }
 
-.block--content {
+.block__content,
+.block__header {
     position: relative;
     img {
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 0.5em;
     }
 }
 
-.block--footer {
-    padding-top: 0.5em;
+.block__footer {
     p {
         padding-bottom: 0;
     }
@@ -75,7 +76,7 @@
 }
 
 // Slogan Block
-.slogan-block .block--content {
+.slogan-block .block__content {
     width: 100%;
     padding-top: 56.25%;
 }
@@ -118,6 +119,9 @@
         margin-bottom: 0.5rem;
         line-height: 1.1;
         @include fucxed;
+        &:first-child {
+            margin-top: 0;
+        }
     }
     h2 {
         font-size: 2.6rem;
@@ -175,4 +179,81 @@
 .title-container + .container .block,
 .title-container + .block {
     margin-top: 1rem;
+}
+
+// full-link block
+.block__link {
+    display: block;
+    text-decoration: none;
+    background: xrColor(light-grey);
+
+    .block__image-placeholder {
+        width: 100%;
+        padding-top: 56.25%;
+        background: xrColor(grey);
+    }
+    .block__header img {
+        margin-bottom: 0.75rem;
+    }
+
+    .block__content,
+    .block__footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+        transition: 0.5s background, 0.5s color;
+        background: xrColor(black);
+        color: xrColor(white);
+        outline: none;
+
+        img {
+            transition: 0.5s filter;
+            filter: saturate(4) hue-rotate(-45deg);
+        }
+        .short-date {
+            transition: 0.5s background, 0.5s color;
+            background: xrColor(light-grey);
+            color: xrColor(black);
+        }
+    }
+}
+
+.short-date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 10;
+
+    background: xrColor(black);
+    color: xrColor(white);
+    line-height: 1.1;
+    @include fucxed;
+
+    &__start,
+    &__end {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75em 1em 0.5em;
+    }
+    &__day {
+        font-size: 2.2em;
+    }
+    &__month {
+        font-size: 1.2em;
+    }
+    &__end:before {
+        content: '-';
+        position: absolute;
+        top: 1.65em;
+        font-size: 2.2em;
+        margin-top: -1em;
+        left: -0.15em;
+    }
 }

@@ -24,7 +24,7 @@
                         <div class="letter-list__entry local-group local-group--{{ local_group.status }}">
                             <div class="local-group__title">
                                 {% if local_group.url %}
-                                    <a href="{{ local_group.url }}">
+                                    <a href="{{ local_group.url }}" id="local_group_link_{{ local_group.pk }}">
                                 {% endif %}
                                     <h3 class="h h--3 h--caps">
                                         {{ local_group.name }}
