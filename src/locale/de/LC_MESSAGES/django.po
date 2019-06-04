@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-14 23:47+0200\n"
+"POT-Creation-Date: 2019-06-02 03:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "The content is only visible on the detail page."
 msgstr "Der Inhalt ist nur auf der Detail-Ansicht sichtbar."
 
-#: xr_blog/models.py:30 xr_pages/models.py:46
+#: xr_blog/models.py:30 xr_pages/models.py:47
 msgid "Title"
 msgstr ""
 
@@ -64,7 +64,7 @@ msgstr ""
 msgid "from"
 msgstr ""
 
-#: xr_events/models.py:45 xr_pages/models.py:187
+#: xr_events/models.py:45 xr_pages/models.py:186
 msgid ""
 "Some city or address, like you would enter in GMaps or OpenStreetMap, e.g. "
 "\"Berlin\", \"Somestreet 84, 12345 Samplecity\"."
@@ -132,12 +132,12 @@ msgid "Event Group Pages"
 msgstr "Veranstaltungs Gruppen Seiten"
 
 #: xr_events/templates/xr_events/pages/event_detail.html:19
-#: xr_events/templates/xr_events/partials/event_card.html:29
+#: xr_events/templates/xr_events/partials/event_card.html:46
 msgid "Wann?"
 msgstr ""
 
 #: xr_events/templates/xr_events/pages/event_detail.html:26
-#: xr_events/templates/xr_events/partials/event_card.html:39
+#: xr_events/templates/xr_events/partials/event_card.html:56
 msgid "Wo?"
 msgstr ""
 
@@ -159,7 +159,7 @@ msgstr ""
 msgid "von"
 msgstr ""
 
-#: xr_events/templates/xr_events/partials/event_card.html:17
+#: xr_events/templates/xr_events/partials/event_card.html:34
 msgid "Wer?"
 msgstr ""
 
@@ -279,8 +279,8 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
-#: xr_pages/blocks.py:58 xr_web/block_utils.py:81 xr_web/block_utils.py:122
-#: xr_web/block_utils.py:128
+#: xr_pages/blocks.py:58 xr_web/block_utils.py:93 xr_web/block_utils.py:134
+#: xr_web/block_utils.py:140
 msgid "Choose the alignment of the block."
 msgstr ""
 
@@ -342,7 +342,7 @@ msgstr ""
 msgid "4"
 msgstr ""
 
-#: xr_pages/models.py:25
+#: xr_pages/models.py:26
 msgid ""
 "An image that can be used not only for the detail view, but also for lists, "
 "teasers or social media."
@@ -350,7 +350,7 @@ msgstr ""
 "Ein Bild, nicht nur für die Detail-Ansicht, sondern auch für Social Media, "
 "Teaser und Listen."
 
-#: xr_pages/models.py:34
+#: xr_pages/models.py:35
 msgid ""
 "A description not only for the detail view, but also for lists, teasers or "
 "social media."
@@ -358,57 +358,58 @@ msgstr ""
 "Ein Beschreibung, nicht nur für die Detail-Ansicht, sondern auch für Social "
 "Media, Teaser und Listen."
 
-#: xr_pages/models.py:70
+#: xr_pages/models.py:71
 #, fuzzy
 #| msgid "Content Page"
 msgid "Home Page"
 msgstr "Inhalts-Seite"
 
-#: xr_pages/models.py:71
+#: xr_pages/models.py:72
 #, fuzzy
 #| msgid "Content Pages"
 msgid "Home Pages"
 msgstr "Inhalts-Seiten"
 
-#: xr_pages/models.py:90
+#: xr_pages/models.py:91
 msgid "Content Page"
 msgstr "Inhalts-Seite"
 
-#: xr_pages/models.py:91
+#: xr_pages/models.py:92
 msgid "Content Pages"
 msgstr "Inhalts-Seiten"
 
-#: xr_pages/models.py:134
+#: xr_pages/models.py:135
 msgid "site"
 msgstr ""
 
-#: xr_pages/models.py:146
+#: xr_pages/models.py:147
 msgid ""
 "The unique name for the local group. Used as label for links referring to "
 "this page. Enter a name without leading \"XR \"."
 msgstr ""
 
-#: xr_pages/models.py:158
+#: xr_pages/models.py:159
 msgid "active"
 msgstr "aktiv"
 
-#: xr_pages/models.py:159
+#: xr_pages/models.py:160
 msgid "in foundation"
 msgstr "im Aufbau"
 
-#: xr_pages/models.py:160
+#: xr_pages/models.py:161
+#: xr_pages/templates/xr_pages/pages/local_group_list.html:58
 msgid "looking for people"
 msgstr "Rebell*innen gesucht"
 
-#: xr_pages/models.py:161
+#: xr_pages/models.py:162
 msgid "idle"
 msgstr "inaktiv"
 
-#: xr_pages/models.py:166
+#: xr_pages/models.py:167
 msgid "More information about the area the group is active in."
 msgstr ""
 
-#: xr_pages/models.py:169 xr_pages/models.py:203
+#: xr_pages/models.py:170 xr_pages/models.py:203
 msgid "Status"
 msgstr "Status"
 
@@ -416,63 +417,63 @@ msgstr "Status"
 msgid "Founding date"
 msgstr "Gründungsdatum"
 
-#: xr_pages/models.py:191
+#: xr_pages/models.py:190
 msgid "Facebook page URL"
 msgstr ""
 
-#: xr_pages/models.py:193
+#: xr_pages/models.py:192
 msgid "Instagram page URL"
 msgstr ""
 
-#: xr_pages/models.py:195
+#: xr_pages/models.py:194
 msgid "Twitter page URL"
 msgstr ""
 
-#: xr_pages/models.py:197
+#: xr_pages/models.py:196
 msgid "YouTube channel or user account URL"
 msgstr ""
 
-#: xr_pages/models.py:207
+#: xr_pages/models.py:212
 msgid "Contact"
 msgstr "Kontakt"
 
-#: xr_pages/models.py:210
+#: xr_pages/models.py:215
 msgid "Location"
 msgstr ""
 
-#: xr_pages/models.py:219
+#: xr_pages/models.py:224
 msgid "Social media"
 msgstr ""
 
-#: xr_pages/models.py:226
-msgid "Group"
-msgstr "Gruppe"
+#: xr_pages/models.py:231
+msgid "Local group"
+msgstr "Ortsgruppe"
 
-#: xr_pages/models.py:227 xr_pages/wagtail_hooks.py:15
-msgid "Groups"
-msgstr "Gruppen"
+#: xr_pages/models.py:232 xr_pages/wagtail_hooks.py:43
+msgid "Local groups"
+msgstr "Ortsgruppen"
 
-#: xr_pages/models.py:336
+#: xr_pages/models.py:363
 msgid "Local Group List Page"
 msgstr "Ortsgruppen Übersicht Seite"
 
-#: xr_pages/models.py:337
+#: xr_pages/models.py:364
 msgid "Local Group List Pages"
 msgstr "Ortsgruppen Übersicht Seiten"
 
-#: xr_pages/models.py:359
+#: xr_pages/models.py:386
 msgid "Local Group Page"
 msgstr "Ortsgruppen Seite"
 
-#: xr_pages/models.py:360
+#: xr_pages/models.py:387
 msgid "Local Group Pages"
 msgstr "Ortsgruppen Seiten"
 
-#: xr_pages/models.py:401
+#: xr_pages/models.py:428
 msgid "Local Group Content Page"
 msgstr "Ortsgruppen Inhalts-Seite"
 
-#: xr_pages/models.py:402
+#: xr_pages/models.py:429
 msgid "Local Group Content Pages"
 msgstr "Ortsgruppen Inhalts-Seiten"
 
@@ -503,13 +504,11 @@ msgstr ""
 msgid "Disclaimer"
 msgstr ""
 
-#: xr_pages/templates/xr_pages/pages/local_group_list.html:40
-msgid "Start"
-msgstr ""
-
-#: xr_pages/templates/xr_pages/pages/local_group_list.html:46
-msgid "Hier werden noch Leute gesucht!"
-msgstr ""
+#: xr_pages/templates/xr_pages/pages/local_group_list.html:50
+#, fuzzy
+#| msgid "Content Page"
+msgid "Homepage"
+msgstr "Inhalts-Seite"
 
 #: xr_web/block_utils.py:21
 msgid "XR green"
@@ -567,14 +566,14 @@ msgstr ""
 msgid "Full page"
 msgstr ""
 
-#: xr_web/block_utils.py:135
+#: xr_web/block_utils.py:147
 msgid "An optional heading, which is displayed above the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:143
+#: xr_web/block_utils.py:155
 msgid "An optional caption, which is displayed below the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:150
+#: xr_web/block_utils.py:162
 msgid "An optional description, which is displayed below the block's caption."
 msgstr ""

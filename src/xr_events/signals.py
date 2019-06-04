@@ -2,6 +2,11 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from xr_events.models import EventGroupPage
+from xr_events.services import (
+    EVENT_AUTH_GROUP_TYPES,
+    MODERATORS_EVENT_PERMISSIONS,
+    EDITORS_EVENT_PERMISSIONS,
+)
 from xr_pages.models import LocalGroup
 from xr_pages.services import (
     update_auth_group_names,
@@ -12,18 +17,8 @@ from xr_pages.services import (
     EDITORS_COLLECTION_PERMISSIONS,
     set_auth_groups_page_permissions,
     delete_auth_groups,
-    MODERATORS_PAGE_PERMISSIONS,
-    EDITORS_PAGE_PERMISSIONS,
 )
 from xr_pages.signals import local_group_name_change
-
-
-EVENT_MODERATORS_SUFFIX = "Event Moderators"
-EVENT_EDITORS_SUFFIX = "Event Editors"
-EVENT_AUTH_GROUP_TYPES = [EVENT_MODERATORS_SUFFIX, EVENT_EDITORS_SUFFIX]
-
-MODERATORS_EVENT_PERMISSIONS = MODERATORS_PAGE_PERMISSIONS
-EDITORS_EVENT_PERMISSIONS = EDITORS_PAGE_PERMISSIONS
 
 
 # LocalGroup

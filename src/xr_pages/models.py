@@ -229,8 +229,8 @@ class LocalGroup(models.Model):
     objects = LocalGroupManager()
 
     class Meta:
-        verbose_name = _("Group")
-        verbose_name_plural = _("Groups")
+        verbose_name = _("Local group")
+        verbose_name_plural = _("Local groups")
 
     @property
     def xr_name(self):

@@ -1,4 +1,15 @@
-from xr_pages.services import get_home_page
+from xr_pages.services import (
+    get_home_page,
+    MODERATORS_PAGE_PERMISSIONS,
+    EDITORS_PAGE_PERMISSIONS,
+)
+
+EVENT_MODERATORS_SUFFIX = "Event Moderators"
+EVENT_EDITORS_SUFFIX = "Event Editors"
+EVENT_AUTH_GROUP_TYPES = [EVENT_MODERATORS_SUFFIX, EVENT_EDITORS_SUFFIX]
+
+MODERATORS_EVENT_PERMISSIONS = MODERATORS_PAGE_PERMISSIONS
+EDITORS_EVENT_PERMISSIONS = EDITORS_PAGE_PERMISSIONS
 
 
 def get_event_list_page(request=None):

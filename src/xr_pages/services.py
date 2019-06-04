@@ -74,8 +74,12 @@ def get_auth_groups(local_group=None, auth_group_types=None):
     auth_groups = []
     for group_type in auth_group_types:
         group_name = get_auth_group_name(local_group.name, group_type)
-        group = Group.objects.get(name=group_name)
-        auth_groups.append(group)
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            pass
+        else:
+            auth_groups.append(group)
     return auth_groups
 
 
