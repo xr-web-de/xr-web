@@ -151,6 +151,11 @@ class LocalGroup(models.Model):
     )
     # old_name field helps with identifying name changes
     old_name = models.CharField(max_length=50, default="", editable=False)
+    area_description = models.TextField(
+        null=True,
+        blank=True,
+        help_text=_("More information about the area the group is active in."),
+    )
     STATUS_ACTIVE = "active"
     STATUS_IN_FOUNDATION = "in_foundation"
     STATUS_LOOKING_FOR_PEOPLE = "looking_for_people"
@@ -161,11 +166,7 @@ class LocalGroup(models.Model):
         (STATUS_LOOKING_FOR_PEOPLE, _("looking for people")),
         (STATUS_IDLE, _("idle")),
     )
-    area_description = models.TextField(
-        null=True,
-        blank=True,
-        help_text=_("More information about the area the group is active in."),
-    )
+
     status = models.CharField(
         _("Status"), max_length=50, default=STATUS_ACTIVE, choices=STATUS_CHOICES
     )
