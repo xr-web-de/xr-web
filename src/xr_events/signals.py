@@ -17,6 +17,7 @@ from xr_pages.services import (
     EDITORS_COLLECTION_PERMISSIONS,
     set_auth_groups_page_permissions,
     delete_auth_groups,
+    set_auth_groups_wagtailadmin_access,
 )
 from xr_pages.signals import local_group_name_change
 
@@ -48,6 +49,7 @@ def create_event_group_page_auth_groups(sender, instance, created=False, **kwarg
         auth_groups = create_auth_groups(
             local_group=instance.group, auth_group_types=EVENT_AUTH_GROUP_TYPES
         )
+        set_auth_groups_wagtailadmin_access(auth_groups)
         set_auth_groups_collection_permissions(
             auth_groups,
             collection_name=COMMON_COLLECTION_NAME,

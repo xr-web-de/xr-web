@@ -83,6 +83,18 @@ def get_auth_groups(local_group=None, auth_group_types=None):
     return auth_groups
 
 
+def set_auth_groups_wagtailadmin_access(auth_groups):
+    admin_content_type = ContentType.objects.get(
+        model="admin", app_label="wagtailadmin"
+    )
+    access_wagtailadmin_permission = Permission.objects.get(
+        content_type=admin_content_type, codename="access_admin"
+    )
+    for auth_group in auth_groups:
+        auth_group.permissions.add(access_wagtailadmin_permission)
+    return auth_groups
+
+
 def set_auth_groups_page_permissions(
     auth_groups, page, moderators_permissions=None, editors_permissions=None
 ):
