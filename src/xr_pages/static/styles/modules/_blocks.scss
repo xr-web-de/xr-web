@@ -2,7 +2,7 @@
 //---------------
 .block {
     position: relative;
-    padding-bottom: 2rem;
+    margin-bottom: $vertical-block-margin;
 
     @media screen and (min-width: $bp-sm) {
         &.align-right {
@@ -17,6 +17,15 @@
         &.align-left {
             z-index: 500;
             width: 346.66px;
+            margin-bottom: 2rem;
+            > .block__footer {
+                padding-top: 0;
+                padding-bottom: 0;
+                .h {
+                    margin-top: 0.75rem;
+                    margin-bottom: 0;
+                }
+            }
         }
     }
     &.align-center {
@@ -28,14 +37,23 @@
     &.align-full_page {
         clear: both;
         padding-top: 2rem;
-        margin-bottom: 2rem;
+        padding-bottom: 0;
         .block__footer {
-            padding-bottom: 1rem;
+            margin-bottom: 1rem;
         }
     }
     &.grid-block {
-        margin-bottom: 0;
+        padding-bottom: 0;
+        .block {
+            margin-bottom: 2rem;
+        }
     }
+}
+
+#main .container:first-child .block.align-full_content,
+#main .block.align-full_page:first-child {
+    margin-top: -$vertical-block-margin;
+    padding-top: 0;
 }
 
 .block__content,
@@ -49,7 +67,7 @@
 
 .block__footer {
     padding: 0.5rem 0;
-    .h--caps {
+    .h {
         margin-top: 0.25rem;
         margin-bottom: 0;
     }
@@ -112,6 +130,9 @@
 
 // Text Block
 .text-block {
+    .rich-text *:last-child {
+        margin-bottom: 0;
+    }
     // headings
     h2,
     h3 {
@@ -170,7 +191,7 @@
 
 // Title Block
 .title-block {
-    padding-bottom: 0;
+    margin-bottom: 0;
     .align-center .h {
         text-align: center;
         margin: 0;
