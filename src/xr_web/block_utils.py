@@ -43,7 +43,7 @@ COLOR_CHOICES = (
     (COLOR_XR_DARK_GREY, _("Dark grey")),
 )
 
-BG_COLOR_CHOICES = (COLOR_XR_TRANSPARENT, _("None / Transparent")) + COLOR_CHOICES
+BG_COLOR_CHOICES = ((COLOR_XR_TRANSPARENT, _("None / Transparent")),) + COLOR_CHOICES
 
 # Alignment choices
 ALIGN_FULL_CONTENT = "full_content"

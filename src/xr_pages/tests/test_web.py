@@ -5,7 +5,7 @@ from django_dynamic_fixture import G
 from django_webtest import WebTest
 from wagtail.contrib.modeladmin.helpers import AdminURLHelper
 
-from xr_pages.models import LocalGroup
+from xr_pages.models import LocalGroup, HomePage
 from xr_pages.services import get_auth_group_name, PAGE_MODERATORS_SUFFIX
 from xr_pages.tests.test_pages import PagesBaseTest
 
@@ -28,6 +28,53 @@ class AdminWebTest(WebTest):
         response = self.app.get(reverse("wagtailadmin_home"), user=self.user)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_wagtail_admin_page_edit_responds(self):
+        edit_url = reverse(
+            "wagtailadmin_pages:edit", args=[HomePage.objects.first().pk]
+        )
+        edit_page = self.app.get(edit_url, user=self.user)
+
+        self.assertEqual(edit_page.status_code, 200)
+        self.assertTrue("page-edit-form" in edit_page.forms)
+
+    def test_wagtail_admin_page_edit_change_and_save_draft(self):
+        home_page = HomePage.objects.first()
+        edit_url = reverse("wagtailadmin_pages:edit", args=[home_page.pk])
+        edit_page = self.app.get(edit_url, user=self.user)
+        form = edit_page.forms["page-edit-form"]
+
+        form["title"] = "crypticTizhasdnme846"
+
+        response = form.submit()
+        edit_page = response.follow()
+
+        home_page.refresh_from_db()
+
+        self.assertRedirects(response, edit_url)
+        self.assertEqual(edit_page.status_code, 200)
+        self.assertNotContains(edit_page, "error")
+        self.assertNotEqual(home_page.title, "crypticTizhasdnme846")
+        self.assertEqual(home_page.draft_title, "crypticTizhasdnme846")
+
+    def test_wagtail_admin_page_edit_change_and_publish(self):
+        home_page = HomePage.objects.first()
+        edit_url = reverse("wagtailadmin_pages:edit", args=[home_page.pk])
+        explorer_url = reverse("wagtailadmin_explore", args=[home_page.pk])
+        edit_page = self.app.get(edit_url, user=self.user)
+        form = edit_page.forms["page-edit-form"]
+
+        form["title"] = "crypticTizhasdnme846"
+        response = form.submit("action-publish")
+
+        self.assertRedirects(response.follow(), explorer_url)
+        explorer_page = response.follow().follow()
+
+        home_page.refresh_from_db()
+
+        self.assertEqual(explorer_page.status_code, 200)
+        self.assertNotContains(edit_page, "error")
+        self.assertEqual(home_page.title, "crypticTizhasdnme846")
 
 
 class PagesWebTest(PagesBaseTest, WebTest):
