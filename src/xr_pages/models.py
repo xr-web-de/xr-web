@@ -423,7 +423,7 @@ class LocalGroupSubPage(XrPage):
 
     content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 
-    parent_page_types = ["LocalGroupPage"]
+    parent_page_types = ["LocalGroupPage", "LocalGroupSubPage"]
 
     class Meta:
         verbose_name = _("Local Group Content Page")

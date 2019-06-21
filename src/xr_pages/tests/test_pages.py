@@ -253,7 +253,8 @@ class PagesPageTreeTest(PagesBaseTest):
             self.assertCanNotCreateAt(LocalGroupPage, page_class)
 
     def test_can_create_pages_under_local_group_sub_page(self):
-        for page_class in PAGES_PAGE_CLASSES:
+        self.assertCanCreateAt(LocalGroupPage, LocalGroupSubPage)
+        for page_class in PAGES_PAGE_CLASSES - {LocalGroupSubPage}:
             self.assertCanNotCreateAt(LocalGroupSubPage, page_class)
 
 
@@ -452,7 +453,7 @@ class PagesSignalsTest(PagesBaseTest):
     def test_local_group_create_doesnt_create_auth_groups(self):
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
-        special_group = self._create_local_group(name=self.special_group_name)
+        self._create_local_group(name=self.special_group_name)
 
         self.assertAuthGroupsNotExists(self.special_group_name, PAGE_AUTH_GROUP_TYPES)
 
