@@ -45,6 +45,9 @@ env/
 # PyCharm
 .idea
 
+# Visual Studio Code
+.vscode/
+
 # Cache
 __pycache__/
 *.sass-cache*
