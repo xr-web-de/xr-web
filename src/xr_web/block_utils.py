@@ -98,6 +98,12 @@ class XrStructValue(StructValue):
                 return internal_link
         return ""
 
+    def background_color(self):
+        background_color = self.get("background_color")
+        if not background_color:
+            return "xr-transparent"
+        return background_color
+
 
 class AlignmentMixin(blocks.StructBlock):
     align = blocks.ChoiceBlock(

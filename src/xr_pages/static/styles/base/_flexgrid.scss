@@ -19,6 +19,35 @@ $flexboxgrid-breakpoints: xs $bp-xs 100%,
 
 $flexboxgrid-max-width: 1200px !default;
 
+$flexboxgrid-vertical-gutter-width: 2em;
+
+$name: xxs;
+
+.grid {
+    margin-top: -$flexboxgrid-vertical-gutter-width;
+    .col-#{$name} {
+        margin-top: $flexboxgrid-vertical-gutter-width;
+    }
+    @for $i from 1 through $flexboxgrid-grid-columns {
+        .col-#{$name}-#{$i} {
+            margin-top: $flexboxgrid-vertical-gutter-width;
+        }
+    }
+
+    @each $breakpoint in $flexboxgrid-breakpoints {
+        $name: nth($breakpoint, 1);
+
+        .col-#{$name} {
+            margin-top: $flexboxgrid-vertical-gutter-width;
+        }
+        @for $i from 1 through $flexboxgrid-grid-columns {
+            .col-#{$name}-#{$i} {
+                margin-top: $flexboxgrid-vertical-gutter-width;
+            }
+        }
+    }
+}
+
 //
 // -- Stop editing -- //
 //

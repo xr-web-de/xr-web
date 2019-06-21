@@ -4,6 +4,9 @@
 {% load xr_pages_tags %}
 
 
+{% block block_content_classes %}{% if value.background_color %}bg--{{ value.background_color }}{% endif %}{% endblock %}
+
+
 {% block open_block_link %}
     <a href="{% pageurl page %}" class="block__link">
 {% endblock %}
