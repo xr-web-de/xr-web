@@ -1,7 +1,21 @@
 //@import "typecast_scale"; // is currently broken in firefox
 
+html,
 body {
-    font-family: 'Crimson Text', serif;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+}
+
+#main {
+    @media screen and (min-width: $bp-sm) {
+        font-size: 1.1rem;
+    }
+    @media screen and (min-width: $bp-md) {
+        font-size: 1.2rem;
+    }
+    @media screen and (min-width: $bp-lg) {
+        font-size: 1.3rem;
+    }
 }
 
 p {
@@ -25,15 +39,15 @@ h6 {
 
 .h {
     &--1 {
-        font-size: 3.6rem;
+        font-size: 3.6em;
     }
 
     &--2 {
-        font-size: 2.6rem;
+        font-size: 2.6em;
     }
 
     &--3 {
-        font-size: 1.6rem;
+        font-size: 1.6em;
     }
     &--caps {
         @include fucxed;

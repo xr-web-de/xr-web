@@ -1,5 +1,5 @@
 html {
-  height: 100%;
+    height: 100%;
 }
 
 body {
@@ -8,35 +8,33 @@ body {
 }
 
 .page-wrap {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
-  > main {
-    flex: 1 1 auto;
-  }
+    > main {
+        flex: 1 1 auto;
+    }
 }
 
 .main-hero {
-
 }
 
 .main-funnel {
-  margin-bottom: 1.5rem;
+    margin-bottom: 1.5em;
 
-  &__headline {
-    text-align: center;
-  }
-  &__form{
-    
-  }
+    &__headline {
+        text-align: center;
+    }
+    &__form {
+    }
 }
 
 .content-section {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+    padding-top: 2em;
+    padding-bottom: 2em;
 }
 
 .linkblock-with-image {
-  margin-bottom: 1.5rem;
+    margin-bottom: 1.5em;
 }

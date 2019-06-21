@@ -1,0 +1,38 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+
+<ul class="navbar-nav primary-nav__menu">
+
+    {% with local_group_page=page.group.active_localgrouppage local_group=page.group event_group_page=page.group.active_eventgrouppage %}
+
+        {% if local_group_page %}
+            <li class="primary-nav__parent-item active{% if page == local_group_page %}{% endif %}">
+                <a href="{% pageurl local_group_page %}">{{ local_group.name }}</a>
+            </li>
+
+            {% if event_group_page %}
+                <li class="primary-nav__item {% if page == event_group_page or page.is_event_page %}active{% endif %}">
+                    <a href="{% pageurl event_group_page %}">{% trans "Veranstaltungen" %}</a>
+                </li>
+            {% endif %}
+
+            {% children_menu local_group_page template="xr_pages/menus/main_menu_items.html" apply_active_classes=True as local_group_menu %}
+
+            {% if local_group_menu.strip  %}
+                {{ local_group_menu }}
+            {% endif %}
+
+        {% elif event_group_page %}
+            <li class="primary-nav__parent-item active{% if page == local_group_page %}{% endif %}">
+                <a href=".">{{ local_group.name }}</a>
+            </li>
+
+            <li class="primary-nav__item {% if page == event_group_page or page.is_event_page %}active{% endif %}">
+                <a href="{% pageurl event_group_page %}">{% trans "Veranstaltungen" %}</a>
+            </li>
+        {% endif %}
+
+    {% endwith %}
+
+</ul>

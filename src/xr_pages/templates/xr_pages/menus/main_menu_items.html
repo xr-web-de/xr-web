@@ -1,0 +1,21 @@
+{% load menu_tags %}
+
+
+{% for item in menu_items %}
+
+    <li class="{{ item.active_class }} primary-nav__item ">
+        <a href="{{ item.href }}" id="menu_item_{{ item.pk }}" >
+            {{ item.text }}
+
+        </a>
+
+        {% if item.active_class %}
+            {% children_menu item template="xr_pages/menus/secondary_nav_menu.html" apply_active_classes=True as local_group_sub_menu %}
+
+            {% if local_group_sub_menu.strip %}
+                {{ local_group_sub_menu }}
+            {% endif %}
+        {% endif %}
+
+    </li>
+{% endfor %}

@@ -69,7 +69,7 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
 
     svg_template = Template(
         """
-        <i class="svg-container {{ css_classes }}"
+        <i class="svg-container svg-container__{{ name }} {{ css_classes }}"
             style="width:{{ size }}px; height:{{ size }}px"
             {% if aria_label %}
                 aria-label="{{ aria_label }}"
@@ -82,6 +82,7 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
     with open(icon_path) as svg_file:
         context = Context(
             {
+                "name": icon_name,
                 "svg": mark_safe(svg_file.read()),
                 "size": size,
                 "css_classes": css_classes,

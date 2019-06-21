@@ -25,7 +25,7 @@
         margin-bottom: 0.5rem;
     }
 
-    @media screen and (max-width: $bp-sm) {
+    @media screen and (max-width: $bp-sm-max) {
         &__entry {
             flex-direction: column;
             margin-bottom: 1.5rem;
@@ -52,7 +52,7 @@
         margin-top: -0.25rem;
     }
 
-    @media screen and (max-width: $mobile-breakpoint) {
+    @media screen and (max-width: $mobile-breakpoint-max) {
         &__title .h {
             margin-bottom: 0;
         }

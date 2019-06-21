@@ -4,13 +4,9 @@
 {% load menu_tags %}
 {% load xr_pages_tags %}
 
+
 {% block page_type %}default{% endblock %}
 
-{% block body_classes %}{% spaceless %}
-    {{ block.super }}
-
-    {% main_menu template="xr_pages/menus/main_menu_body_classes.html" %}
-{% endspaceless %}{% endblock %}
 
 {% block layout %}
     {% block header %}
@@ -23,17 +19,16 @@
                             <img class="img-responsive" src="{% static "img/XR_logo_linear_DE.png" %}" alt="My image" class=""/>
                         </a>
 
-                        {% main_menu %}
-
-                        <button class="nav-wrapper__toggle" id="nav-toggle">MENU</button>
-                    </div>
-                </nav>
-
-                <nav class="secondary-nav">
-                    <div class="container">
-                        {% block secondary_nav %}
-                            {% main_menu template="xr_pages/menus/main_menu_level_2.html" %}
+                        {% block main_menu %}
+                            {% include "xr_pages/menus/local_group_main_menu.html" %}
                         {% endblock %}
+
+                        <div class="social-media-links">
+                            {% block social_media_menu %}
+                            {% endblock %}
+                        </div>
+
+                        <button class="nav-wrapper__toggle" id="nav-toggle"><span>Menu</span> {% svg_icon "menu" size=24 %}{% svg_icon "close" size=24 %}</button>
                     </div>
                 </nav>
 
@@ -64,8 +59,10 @@
                     </div>
 
                     <div class="col-xxs-12 col-xs-4">
-                        {% get_home_page as home_page %}
-                        {% render_social_media_links_for_group home_page.group %}
+                        <div class="float-right">
+                            {% block social_media_footer %}
+                            {% endblock %}
+                        </div>
                     </div>
 
                 </div>

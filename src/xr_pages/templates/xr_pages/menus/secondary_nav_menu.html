@@ -1,0 +1,17 @@
+{% load menu_tags %}
+
+{% if menu_items %}
+    <nav class="secondary-nav">
+        <div class="container">
+            <ul aria-labelledby="menu_item_{{ parent_page.pk }}" class="secondary-nav__menu">
+                {% for item in menu_items %}
+                    <li class="{{ item.active_class }} secondary-nav__item ">
+                        <a href="{{ item.href }}" id="menu_item_{{ item.pk }}" >
+                            {{ item.text }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+{% endif %}

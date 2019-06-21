@@ -2,9 +2,21 @@
 
 */
 
-$bp-xs: 30rem;
-$bp-sm: 46rem;
-$bp-md: 61rem;
-$bp-lg: 71rem !default;
+$font-size-base: 16px;
+$font-family-base: 'Crimson Text', Georgia, serif;
 
-$vertical-block-margin: 3rem;
+$bp-xs: $font-size-base * 30; // 30rem;
+$bp-sm: $font-size-base * 46; // 46rem;
+$bp-md: $font-size-base * 61; // 61rem;
+$bp-lg: $font-size-base * 71; // 71rem !default;
+
+$bp-xs-min: $bp-xs;
+$bp-xs-max: $bp-xs - 1px;
+$bp-sm-min: $bp-sm;
+$bp-sm-max: $bp-sm - 1px;
+$bp-md-min: $bp-md;
+$bp-md-max: $bp-md - 1px;
+$bp-lg-min: $bp-lg;
+$bp-lg-max: $bp-lg - 1px;
+
+$vertical-block-margin: 3em;

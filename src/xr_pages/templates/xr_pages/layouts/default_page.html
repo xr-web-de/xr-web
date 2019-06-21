@@ -1,5 +1,7 @@
 {% extends "xr_pages/layouts/default.html" %}
 {% load wagtailcore_tags %}
+{% load menu_tags %}
+{% load xr_pages_tags %}
 
 
 {% block head_title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | {{ block.super }}{% endblock %}
@@ -8,7 +10,33 @@
 {% block page_type %}{{ page.content_type.model }}{% endblock %}
 
 
-{% block body_classes %}{{ block.super }} {{ page.content_type.model }}-page{% endblock %}
+{% block body_classes %}{% spaceless %}
+    {{ page.content_type.model }}-page
+
+    {% if page.group.is_regional_group %}
+        {% main_menu template="xr_pages/menus/main_menu_body_classes.html" %}
+    {% else %}
+        {% with local_group_page=page.group.active_localgrouppage %}
+            {% if local_group_page %}
+                {% children_menu local_group_page template="xr_pages/menus/main_menu_body_classes.html" apply_active_classes=True max_levels=5 %}
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+{% endspaceless %}{% endblock %}
+
+
+{% block main_menu %}
+    {% if page.group.is_regional_group %}
+        {% main_menu %}
+    {% else %}
+        {% include "xr_pages/menus/local_group_main_menu.html" %}
+    {% endif %}
+{% endblock %}
+
+
+{% block social_media_menu %}
+    {% render_social_media_links_for_group page.group %}
+{% endblock %}
 
 
 {% block content_title %}
@@ -21,8 +49,14 @@
 
 {% endblock %}
 
+
 {% block content %}
 
     {% include_block page.content %}
 
+{% endblock %}
+
+
+{% block social_media_footer %}
+    {% render_social_media_links_for_group page.group %}
 {% endblock %}
