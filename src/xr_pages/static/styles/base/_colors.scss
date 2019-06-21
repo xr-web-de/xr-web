@@ -1,18 +1,22 @@
 // Theme color palette
 
 $colors: (
-    xr-green: #00a835,
-    xr-yellow: #f4f07a,
-    xr-light-blue: #75d0f1,
-    xr-dark-blue: #3860aa,
-    xr-pink: #ed9bc4,
-    xr-purple: #986297,
-    xr-red: #b51f09,
+    xr-green: rgb(20, 170, 55),
+    xr-black: rgb(0, 0, 0),
+    xr-lemon: rgb(247, 238, 106),
+    xr-light-blue: rgb(117, 208, 241),
+    xr-pink: rgb(237, 155, 196),
+    xr-purple: rgb(152, 98, 151),
+    xr-light-green: rgb(190, 210, 118),
+    xr-warm-yellow: rgb(255, 193, 30),
+    xr-bright-pink: rgb(207, 98, 151),
+    xr-red: rgb(220, 79, 0),
+    xr-dark-blue: rgb(56, 96, 170),
+    xr-angry: rgb(200, 0, 130),
     xr-white: #ffffff,
     xr-light-grey: #e6e6e6,
     xr-grey: #aaaaaa,
     xr-dark-grey: #404040,
-    xr-black: #130c0d,
 );
 
 @function xrColor($key) {

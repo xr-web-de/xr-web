@@ -6,31 +6,44 @@ from wagtail.core import blocks
 # Theme color palette (python constants for css classes)
 from wagtail.core.blocks import StructValue
 
+COLOR_XR_TRANSPARENT = "xr-transparent"
 COLOR_XR_GREEN = "xr-green"
-COLOR_XR_YELLOW = "xr-yellow"
+COLOR_XR_BLACK = "xr-black"
+COLOR_XR_LEMON = "xr-lemon"
 COLOR_XR_LIGHT_BLUE = "xr-light-blue"
-COLOR_XR_DARK_BLUE = "xr-dark-blue"
-COLOR_XR_PURPLE = "xr-purple"
 COLOR_XR_PINK = "xr-pink"
+COLOR_XR_PURPLE = "xr-purple"
+COLOR_XR_LIGHT_GREEN = "xr-light-green"
+COLOR_XR_WARM_YELLOW = "xr-warm-yellow"
+COLOR_XR_BRIGHT_PINK = "xr-bright-pink"
+COLOR_XR_RED = "xr-red"
+COLOR_XR_DARK_BLUE = "xr-dark-blue"
+COLOR_XR_ANGRY = "xr-angry"
+COLOR_XR_WHITE = "xr-white"
 COLOR_XR_LIGHT_GREY = "xr-light-grey"
 COLOR_XR_GREY = "xr-grey"
 COLOR_XR_DARK_GREY = "xr-dark-grey"
-COLOR_XR_WHITE = "xr-white"
-COLOR_XR_BLACK = "xr-black"
+
 COLOR_CHOICES = (
-    (COLOR_XR_GREEN, _("XR green")),
-    (COLOR_XR_YELLOW, _("XR yellow")),
-    (COLOR_XR_LIGHT_BLUE, _("XR light blue")),
-    (COLOR_XR_DARK_BLUE, _("XR dark blue")),
-    (COLOR_XR_PURPLE, _("XR purple")),
-    (COLOR_XR_PINK, _("XR pink")),
-    (COLOR_XR_LIGHT_GREY, _("XR light grey")),
-    (COLOR_XR_GREY, _("XR grey")),
-    (COLOR_XR_DARK_GREY, _("XR dark grey")),
-    (COLOR_XR_WHITE, _("XR white")),
-    (COLOR_XR_BLACK, _("XR black")),
+    (COLOR_XR_GREEN, _("Green")),
+    (COLOR_XR_BLACK, _("Black")),
+    (COLOR_XR_LEMON, _("Lemon")),
+    (COLOR_XR_LIGHT_BLUE, _("Light blue")),
+    (COLOR_XR_PINK, _("Pink")),
+    (COLOR_XR_PURPLE, _("Purple")),
+    (COLOR_XR_LIGHT_GREEN, _("Light green")),
+    (COLOR_XR_WARM_YELLOW, _("Warm yellow")),
+    (COLOR_XR_BRIGHT_PINK, _("Bright pink")),
+    (COLOR_XR_RED, _("Red")),
+    (COLOR_XR_DARK_BLUE, _("Dark blue")),
+    (COLOR_XR_ANGRY, _("Angry")),
+    (COLOR_XR_WHITE, _("White")),
+    (COLOR_XR_LIGHT_GREY, _("Light grey")),
+    (COLOR_XR_GREY, _("Grey")),
+    (COLOR_XR_DARK_GREY, _("Dark grey")),
 )
 
+BG_COLOR_CHOICES = (COLOR_XR_TRANSPARENT, _("None / Transparent")) + COLOR_CHOICES
 
 # Alignment choices
 ALIGN_FULL_CONTENT = "full_content"

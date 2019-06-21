@@ -8,8 +8,9 @@ from xr_web.block_utils import (
     description_block_kwargs,
     COLOR_CHOICES,
     COLOR_XR_BLACK,
-    COLOR_XR_WHITE,
     CollapsibleFieldsMixin,
+    COLOR_XR_TRANSPARENT,
+    BG_COLOR_CHOICES,
 )
 
 
@@ -19,7 +20,9 @@ class EmailFormBlock(CollapsibleFieldsMixin, blocks.StructBlock):
         ["xr_newsletter.EmailFormPage", "xr_newsletter.NewsletterFormPage"]
     )
     font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_BLACK)
-    background_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_WHITE)
+    background_color = blocks.ChoiceBlock(
+        choices=BG_COLOR_CHOICES, default=COLOR_XR_TRANSPARENT
+    )
     caption = blocks.CharBlock(**caption_block_kwargs)
     description = blocks.TextBlock(**description_block_kwargs)
 

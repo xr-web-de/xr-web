@@ -10,15 +10,16 @@ from xr_web.block_utils import (
     caption_block_kwargs,
     description_block_kwargs,
     COLOR_CHOICES,
-    COLOR_XR_YELLOW,
+    COLOR_XR_WARM_YELLOW,
     COLOR_XR_GREEN,
     AlignmentMixin,
     CollapsibleFieldsMixin,
     COLOR_XR_BLACK,
-    COLOR_XR_WHITE,
     XrStructValue,
     ALIGN_CENTER,
     ALIGN_LEFT,
+    COLOR_XR_TRANSPARENT,
+    BG_COLOR_CHOICES,
 )
 from xr_newsletter.blocks import EmailFormBlock
 
@@ -111,7 +112,9 @@ class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
             "If not given, the image's title attribute will be used instead."
         ),
     )
-    background_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_GREEN)
+    background_color = blocks.ChoiceBlock(
+        choices=BG_COLOR_CHOICES, default=COLOR_XR_TRANSPARENT
+    )
     attribution = blocks.CharBlock(
         required=False,
         help_text=_(
@@ -154,8 +157,10 @@ class SloganBlock(CollapsibleFieldsMixin, blocks.StructBlock):
             "how big the font will be rendered."
         ),
     )
-    font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_YELLOW)
-    background_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_GREEN)
+    font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_WARM_YELLOW)
+    background_color = blocks.ChoiceBlock(
+        choices=BG_COLOR_CHOICES, default=COLOR_XR_GREEN
+    )
     background_image = ImageChooserBlock(required=False)
     caption = blocks.CharBlock(**caption_block_kwargs)
     description = blocks.TextBlock(**description_block_kwargs)
@@ -225,7 +230,9 @@ class GridBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     COLUMN_CHOICES = ((2, _("2")), (3, _("3")), (4, _("4")))
     columns = blocks.ChoiceBlock(choices=COLUMN_CHOICES, default=3)
     font_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_BLACK)
-    background_color = blocks.ChoiceBlock(choices=COLOR_CHOICES, default=COLOR_XR_WHITE)
+    background_color = blocks.ChoiceBlock(
+        choices=BG_COLOR_CHOICES, default=COLOR_XR_TRANSPARENT
+    )
 
     fields = [
         "heading",

@@ -221,7 +221,7 @@ body.with-secondary-nav {
         align-items: center;
         align-content: space-between;
 
-        background-color: map_get($colors, xr-yellow);
+        background-color: map_get($colors, xr-warm-yellow);
         border: 2px solid map_get($colors, xr-black);
 
         pointer-events: auto;
@@ -279,7 +279,7 @@ body.with-secondary-nav {
         & > li > a:hover,
         & > li > a:focus,
         & > li > a:active {
-            color: map-get($colors, xr-yellow);
+            color: map-get($colors, xr-warm-yellow);
         }
     }
 
@@ -346,13 +346,13 @@ body.with-secondary-nav {
         & > a:focus,
         & > a:active {
             &:before {
-                background: rgba(map-get($colors, xr-yellow), 0.8);
+                background: rgba(map-get($colors, xr-warm-yellow), 0.8);
             }
         }
         &.active,
         &.ancestor {
             & > a:before {
-                background: map-get($colors, xr-yellow);
+                background: map-get($colors, xr-warm-yellow);
             }
         }
     }
@@ -378,7 +378,7 @@ body.with-secondary-nav {
         top: $header-height-desktop;
         left: 0;
         margin-bottom: 0;
-        background: map-get($colors, xr-yellow);
+        background: map-get($colors, xr-warm-yellow);
     }
 
     &__menu {
