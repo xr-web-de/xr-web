@@ -9,8 +9,11 @@ from xr_pages.models import XrPage
 
 class BlogEntryPage(XrPage):
     template = "xr_blog/pages/blog_entry.html"
-    group = models.OneToOneField(
-        "xr_pages.LocalGroup", editable=False, on_delete=models.PROTECT
+    group = models.ForeignKey(
+        "xr_pages.LocalGroup",
+        editable=False,
+        on_delete=models.PROTECT,
+        related_name="blog_entries",
     )
     date = models.DateField(_("Post date"))
     author = models.CharField(max_length=200)
