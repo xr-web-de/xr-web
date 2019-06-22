@@ -89,6 +89,7 @@
 
 .block__footer {
     padding: 0.5em 0;
+    @include clearfix;
     .h {
         margin-top: 0.25em;
         margin-bottom: 0;
@@ -158,8 +159,6 @@
     // headings
     h2,
     h3 {
-        margin-top: 1em;
-        margin-bottom: 0.5em;
         line-height: 1.1;
         @include fucxed;
         &:first-child {
@@ -167,12 +166,22 @@
         }
     }
     h2 {
+        margin-top: (1.5em / 2.6);
         font-size: 2.6em;
     }
     h3 {
+        margin-top: (1em / 1.6);
         font-size: 1.6em;
     }
+    h2,
+    h3 {
+        & + h2,
+        & + h3 {
+            margin-top: 0.1em;
+        }
+    }
     h4 {
+        margin-top: (1em / 1.4);
         font-size: 1.4em;
         font-weight: bold;
     }
@@ -255,39 +264,17 @@
     }
 }
 
-.short-date {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    z-index: 10;
-
-    background: xrColor(black);
-    color: xrColor(white);
-    line-height: 1.1;
-    @include fucxed;
-
-    &__start,
-    &__end {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0.75em 1em 0.5em;
-    }
-    &__day {
-        font-size: 2.2em;
-    }
-    &__month {
-        font-size: 1.2em;
-    }
-    &__end:before {
-        content: '-';
+.event-block {
+    .short-date {
+        float: left;
         position: absolute;
-        top: 1.65em;
-        font-size: 2.2em;
-        margin-top: -1em;
-        left: -0.15em;
+        top: 0;
+        left: 0;
+    }
+    &__location {
+        position: absolute;
+        right: 0;
+        bottom: 0;
     }
 }
 

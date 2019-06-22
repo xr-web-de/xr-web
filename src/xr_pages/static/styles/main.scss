@@ -20,6 +20,7 @@
 @import 'modules/buttons';
 
 @import 'modules/svg_icons';
+@import 'modules/dates';
 @import 'modules/blocks';
 @import 'modules/datetime_widget';
 @import 'modules/letter_list';
@@ -55,6 +56,10 @@
     padding-bottom: $vertical-block-margin;
 }
 
+.page-title {
+    margin-bottom: 2em;
+}
+
 #footer .flat-menu {
     margin-bottom: 1em;
 }
@@ -82,4 +87,8 @@ dt {
 dd {
     flex-basis: 70%;
     flex-grow: 1;
+}
+
+small {
+    font-size: 75%;
 }

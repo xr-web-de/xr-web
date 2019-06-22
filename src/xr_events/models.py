@@ -89,6 +89,13 @@ class EventPage(XrPage):
     def organiser(self):
         return self.group
 
+    @property
+    def all_organiser_names(self):
+        all_organisers = [self.group.name]
+        if hasattr(self, "further_organisers") and self.further_organisers.exists():
+            all_organisers += list(self.further_organisers.all())
+        return ", ".join([str(organiser) for organiser in all_organisers])
+
     def save(self, *args, **kwargs):
         if not hasattr(self, "group"):
             self.group = self.get_parent().specific.group
@@ -115,15 +122,29 @@ class EventDate(Orderable):
         max_length=255,
         help_text=_('Optional label like "Part I" or "Meeting point"'),
     )
+    location = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "A more specific location, overwrites the events default location."
+        ),
+    )
+    description = models.CharField(
+        max_length=1000,
+        blank=True,
+        help_text=_("Optional date description. Visible on event detail page only."),
+    )
 
     panels = [
         FieldRowPanel([FieldPanel("start"), FieldPanel("end")]),
-        FieldPanel("label"),
+        FieldRowPanel([FieldPanel("label"), FieldPanel("location")]),
+        FieldPanel("description"),
     ]
 
     class Meta:
         verbose_name = _("Date")
         verbose_name_plural = _("Dates")
+        ordering = ["sort_order"]
 
     def __str__(self):
         start = formats.date_format(self.start, "SHORT_DATETIME_FORMAT")
@@ -154,6 +175,7 @@ class EventOrganiser(Orderable):
     class Meta:
         verbose_name = _("Organiser")
         verbose_name_plural = _("Organisers")
+        ordering = ["sort_order"]
 
     def __str__(self):
         return self.name

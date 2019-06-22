@@ -2,49 +2,124 @@
 {% load i18n %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load xr_pages_tags %}
 
 
 {% block content_title %}{% endblock %}
 
 {% block content %}
-    <article class="container">
-        <h1 class="h h--1 h--caps">{{ event.title }}</h1>
+    <article>
+        <div class="container">
+            <section class="block event-block align-full_page bg--xr-transparent">
 
-        {% if event.get_image %}
-            {% image event.get_image fill-1280x720-c75 alt=event.title class="img-responsive" %}
-        {% endif %}
+                <div class="block__content">
+                    {% if event.start_date %}
+                        <div class="short-date">
+                            <span class="short-date__start">
+                                <span class="short-date__day">{{ event.start_date|date:"d" }}</span>
+                                <span class="short-date__month">{{ event.start_date|date:"M" }}</span>
+                            </span>
+                            {% if event.start_date != event.end_date %}
+                                <span class="short-date__end">
+                                    <span class="short-date__day">{{ event.end_date|date:"d" }}</span>
+                                    <span class="short-date__month">{{ event.end_date|date:"M" }}</span>
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
 
+                    {% if event.get_image %}
+                        {% image event.get_image fill-1280x720-c75 alt=event.title class="img-responsive" %}
+                    {% else %}
+                        <div class="image-placeholder"></div>
+                    {% endif %}
 
-        {% if event.dates.exists %}
-            <h2>{% trans "Wann?" %}</h2>
-            {% for date in event.dates.all %}
-                <p>{{ date.start }}{% if date.label %}: {{ date.label }}{% endif %}</p>
-            {% endfor %}
-        {% endif %}
+                    {% if event.location %}
+                        <div class="event-block__location"><strong class="black">{{ event.location }}</strong></div>
+                    {% endif %}
 
-        {% if event.location %}
-            <h2>{% trans "Wo?" %}</h2>
-            <p>{{ event.location }}</p>
-        {% endif %}
+                </div>
 
-        {% include_block page.content %}
+                <div class="block__footer">
+                    <h1 class="h h--1 h--caps">{{ event.title }}</h1>
 
-        {% if event.organiser %}
-            <h2>{% trans "Veranstalter" %}</h2>
-            <p>
-                <a href="{{ event.organiser.url }}">{{ event.organiser.name }}</a>
-                {% if event.organiser.email %}, <a href="mailto:{{ event.organiser.email }}">{{ event.organiser.email }}</a>{% endif %}
-            </p>
-        {% endif %}
+                    {% if event.all_organiser_names %}
+                        <h3 class="h h--3 h--caps">{{ event.all_organiser_names }}</h3>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
 
-        {% if event.further_organisers.exists %}
-            <p>
-                {% trans "in Kooperation mit" %}
-                {% for organiser in event.further_organisers.all %}
-                    {{ organiser.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </p>
-        {% endif %}
+        {% include_block event.content %}
+
+        <div class="container">
+            <section class="block align-full_content">
+
+                <div class="block__content">
+                    {% regroup event.dates.all by start.date as grouped_dates %}
+
+                    <div class="date-list">
+                        {% for date_group in grouped_dates %}
+                            <div class="date-list__group">
+
+                                <div class="date-list__grouper short-date">
+                                    <span class="short-date__start">
+                                        <span class="short-date__day">{{ date_group.grouper|date:"d" }}</span>
+                                        <span class="short-date__month">{{ date_group.grouper|date:"M" }}</span>
+                                    </span>
+                                </div>
+
+                                <div class="date-list__dates">
+                                    {% for date in date_group.list %}
+
+                                        <div class="date-list__date">
+                                            <h2 class="h h--2 h--caps date-list__title">
+                                                <small class="date-list__time">{{ date.start|date:'TIME_FORMAT' }}{% if date.end %} - {{ date.end|date:'TIME_FORMAT' }}{% endif %}</small>
+                                                <span class="date-list__label">{% if date.label %}{{ date.label }}{% endif %}</span>
+                                            </h2>
+
+                                            <div class="date-list__info">
+                                                <div class="date-list__location">
+                                                <strong>
+                                                    {% if date.location %}
+                                                        {{ date.location }}
+                                                    {% elif event.location %}
+                                                        {{ event.location }}
+                                                    {% endif %}
+                                                </strong>
+                                                </div>
+                                                <div class="date-list__description">
+                                                    {% if date.description %}
+                                                        {{ date.description }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="container">
+            <section class="block align-full_content">
+                {% if event.organiser %}
+                    <h4 class="h h--4 h--caps">{% trans "Hosted by" %}</h4>
+                    {% include "xr_pages/partials/local_group_list_item.html" with local_group=event.organiser %}
+                {% endif %}
+
+                {% if event.further_organisers.exists %}
+                    <h4 class="h h--4 h--caps">{% trans "in cooperation with" %}</h4>
+                    {% for organiser in event.further_organisers.all %}
+                        {% include "xr_pages/partials/local_group_list_item.html" with local_group=organiser %}
+                    {% endfor %}
+                {% endif %}
+            </section>
+        </div>
 
     </article>
 {% endblock %}

@@ -9,4 +9,8 @@ svg_icon_map = {
     "extinctionsymbol": "008-extinctionsymbol.svg",
     "menu": "009-menu.svg",
     "close": "010-close.svg",
+    "more": "011-right.svg",
+    "globe": "012-earth-globe.svg",
+    "lock": "013-lock.svg",
+    "group": "014-group.svg",
 }

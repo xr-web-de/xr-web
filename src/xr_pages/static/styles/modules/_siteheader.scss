@@ -267,6 +267,8 @@ body.with-secondary-nav {
 
     .social-media-links {
         margin-top: 2em;
+        flex: 0 0 auto;
+
         @media (min-width: $mobile-breakpoint) {
             margin-top: 0;
             margin-left: 2em;

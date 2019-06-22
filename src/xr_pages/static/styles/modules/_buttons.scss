@@ -8,13 +8,13 @@ input[type='submit'] {
     //border-radius: .4em;
     cursor: pointer;
     display: inline-block;
-    font-size: 1.6em;
+    font-size: 1.3em;
     font-weight: 700;
 
-    height: 3em;
-    line-height: 3em;
+    height: 2em;
+    line-height: 2em;
 
-    padding: 0.2em 3em;
+    padding: 0.1em 1em 0;
     text-align: center;
     text-decoration: none;
     white-space: nowrap;
@@ -26,5 +26,9 @@ input[type='submit'] {
         background-color: black;
         color: white;
         outline: 0;
+    }
+
+    &.lg {
+        font-size: 1.6em;
     }
 }

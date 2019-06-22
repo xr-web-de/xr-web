@@ -4,7 +4,7 @@
     <ul class="icon-list icon-list--icons-vertical">
         {% for link in social_media_links %}
             <li>
-                <a href="{{ link.url }}">
+                <a href="{{ link.url }}" target="_blank">
                     {% svg_icon link.icon_name size=size css_classes=css_classes aria_label=link.verbose_name %}
                     {% if show_label %}<span aria-hidden="true">{{ link.verbose_name }}</span>{% endif %}
                 </a>

@@ -10,7 +10,6 @@
     {% get_local_groups as local_groups %}
     {% regroup local_groups by first_letter as local_group_list %}
 
-
     <div class="container">
 
         {% for local_group_group in local_group_list %}
@@ -19,53 +18,15 @@
                     {{ local_group_group.grouper }}
                 </div>
                 <div class="letter-list__list">
+
                     {% for local_group in local_group_group.list %}
-
-                        <div class="letter-list__entry local-group local-group--{{ local_group.status }}">
-                            <div class="local-group__title">
-                                {% if local_group.url %}
-                                    <a href="{{ local_group.url }}" id="local_group_link_{{ local_group.pk }}">
-                                {% endif %}
-                                    <h3 class="h h--3 h--caps">
-                                        {{ local_group.name }}
-                                    </h3>
-                                {% if local_group.url %}
-                                    </a>
-                                {% endif %}
-                                {% if local_group.area_description %}
-                                    ({{ local_group.area_description }})
-                                {% endif %}
-                            </div>
-                            <div class="local-group__info">
-
-                                    {% if local_group.email %}
-                                        <a href="mailto:{{ local_group.email }}">{{ local_group.email }}</a>
-                                    {% endif %}
-
-                                    {% if local_group.pgp_key_id %}
-                                        | PGP-Key-ID: {{ local_group.pgp_key_id }}
-                                    {% endif %}
-
-                                    {% if local_group.url %}
-                                        | <a href="{{ local_group.url }}">{% trans "Homepage" %}</a>
-                                    {% endif %}
-
-                                    {% if local_group.has_any_social_media_urls %}
-                                        |  {% render_social_media_links_for_group local_group size=24 %}
-                                    {% endif %}
-
-                                    {% if not local_group.is_active %}
-                                        | {{ local_group.get_status_display }}{% if local_group.is_in_foundation %}, {% trans "looking for people" %}{% endif %}
-                                    {% endif %}
-
-                            </div>
-
+                        <div class="letter-list__entry">
+                            {% include "xr_pages/partials/local_group_list_item.html" with local_group=local_group %}
                         </div>
-
                     {% endfor %}
+
                 </div>
             </div>
-
         {% endfor %}
 
     </div>

@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load xr_pages_tags %}
+
+<div class="local-group local-group--{{ local_group.status }}">
+
+    <div class="local-group__title">
+        {% if local_group.url %}
+            <a href="{{ local_group.url }}" id="local_group_link_{{ local_group.pk }}">
+        {% endif %}
+
+        <h3 class="h h--3 h--caps">
+            {{ local_group.name }}
+        </h3>
+        {% if local_group.area_description %}
+            <span class="local-group__area_description">({{ local_group.area_description }})</span>
+        {% endif %}
+
+        {% if local_group.url %}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="local-group__info">
+        <ul class="icon-list">
+            {% if local_group.email %}
+                <li class="local-group__email">
+                    <a href="mailto:{{ local_group.email }}">{% svg_icon "email" 28 %} <span>{{ local_group.email }}</span></a>
+                </li>
+            {% endif %}
+
+            {% if local_group.status %}
+                <li class="local-group__status">
+                    <span>
+                        {% svg_icon "group" 24 %}
+                        {{ local_group.get_status_display|capfirst }}{% if local_group.is_in_foundation %}, {% trans "looking for people" %}{% endif %}
+                    </span>
+                </li>
+            {% endif %}
+
+            {% if local_group.url %}
+                <li class="local-group__url">
+                    <a href="{{ local_group.url }}">{% svg_icon "globe" 28 %} <span>{{ local_group.url }}</span></a>
+                </li>
+            {% endif %}
+
+            {% if local_group.pgp_key_id %}
+                <li><span>{% svg_icon "lock" 28 %} PGP-Key-ID: {{ local_group.pgp_key_id }}</span></li>
+            {% endif %}
+
+            {% if local_group.has_any_social_media_urls %}
+                <li>{% render_social_media_links_for_group local_group size=28 %}</li>
+            {% endif %}
+        </ul>
+    </div>
+</div>

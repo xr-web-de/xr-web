@@ -1,0 +1,96 @@
+// Short Date
+//---------------
+
+.short-date {
+    display: flex;
+    z-index: 10;
+    font-size: 1em;
+
+    background: xrColor(black);
+    color: xrColor(white);
+    line-height: 1.1;
+    @include fucxed;
+
+    &__start,
+    &__end {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.6em 1em 0.4em;
+    }
+    &__day {
+        font-size: 0.75 * 2.6em;
+    }
+    &__month {
+        font-size: 1.2em;
+    }
+    &__end:before {
+        content: '-';
+        position: absolute;
+        top: 1.65em;
+        font-size: 2.2em;
+        margin-top: -1em;
+        left: -0.15em;
+    }
+}
+
+// Date List
+//---------------
+
+.date-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: -1em;
+
+    &__group {
+        display: flex;
+        align-items: start;
+        margin-top: 1em;
+    }
+    &__grouper {
+        float: left;
+        margin-right: 1em;
+    }
+    &__dates {
+        display: flex;
+        flex-direction: column;
+    }
+    &__date {
+        .h {
+            line-height: 0.95;
+            padding-top: 0.07em;
+        }
+        margin-bottom: 0.7em;
+    }
+    &__time {
+        margin-top: 0.25em;
+        margin-right: 0.19em;
+        flex: 0 0 16em;
+    }
+    &__label {
+        display: inline-block;
+    }
+    &__location {
+        margin-right: 0.19em;
+    }
+
+    @media (min-width: $mobile-breakpoint) {
+        &__title {
+            display: flex;
+            flex-direction: row;
+        }
+        &__time {
+            margin-right: 0.25em;
+            flex: 0 0 (10em * 0.512);
+        }
+        &__location {
+            margin-right: 0.5em;
+            flex: 0 0 10em;
+            line-height: 1.25;
+        }
+        &__info {
+            line-height: 1.4;
+        }
+    }
+}

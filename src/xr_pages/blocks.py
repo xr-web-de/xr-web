@@ -32,7 +32,6 @@ from xr_newsletter.blocks import EmailFormBlock
 
 
 class TextBlock(CollapsibleFieldsMixin, blocks.StructBlock):
-    heading = blocks.CharBlock(**heading_block_kwargs)
     text = blocks.RichTextBlock(
         features=simple_rich_text_features,
         help_text=_(
