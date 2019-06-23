@@ -4,7 +4,7 @@ from wagtailmenus.models import MainMenuItem
 
 from xr_events.tests.test_events_pages import EVENT_PAGE_CLASSES
 from xr_newsletter.models import NewsletterFormPage, EmailFormPage, NewsletterFormField
-from xr_pages.models import HomePage, LocalGroupPage
+from xr_pages.models import HomePage, LocalGroupPage, HomeSubPage, LocalGroupSubPage
 from xr_pages.services import MODERATORS_PAGE_PERMISSIONS, EDITORS_PAGE_PERMISSIONS
 from xr_pages.tests.test_pages import PagesBaseTest, PAGES_PAGE_CLASSES
 
@@ -62,11 +62,16 @@ class NewsletterPageTreeTest(NewsletterBaseTest):
         self.assertIn(self.home_sub_page, home_page_children)
 
     def test_can_create_newsletter_form_page_under_pages(self):
-
         self.assertCanCreateAt(LocalGroupPage, NewsletterFormPage)
+        self.assertCanCreateAt(LocalGroupSubPage, NewsletterFormPage)
+        self.assertCanCreateAt(HomePage, NewsletterFormPage)
+        self.assertCanCreateAt(HomeSubPage, NewsletterFormPage)
 
         for page_class in PAGES_PAGE_CLASSES.union(EVENT_PAGE_CLASSES) - {
-            LocalGroupPage
+            LocalGroupPage,
+            LocalGroupSubPage,
+            HomePage,
+            HomeSubPage,
         }:
             self.assertCanNotCreateAt(page_class, NewsletterFormPage)
 
@@ -76,11 +81,15 @@ class NewsletterPageTreeTest(NewsletterBaseTest):
 
     def test_can_create_email_form_page_under_pages(self):
         self.assertCanCreateAt(HomePage, EmailFormPage)
+        self.assertCanCreateAt(HomeSubPage, EmailFormPage)
         self.assertCanCreateAt(LocalGroupPage, EmailFormPage)
+        self.assertCanCreateAt(LocalGroupSubPage, EmailFormPage)
 
         for page_class in PAGES_PAGE_CLASSES.union(EVENT_PAGE_CLASSES) - {
             LocalGroupPage,
+            LocalGroupSubPage,
             HomePage,
+            HomeSubPage,
         }:
             self.assertCanNotCreateAt(page_class, EmailFormPage)
 

@@ -4,7 +4,13 @@ from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiField
 from wagtail.core.fields import StreamField
 
 from xr_pages.blocks import ContentBlock
-from xr_pages.models import XrPage
+from xr_pages.models import (
+    XrPage,
+    HomePage,
+    LocalGroupPage,
+    HomeSubPage,
+    LocalGroupSubPage,
+)
 
 
 class BlogEntryPage(XrPage):
@@ -61,7 +67,7 @@ class BlogListPage(XrPage):
         help_text=_("The content is only visible on the detail page."),
     )
 
-    parent_page_types = ["xr_pages.HomePage", "xr_pages.LocalGroupPage"]
+    parent_page_types = [HomePage, HomeSubPage, LocalGroupPage, LocalGroupSubPage]
 
     content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
 

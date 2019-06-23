@@ -18,13 +18,20 @@ from wagtail.admin.edit_handlers import (
 )
 from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable
+from wagtail.core.models import Page
 
 from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_web.edit_handlers import FieldCollapsiblePanel
-from xr_pages.models import LocalGroup, HomePage, LocalGroupPage, XrPage
+from xr_pages.models import (
+    LocalGroup,
+    HomePage,
+    LocalGroupPage,
+    XrPage,
+    HomeSubPage,
+    LocalGroupSubPage,
+)
 
 
 class EmailFormField(AbstractFormField):
@@ -101,7 +108,7 @@ class EmailFormPage(AbstractEmailFormPage):
     landing_page_template = "xr_newsletter/pages/email_form_thank_you.html"
     group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
 
-    parent_page_types = [HomePage, LocalGroupPage]
+    parent_page_types = [HomePage, LocalGroupPage, HomeSubPage, LocalGroupSubPage]
 
     class Meta:
         verbose_name = _("Email Form Page")
@@ -182,7 +189,7 @@ class NewsletterFormPage(AbstractEmailFormPage):
         )
     ]
 
-    parent_page_types = [LocalGroupPage]
+    parent_page_types = [HomePage, HomeSubPage, LocalGroupPage, LocalGroupSubPage]
 
     base_form_class = WagtailAdminNewsletterFormPageForm
 
