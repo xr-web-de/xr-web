@@ -1,7 +1,7 @@
-<svg viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid meet" class="inline-svg-text">
-    <text font-size="{{ font_size }}" y="-0.1em">
+<svg viewBox="-50 -47 100 100" preserveAspectRatio="xMidYMid meet" class="inline-svg-text">
+    <text font-size="{{ font_size }}" y="-{{ text_y }}em">
         {% for line in text_lines %}
-            <tspan x="0" dy="{{ forloop.counter0 }}em">{{ line }}</tspan>
+            <tspan x="0" dy="1em">{{ line }}</tspan>
         {% endfor %}
     </text>
 </svg>

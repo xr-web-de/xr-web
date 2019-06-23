@@ -42,7 +42,11 @@ def inline_svg_text(text, font_size=None):
 
     text_lines = text.split("\n")
 
-    return {"text_lines": text_lines, "font_size": font_size}
+    return {
+        "text_lines": text_lines,
+        "font_size": font_size,
+        "text_y": "{}".format(len(text_lines) / 2),
+    }
 
 
 @register.simple_tag(takes_context=True)
