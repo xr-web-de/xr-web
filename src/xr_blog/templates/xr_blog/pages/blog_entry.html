@@ -1,22 +1,57 @@
 {% extends "xr_pages/layouts/default_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
 
 
 {% block content_title %}
-    {{ block.super }}
-    <div class="container">
-        <p>
-            {% blocktrans with author=page.author date=page.date %}
-                Published by {{ author }} at {{ date }}
-            {% endblocktrans %}
-        </p>
-    </div>
+        <div class="page-title container">
+            <h1 class="h h--1 h--caps">{{ page.title }}</h1>
+            <p class="blog-entry__from">
+                {% blocktrans with author=page.author date=page.date|date:"SHORT_DATE_FORMAT" %}
+                    Written by <em>{{ author }}</em> on <em>{{ date }}</em>
+                {% endblocktrans %}
+            </p>
+        </div>
 {% endblock %}
 
 
 {% block content %}
+    <article>
+{#        {% if page.image %}#}
+{#            <div class="container">#}
+{#                <section class="block event-block align-center bg--xr-transparent">#}
+{##}
+{#                    <div class="block__content">#}
+{#                        {% image page.image fill-1280x720-c75 alt=event.title class="img-responsive" %}#}
+{#                    </div>#}
+{##}
+{#                    <div class="block__footer">#}
+{#                        {% if page.show_page_title %}#}
+{#                            <h1 class="h h--1 h--caps">{{ page.title }}</h1>#}
+{#                        {% endif %}#}
+{#                        <p class="blog-entry__from">#}
+{#                            {% blocktrans with author=page.author date=page.date|date:"SHORT_DATE_FORMAT" %}#}
+{#                                Written by <em>{{ author }}</em> on <em>{{ date }}</em>#}
+{#                            {% endblocktrans %}#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </section>#}
+{#            </div>#}
+{#        {% else %}#}
+{#            <div class="page-title container">#}
+{#                <h1 class="h h--1 h--caps">{{ page.title }}</h1>#}
+{#                <p class="blog-entry__from">#}
+{#                    {% blocktrans with author=page.author date=page.date|date:"SHORT_DATE_FORMAT" %}#}
+{#                        Written by <em>{{ author }}</em> on <em>{{ date }}</em>#}
+{#                    {% endblocktrans %}#}
+{#                </p>#}
+{#            </div>#}
+{#        {% endif %}#}
 
-    {% include_block page.content %}
+        {% include_block page.content %}
+
+    </article>
+
 
 {% endblock %}

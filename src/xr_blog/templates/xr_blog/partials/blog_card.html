@@ -1,34 +1,48 @@
 {% load i18n %}
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
+{% load xr_pages_tags %}
 
 
-<article class="block blog-entry-block">
-    <header class="block__header">
-        <a href="{% pageurl entry %}">
-
-        <h2 class="h h--2 h--caps">
-            {{ entry.title }}
-        </h2>
-
-        </a>
-    </header>
-
-    <div class="block__content">
-        {% if entry.image %}
-            <a href="{% pageurl entry %}">
-                {% image entry.image fill-512x288-c75 alt=blog.title class="img-responsive" %}
-            </a>
-        {% endif %}
-    </div>
+<article class="block blog-entry-block blog-entry">
+{#    <header class="block__header">#}
+{#        <a href="{% pageurl entry %}">#}
+{##}
+{#        <h2 class="h h--2 h--caps">#}
+{#            {{ entry.title }}#}
+{#        </h2>#}
+{##}
+{#        </a>#}
+{#    </header>#}
 
 
-    <footer class="block__footer">
-        <p class="blog-entry-block--author">{% trans "from" %} {{ entry.author }}</p>
-        <p class="blog-entry-block--date">{{ entry.date|date:"SHORT_DATE_FORMAT" }}</p>
-        {% if entry.description %}
-            <p>{{ entry.description }}</p>
-        {% endif %}
-    </footer>
+    <a href="{% pageurl entry %}" class="block__link">
+
+
+        <div class="block__content">
+            {% if entry.image %}
+        {#            <a href="{% pageurl entry %}">#}
+                    {% image entry.image fill-512x288-c75 alt=blog.title class="img-responsive" %}
+        {#            </a>#}
+            {% endif %}
+        </div>
+
+
+        <footer class="block__footer">
+            <h3 class="h h--3 h--caps">{{ entry.title }}</h3>
+            <p class="blog-entry__from">
+                {% blocktrans with author=entry.author date=entry.date|date:"SHORT_DATE_FORMAT" %}
+                    Written by <em>{{ author }}</em> on <em>{{ date }}</em>
+                {% endblocktrans %}
+            </p>
+{#            <p class="blog-entry-block__author">{% trans "from" %} {{ entry.author }}</p>#}
+{#            <p class="blog-entry-block__date">{{ entry.date|date:"SHORT_DATE_FORMAT" }}</p>#}
+            {% if entry.description %}
+                <p>{{ entry.description }}</p>
+            {% endif %}
+            <strong class="black float-right">{% trans "More" %} {% svg_icon "more" 24 %}</strong>
+        </footer>
+
+    </a>
 
 </article>
