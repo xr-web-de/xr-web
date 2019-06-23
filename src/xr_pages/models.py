@@ -467,3 +467,9 @@ class LocalGroupSubPage(XrPage):
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)
+
+
+class VideoThumbnail(models.Model):
+    thumbnail = models.ImageField(upload_to="video_thumbnails/")
+    uuid = models.CharField(max_length=32)
+    source_url = models.URLField()

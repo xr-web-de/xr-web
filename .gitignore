@@ -63,6 +63,7 @@ cover/
 # User files
 /uploads/
 /pdfs/
+/media/
 
 # Caches
 /cache/
