@@ -2,6 +2,7 @@
 {% load wagtailimages_tags %}
 {% load wagtailcore_tags %}
 {% load xr_pages_tags %}
+{% load i18n %}
 
 
 {% block block_content_classes %}{% if value.background_color %}bg--{{ value.background_color }}{% endif %}{% endblock %}
@@ -45,7 +46,7 @@
     {% endif %}
 
     {% with page=value.page.specific %}
-        {% if page.image or value.caption or page.description or value.description %}
+{#        {% if page.image or value.caption or page.description or value.description %}#}
             <footer class="block__footer">
                 {% if page.image or value.caption %}
                     <h3 class="h h--3 h--caps">
@@ -65,8 +66,12 @@
                         {% endif %}
                     </p>
                 {% endif %}
+
+                {% block read_more_button %}
+                    <strong class="black float-right">{% trans "More" %} {% svg_icon "more" 24 %}</strong>
+                {% endblock %}
             </footer>
-        {% endif %}
+{#        {% endif %}#}
     {% endwith %}
 
     {% if value.align == "full_page" or value.align is None %}

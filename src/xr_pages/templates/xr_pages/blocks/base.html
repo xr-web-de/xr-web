@@ -1,6 +1,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load xr_pages_tags %}
+{% load i18n %}
 
 
 <section class="block {{ value.block.name }}-block {% if value.align %}align-{{ value.align }}{% endif %} {% block block_classes %}{% endblock %}">
@@ -37,7 +38,7 @@
     {% endblock %}
 
     {% block block_footer %}
-        {% if value.caption or value.description %}
+        {% if value.caption or value.description or value.get_link %}
             {% if value.align == "full_page" or value.align is None %}
                 <div class="container">
             {% endif %}
@@ -49,6 +50,12 @@
                 {% if value.description %}
                     <p>{{ value.description }}</p>
                 {% endif %}
+
+                {% block read_more_button %}
+                    {% if value.get_link %}
+                        <strong class="black float-right">{% trans "More" %} {% svg_icon "more" 24 %}</strong>
+                    {% endif %}
+                {% endblock %}
             </footer>
 
             {% if value.align == "full_page" or value.align is None %}
