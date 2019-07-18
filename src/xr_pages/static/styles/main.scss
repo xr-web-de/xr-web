@@ -72,6 +72,14 @@ a {
 .display--block {
     display: block;
 }
+.rounded {
+    border-radius: 50%;
+    svg {
+        top: -1px;
+        left: 2px;
+        position: relative;
+    }
+}
 
 // Content
 
