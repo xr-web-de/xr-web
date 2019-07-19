@@ -5,43 +5,51 @@ from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
 
 
 class WagtailAdminNewsletterFormPageForm(WagtailAdminFormPageForm):
-    def __init__(self, data=None, files=None, parent_page=None, *args, **kwargs):
-        from xr_newsletter.models import NewsletterFormField
+    required_fields = ["email", "name", "gdpr"]
+    required_fields_required = ["email", "gdpr"]
 
+    def __init__(self, data=None, files=None, parent_page=None, *args, **kwargs):
         instance = kwargs["instance"]
 
         if not instance.form_fields.exists():
-            form_fields = [
-                NewsletterFormField(
-                    label=_("Email"),
-                    name="email",
-                    field_type="email",
-                    required=True,
-                    sort_order=0,
-                ),
-                NewsletterFormField(
-                    label=_("Name"),
-                    name="name",
-                    field_type="singleline",
-                    required=False,
-                    sort_order=1,
-                ),
-                NewsletterFormField(
-                    label=_("I agree"),
-                    name="gdpr",
-                    field_type="checkbox",
-                    required=True,
-                    help_text=_(
-                        "GDPR Permission: I give my consent to Extinction Rebellion to "
-                        "get in touch with me using the information I have provided in "
-                        "this form, for the purpose of news, updates, and rebellion."
-                    ),
-                    sort_order=2,
-                ),
-            ]
+            form_fields = self.get_form_fields()
             instance.form_fields.set(form_fields)
 
         super().__init__(data, files, parent_page, *args, **kwargs)
+
+    @staticmethod
+    def get_form_fields():
+        from xr_newsletter.models import NewsletterFormField
+
+        form_fields = [
+            NewsletterFormField(
+                label=_("Email"),
+                name="email",
+                field_type="email",
+                required=True,
+                sort_order=0,
+            ),
+            NewsletterFormField(
+                label=_("Name"),
+                name="name",
+                field_type="singleline",
+                required=False,
+                sort_order=1,
+            ),
+            NewsletterFormField(
+                label=_("I agree"),
+                name="gdpr",
+                field_type="checkbox",
+                required=True,
+                help_text=_(
+                    "GDPR Permission: I give my consent to Extinction Rebellion to "
+                    "get in touch with me using the information I have provided in "
+                    "this form, for the purpose of news, updates, and rebellion."
+                ),
+                sort_order=2,
+            ),
+        ]
+        return form_fields
 
     def clean(self):
         super().clean()
@@ -70,18 +78,16 @@ class WagtailAdminNewsletterFormPageForm(WagtailAdminFormPageForm):
                             )
 
             # check for required newsletter form fields
-            required_fields = ["email", "name", "gdpr"]
-            required_fields_required = ["email", "gdpr"]
 
             found_field_forms = {}
 
             for form in _forms:
                 name = form.cleaned_data.get("name")
-                if name in required_fields:
+                if name in self.required_fields:
                     found_field_forms[name] = form
 
-            for field_name in required_fields:
-                if not field_name in found_field_forms:
+            for field_name in self.required_fields:
+                if field_name not in found_field_forms:
                     self.add_error(
                         NON_FIELD_ERRORS,
                         ValidationError(
@@ -91,7 +97,7 @@ class WagtailAdminNewsletterFormPageForm(WagtailAdminFormPageForm):
                         ),
                     )
 
-            for field_name in required_fields_required:
+            for field_name in self.required_fields_required:
                 form = found_field_forms.get(field_name, None)
 
                 if form and not form.cleaned_data.get("required"):
@@ -114,3 +120,56 @@ class WagtailAdminNewsletterFormPageForm(WagtailAdminFormPageForm):
                         "in order to allow subscribing to the newsletter."
                     ),
                 )
+
+
+class WagtailAdminMauticFormPageForm(WagtailAdminNewsletterFormPageForm):
+    required_fields = ["email", "name", "gdpr", "city", "phone"]
+    required_fields_required = ["email", "gdpr"]
+
+    @staticmethod
+    def get_form_fields():
+        from xr_newsletter.models import NewsletterFormField
+
+        form_fields = [
+            NewsletterFormField(
+                label=_("Name"),
+                name="name",
+                field_type="singleline",
+                required=False,
+                sort_order=1,
+            ),
+            NewsletterFormField(
+                label=_("City"),
+                name="city",
+                field_type="singleline",
+                required=False,
+                sort_order=1,
+            ),
+            NewsletterFormField(
+                label=_("Email"),
+                name="email",
+                field_type="email",
+                required=True,
+                sort_order=0,
+            ),
+            NewsletterFormField(
+                label=_("Phone"),
+                name="phone",
+                field_type="singleline",
+                required=False,
+                sort_order=1,
+            ),
+            NewsletterFormField(
+                label=_("Data policy"),
+                name="gdpr",
+                field_type="checkbox",
+                required=True,
+                help_text=_(
+                    "GDPR Permission: I give my consent to Extinction Rebellion to "
+                    "get in touch with me using the information I have provided in "
+                    "this form, for the purpose of news, updates, and rebellion."
+                ),
+                sort_order=2,
+            ),
+        ]
+        return form_fields

@@ -1,5 +1,8 @@
 import json
+import re
 
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
@@ -20,7 +23,7 @@ from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 
-from xr_newsletter.forms import WagtailAdminNewsletterFormPageForm
+from xr_newsletter.forms import WagtailAdminMauticFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_web.edit_handlers import FieldCollapsiblePanel
@@ -38,18 +41,27 @@ class EmailFormField(AbstractFormField):
     page = ParentalKey(
         "EmailFormPage", on_delete=models.CASCADE, related_name="form_fields"
     )
+    placeholder = models.CharField(
+        verbose_name=_("placeholder"),
+        max_length=255,
+        help_text=_(
+            "The placeholder is displayed in grey, " "and disappears on focus."
+        ),
+        default="",
+        blank=True,
+    )
 
     panels = [
-        FieldRowPanel((FieldPanel("label"),)),
+        FieldRowPanel((FieldPanel("label"), FieldPanel("required"))),
         FieldCollapsiblePanel(
             [
-                FieldPanel("help_text"),
                 FieldRowPanel(
                     (
                         FieldPanel("field_type", classname="formbuilder-type"),
-                        FieldPanel("required"),
+                        FieldPanel("placeholder"),
                     )
                 ),
+                FieldPanel("help_text"),
                 FieldRowPanel(
                     (
                         FieldPanel("choices", classname="formbuilder-choices"),
@@ -133,23 +145,33 @@ class NewsletterFormField(AbstractFormField):
         "NewsletterFormPage", on_delete=models.CASCADE, related_name="form_fields"
     )
 
-    name = models.SlugField(
+    name = models.CharField(
         verbose_name=_("name"),
         max_length=255,
         help_text=_("A unique name for the form field"),
     )
+    placeholder = models.CharField(
+        verbose_name=_("placeholder"),
+        max_length=255,
+        help_text=_(
+            "The placeholder is displayed in grey, " "and disappears on focus."
+        ),
+        default="",
+        blank=True,
+    )
 
     panels = [
         FieldRowPanel((FieldPanel("label"), FieldPanel("name"))),
+        FieldPanel("required"),
         FieldCollapsiblePanel(
             [
-                FieldPanel("help_text"),
                 FieldRowPanel(
                     (
                         FieldPanel("field_type", classname="formbuilder-type"),
-                        FieldPanel("required"),
+                        FieldPanel("placeholder"),
                     )
                 ),
+                FieldPanel("help_text"),
                 FieldRowPanel(
                     (
                         FieldPanel("choices", classname="formbuilder-choices"),
@@ -179,19 +201,24 @@ class NewsletterFormField(AbstractFormField):
 class NewsletterFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/newsletter_form.html"
     landing_page_template = "xr_newsletter/pages/newsletter_form_thank_you.html"
-    group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
+    group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
     sendy_list_id = models.CharField(max_length=254, null=True, blank=True)
+    mautic_form_id = models.PositiveSmallIntegerField(null=True, blank=True)
 
     settings_panels = AbstractEmailFormPage.settings_panels + [
         MultiFieldPanel(
             [FieldPanel("sendy_list_id")],
             _("Subscribe to Sendy newsletter list on submit"),
-        )
+        ),
+        MultiFieldPanel(
+            [FieldPanel("mautic_form_id")],
+            _("Subscribe to Mautic newsletter on submit."),
+        ),
     ]
 
     parent_page_types = [HomePage, HomeSubPage, LocalGroupPage, LocalGroupSubPage]
 
-    base_form_class = WagtailAdminNewsletterFormPageForm
+    base_form_class = WagtailAdminMauticFormPageForm
 
     class Meta:
         verbose_name = _("Newsletter Form Page")
@@ -211,7 +238,31 @@ class NewsletterFormPage(AbstractEmailFormPage):
                 if self.to_address:
                     self.send_mail(form)
 
-                if self.sendy_list_id:
+                if self.mautic_submit_url:
+                    try:
+                        data = {
+                            "mauticform[f_name]": form.cleaned_data.get("name", None),
+                            "mauticform[stadt]": form.cleaned_data.get("city", None),
+                            "mauticform[email]": form.cleaned_data.get("email", None),
+                            "mauticform[rufnummer1]": form.cleaned_data.get(
+                                "phone", None
+                            ),
+                            "mauticform[formId]": self.mautic_form_id,
+                            "mauticform[return]": "",
+                            "mauticform[formName]": "inputwebsitenew",
+                        }
+                        response = requests.post(self.mautic_submit_url, data=data)
+
+                        if response.status_code == 200 and not re.search(
+                            "Error", response.text
+                        ):
+                            return self.render_landing_page(
+                                request, form_submission, *args, **kwargs
+                            )
+                    except IndexError:
+                        pass
+
+                elif self.sendy_list_id:
                     data = {
                         "email": form.cleaned_data.get("email", None),
                         "name": form.cleaned_data.get("name", None),
@@ -230,11 +281,7 @@ class NewsletterFormPage(AbstractEmailFormPage):
                     except ValueError:
                         pass
 
-                message = _(
-                    "Sorry, there was an error talking to the Newsletter API "
-                    "or you have subscribed already. "
-                    "Please try again later."
-                )
+                message = _("Uups, something went wrong. Please try again later.")
                 messages.error(request, message)
                 # form = self.get_form(page=self, user=request.user)
         else:
@@ -245,7 +292,16 @@ class NewsletterFormPage(AbstractEmailFormPage):
 
         return render(request, self.get_template(request), context)
 
+    @property
+    def mautic_submit_url(self):
+        # e.g. https://mautic.extinctionrebellion.de/form/submit?formId=3
+        if not hasattr(settings, "MAUTIC_SUBMIT_URL") or not self.mautic_form_id:
+            return None
+        return "{}?formId={}".format(settings.MAUTIC_SUBMIT_URL, self.mautic_form_id)
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context.update({"action": self.url, "form_id": "newsletter_form"})
+        if self.mautic_submit_url:
+            context.update({"submit_name": "mauticform[submit]"})
         return context

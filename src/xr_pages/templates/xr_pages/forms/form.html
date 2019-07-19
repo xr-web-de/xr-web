@@ -41,7 +41,7 @@
 
         {% block submit_buttons %}
             <div class="col-xxs-12 col-sm-6 col-md-4">
-                <button type="submit">
+                <button type="submit" {% if submit_name %}name="{{ submit_name }}"{% endif %}>
                     {% if submit_butten_text %}
                         {{ submit_butten_text }}
                     {% else %}
