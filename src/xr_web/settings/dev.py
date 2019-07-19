@@ -45,3 +45,5 @@ LOGGING = {
 
 SENDY_HOST_URL = "https://sendy.testhost"
 SENDY_API_KEY = "NotSecretAtAll"
+
+MAUTIC_SUBMIT_URL = "https://mautic.extinctionrebellion.de"
