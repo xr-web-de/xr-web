@@ -119,8 +119,16 @@ class EmailFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/email_form.html"
     landing_page_template = "xr_newsletter/pages/email_form_thank_you.html"
     group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
+    save_submission = models.BooleanField(default=False, blank=True)
 
     parent_page_types = [HomePage, LocalGroupPage, HomeSubPage, LocalGroupSubPage]
+
+    settings_panels = AbstractEmailFormPage.settings_panels + [
+        MultiFieldPanel(
+            [FieldPanel("save_submission")],
+            _("Save the submitted data on the webserver (e.g. for CSV export)"),
+        )
+    ]
 
     class Meta:
         verbose_name = _("Email Form Page")
@@ -130,6 +138,8 @@ class EmailFormPage(AbstractEmailFormPage):
         submission = self.get_submission_class()(
             form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder), page=self
         )
+        if self.save_submission:
+            submission.save()
         if self.to_address:
             self.send_mail(form)
         return submission
@@ -297,7 +307,9 @@ class NewsletterFormPage(AbstractEmailFormPage):
         # e.g. https://mautic.extinctionrebellion.de/form/submit?formId=3
         if not hasattr(settings, "MAUTIC_SUBMIT_URL") or not self.mautic_form_id:
             return None
-        return "{}?formId={}".format(settings.MAUTIC_SUBMIT_URL, self.mautic_form_id)
+        return "{}/form/submit?formId={}".format(
+            settings.MAUTIC_SUBMIT_URL, self.mautic_form_id
+        )
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
