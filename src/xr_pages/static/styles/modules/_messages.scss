@@ -1,0 +1,64 @@
+.messages {
+    margin-bottom: 2em;
+
+    > li {
+        position: relative;
+        padding-left: 2em;
+    }
+    .success,
+    .error,
+    .warning,
+    .info {
+        line-height: 2;
+        &:before {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            box-sizing: border-box;
+
+            background: transparent;
+        }
+    }
+    .success {
+        &:before {
+            top: 0.13em;
+            left: 0.5em;
+            width: 0.8em;
+            height: 1.3em;
+
+            border: 0.4em solid xrColor(green);
+            border-top: none;
+            border-left: none;
+
+            transform: rotate(45deg);
+        }
+    }
+    .error,
+    .warning {
+        &:before {
+            top: 0.2em;
+            left: 0.7em;
+            width: 0.4em;
+            height: 1.4em;
+
+            border-top: 0.8em solid xrColor(red);
+            border-bottom: 0.4em solid xrColor(red);
+        }
+    }
+    .warning {
+        &:before {
+            border-color: xrColor(warm-yellow);
+        }
+    }
+    .info {
+        &:before {
+            top: 0.2em;
+            left: 0.7em;
+            width: 0.4em;
+            height: 1.4em;
+
+            border-top: 0.4em solid xrColor(light-blue);
+            border-bottom: 0.8em solid xrColor(light-blue);
+        }
+    }
+}
