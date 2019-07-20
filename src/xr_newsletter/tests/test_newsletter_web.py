@@ -96,8 +96,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             response = form.submit()
 
             self.assertEqual(response.status_code, 200)
-            self.assertNotContains(response, "error")
-            # TODO: test error message
+            self.assertContains(response, "error")
 
     def test_newsletter_form_missing_to_address(self):
         self.newsletter_page.to_address = ""
@@ -147,8 +146,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             response = form.submit()
 
             self.assertEqual(response.status_code, 200)
-            self.assertNotContains(response, "error")
-            # response.mustcontain("success")
+            self.assertContains(response, "error")
 
             mock_sendy_subscribe.assert_not_called()
             # Test that one message has been sent.
