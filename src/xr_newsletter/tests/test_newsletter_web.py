@@ -60,6 +60,9 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
         ) as mock_sendy_subscribe:
             response = form.submit()
 
+            self.assertRedirects(response, self.home_page.get_url())
+            response = response.follow()
+
             self.assertEqual(response.status_code, 200)
             self.assertNotContains(response, "error")
             # response.mustcontain("success")
@@ -74,7 +77,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
     def test_newsletter_form_unexpected_api_response(self):
         with mock.patch.object(
             xr_newsletter.services.sendy_api, "subscriber_count", return_value=10
-        ) as mock_sendy_subscribe:
+        ):
             self.newsletter_page.sendy_list_id = "sendy_TEST_list_id"
             self.newsletter_page.to_address = "admin@example.com"
             self.newsletter_page.save()
@@ -89,7 +92,7 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
 
         with mock.patch.object(
             xr_newsletter.services.sendy_api, "subscribe", return_value=b"\nunexpected"
-        ) as mock_sendy_subscribe:
+        ):
             response = form.submit()
 
             self.assertEqual(response.status_code, 200)
@@ -112,6 +115,9 @@ class NewsletterWebTest(PagesBaseTest, WebTest):
             xr_newsletter.services.sendy_api, "subscribe", return_value="true"
         ) as mock_sendy_subscribe:
             response = form.submit()
+
+            self.assertRedirects(response, self.home_page.get_url())
+            response = response.follow()
 
             self.assertEqual(response.status_code, 200)
             self.assertNotContains(response, "error")

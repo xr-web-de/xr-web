@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from modelcluster.fields import ParentalKey
@@ -26,6 +26,7 @@ from wagtail.core.models import Page
 from xr_newsletter.forms import WagtailAdminMauticFormPageForm
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
+from xr_pages.services import get_home_page
 from xr_web.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import (
     LocalGroup,
@@ -82,12 +83,11 @@ class EmailFormField(AbstractFormField):
 
 class AbstractEmailFormPage(AbstractEmailForm, XrPage):
     content = StreamField(ContentBlock, blank=True)
-    thank_you_text = StreamField(ContentBlock, blank=True)
+    group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
 
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel("content"),
         InlinePanel("form_fields", label=_("Form fields")),
-        StreamFieldPanel("thank_you_text"),
     ]
 
     settings_panels = Page.settings_panels + [
@@ -108,6 +108,16 @@ class AbstractEmailFormPage(AbstractEmailForm, XrPage):
     class Meta:
         abstract = True
 
+    def get_landing_page(self, request=None):
+        qs = ThankYouPage.objects.live().child_of(self)
+        if qs.exists():
+            return qs.first()
+
+        if request:
+            message = _("Thank you! Your form was submitted successfully.")
+            messages.success(request, message)
+        return get_home_page()
+
     def save(self, *args, **kwargs):
         if not hasattr(self, "group") or self.group is None:
             self.group = self.get_parent().specific.group
@@ -117,8 +127,7 @@ class AbstractEmailFormPage(AbstractEmailForm, XrPage):
 
 class EmailFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/email_form.html"
-    landing_page_template = "xr_newsletter/pages/email_form_thank_you.html"
-    group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
+
     save_submission = models.BooleanField(default=False, blank=True)
 
     parent_page_types = [HomePage, LocalGroupPage, HomeSubPage, LocalGroupSubPage]
@@ -143,6 +152,24 @@ class EmailFormPage(AbstractEmailFormPage):
         if self.to_address:
             self.send_mail(form)
         return submission
+
+    def serve(self, request, *args, **kwargs):
+        if request.method == "POST":
+            form = self.get_form(
+                request.POST, request.FILES, page=self, user=request.user
+            )
+
+            if form.is_valid():
+                self.process_form_submission(form)
+                return redirect(
+                    self.get_landing_page(request).get_url(), permanent=False
+                )
+        else:
+            form = self.get_form(page=self, user=request.user)
+
+        context = self.get_context(request)
+        context["form"] = form
+        return render(request, self.get_template(request), context)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -210,8 +237,6 @@ class NewsletterFormField(AbstractFormField):
 
 class NewsletterFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/newsletter_form.html"
-    landing_page_template = "xr_newsletter/pages/newsletter_form_thank_you.html"
-    group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
     sendy_list_id = models.CharField(max_length=254, null=True, blank=True)
     mautic_form_id = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -241,10 +266,10 @@ class NewsletterFormPage(AbstractEmailFormPage):
             )
 
             if form.is_valid():
-                form_submission = self.get_submission_class()(
-                    form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
-                    page=self,
-                )
+                # form_submission = self.get_submission_class()(
+                #     form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+                #     page=self,
+                # )
                 if self.to_address:
                     self.send_mail(form)
 
@@ -266,8 +291,9 @@ class NewsletterFormPage(AbstractEmailFormPage):
                         if response.status_code == 200 and not re.search(
                             "Error", response.text
                         ):
-                            return self.render_landing_page(
-                                request, form_submission, *args, **kwargs
+                            return redirect(
+                                self.get_landing_page(request).get_url(),
+                                permanent=False,
                             )
                     except IndexError:
                         pass
@@ -285,8 +311,9 @@ class NewsletterFormPage(AbstractEmailFormPage):
 
                     try:
                         if sendy_response == "true" or int(sendy_response) == 1:
-                            return self.render_landing_page(
-                                request, form_submission, *args, **kwargs
+                            return redirect(
+                                self.get_landing_page(request).get_url(),
+                                permanent=False,
                             )
                     except ValueError:
                         pass
@@ -317,3 +344,23 @@ class NewsletterFormPage(AbstractEmailFormPage):
         if self.mautic_submit_url:
             context.update({"submit_name": "mauticform[submit]"})
         return context
+
+
+class ThankYouPage(XrPage):
+    template = "xr_newsletter/pages/thank_you.html"
+    content = StreamField(ContentBlock, blank=True)
+    group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
+
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
+
+    parent_page_types = [EmailFormPage, NewsletterFormPage]
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "group") or self.group is None:
+            self.group = self.get_parent().specific.group
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("Thank You Page")
+        verbose_name_plural = _("Thank You Pages")
