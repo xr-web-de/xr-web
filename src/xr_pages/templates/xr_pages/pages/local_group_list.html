@@ -5,18 +5,20 @@
 
 {% block content %}
 
-    {% include_block page.content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                {% include_block page.content %}
+            </div>
+            <div class="col-xs-12 col-md-6">
+                {% include "xr_pages/partials/local_group_umap.html" %}
+            </div>
+        </div>
+    </div>
 
     {% get_local_groups as local_groups %}
     {% regroup local_groups by first_letter as local_group_list %}
-    <div class="mapIframe">
-        <iframe width="100%" height="510px" frameborder="0" allowfullscreen
-                src="https://umap.openstreetmap.de/de/map/extinction-rebellion-ortsgruppen-deutschland_337?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=undefined&captionBar=false"></iframe>
-        <p><a href="https://umap.openstreetmap.de/de/map/extinction-rebellion-ortsgruppen-deutschland_337">Vollbildanzeige</a>
-            <span class="bg--xr-warm-yellow rounded">{% svg_icon "extinctionsymbol" size=24 %}</span> Ortsgruppe im Aufbau
-            <span class="bg--xr-green rounded">{% svg_icon "extinctionsymbol" size=24 %}</span> Aktive Ortsgruppe
-        </p>
-    </div>
+
     <div class="container">
 
         {% for local_group_group in local_group_list %}

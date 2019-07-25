@@ -14,13 +14,13 @@
 
     {% if value.background_image %}
         {% if value.align == "full_page" %}
-            {% image value.background_image fill-1920x1080-c75 alt="{{ value.text }}" class="slogan-block--bg-img" %}
+            {% image value.background_image fill-1920x1080-c75 alt=value.text class="slogan-block--bg-img" %}
         {% elif value.align == "full_content" %}
-            {% image value.background_image fill-1280x720-c75 alt="{{ value.text }}" class="slogan-block--bg-img" %}
+            {% image value.background_image fill-1280x720-c75 alt=value.text class="slogan-block--bg-img" %}
         {% elif value.align == "center" %}
-            {% image value.background_image fill-768x432-c75 alt="{{ value.text }}" class="slogan-block--bg-img" %}
+            {% image value.background_image fill-768x432-c75 alt=value.text class="slogan-block--bg-img" %}
         {% else %} {# align in "left, right" #}
-            {% image value.background_image fill-512x288-c75 alt="{{ value.text }}" class="slogan-block--bg-img" %}
+            {% image value.background_image fill-512x288-c75 alt=value.text class="slogan-block--bg-img" %}
         {% endif %}
     {% endif %}
 
