@@ -1,0 +1,19 @@
+{% extends "xr_pages/blocks/base.html" %}
+{% load xr_pages_tags %}
+
+
+{% block block_content %}
+    <div class="mapIframe">
+    <iframe width="100%" height="510px" frameborder="0" allowfullscreen
+            src="{{ value.get_umap_url }}">
+    </iframe>
+    <p>
+        <a href="{{ value.get_umap_url }}">Vollbildanzeige</a>
+
+    </p>
+    {% if value.umap_url == "de_local_groups" %}
+        <span class="bg--xr-warm-yellow rounded">{% svg_icon "extinctionsymbol" size=24 %}</span> Ortsgruppe im Aufbau
+        <span class="bg--xr-green rounded">{% svg_icon "extinctionsymbol" size=24 %}</span> Aktive Ortsgruppe
+    {% endif %}
+</div>
+{% endblock %}

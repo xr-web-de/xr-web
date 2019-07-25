@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from wagtail.core import blocks
 from wagtail.embeds.blocks import EmbedBlock
@@ -216,6 +217,25 @@ class TeaserBlock(CollapsibleFieldsMixin, blocks.StructBlock):
         value_class = XrStructValue
 
 
+class UmapBlock(CollapsibleFieldsMixin, blocks.StructBlock):
+    heading = blocks.CharBlock(**heading_block_kwargs)
+    umap_url = blocks.ChoiceBlock(choices=settings.UMAP_URLS)
+    caption = blocks.CharBlock(**caption_block_kwargs)
+    description = blocks.TextBlock(**description_block_kwargs)
+
+    fields = [
+        "heading",
+        "umap_url",
+        {"label": _("Card"), "fields": ["caption", "description"]},
+        {"label": _("Settings"), "fields": ["align"]},
+    ]
+
+    class Meta:
+        icon = "site"
+        template = "xr_pages/blocks/umap.html"
+        value_class = XrStructValue
+
+
 class GridBlock(CollapsibleFieldsMixin, blocks.StructBlock):
     heading = blocks.CharBlock(**heading_block_kwargs)
     items = blocks.StreamBlock(
@@ -272,6 +292,10 @@ class AlignedCarouselBlock(AlignmentMixin, CarouselBlock):
     pass
 
 
+class AlignedUmapBlock(AlignmentMixin, UmapBlock):
+    pass
+
+
 # Page content StreamField
 class ContentBlock(blocks.StreamBlock):
     title = TitleBlock()
@@ -282,6 +306,7 @@ class ContentBlock(blocks.StreamBlock):
     slogan = AlignedSloganBlock()
     form = EmailFormBlock()
     grid = GridBlock()
+    umap = AlignedUmapBlock()
     # carousel = AlignedCarouselBlock()
 
     class Meta:

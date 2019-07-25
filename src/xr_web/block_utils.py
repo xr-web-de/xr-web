@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from wagtail.core import blocks
 
@@ -103,6 +104,12 @@ class XrStructValue(StructValue):
         if not background_color:
             return "xr-transparent"
         return background_color
+
+    def get_umap_url(self):
+        for key, value in settings.UMAP_URLS:
+            if key == self.get("umap_url"):
+                return value
+        return ""
 
 
 class AlignmentMixin(blocks.StructBlock):

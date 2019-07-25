@@ -5,16 +5,8 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-6">
-                {% include_block page.content %}
-            </div>
-            <div class="col-xs-12 col-md-6">
-                {% include "xr_pages/partials/local_group_umap.html" %}
-            </div>
-        </div>
-    </div>
+    {% include_block page.content %}
+
 
     {% get_local_groups as local_groups %}
     {% regroup local_groups by first_letter as local_group_list %}
