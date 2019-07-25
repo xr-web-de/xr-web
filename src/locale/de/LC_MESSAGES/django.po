@@ -42,12 +42,12 @@ msgstr "Blog Beitrag Seiten"
 #: xr_blog/models.py:75
 #| msgid "Event List Page"
 msgid "Blog List Page"
-msgstr "Veranstaltungs Übersicht Seite"
+msgstr "Blog Übersicht Seite"
 
 #: xr_blog/models.py:76
 #| msgid "Event List Pages"
 msgid "Blog List Pages"
-msgstr "Veranstaltungs Übersicht Seiten"
+msgstr "Blog Übersicht Seiten"
 
 #: xr_blog/templates/xr_blog/pages/blog_entry.html:11
 #: xr_blog/templates/xr_blog/partials/blog_card.html:34

@@ -129,10 +129,14 @@
     width: 100%;
     height: 100%;
 }
-.inline-svg-text text {
-    text-anchor: middle;
-    text-transform: uppercase;
-    font-family: 'Fucxed', Impact, Arial, sans-serif;
+.inline-svg-text {
+    text {
+        text-anchor: middle;
+        font-family: 'Fucxed', Impact, Arial, sans-serif;
+    }
+    text tspan {
+        text-transform: uppercase;
+    }
 }
 
 // Image Block

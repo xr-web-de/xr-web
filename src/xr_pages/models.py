@@ -231,6 +231,7 @@ class LocalGroup(models.Model):
     class Meta:
         verbose_name = _("Local group")
         verbose_name_plural = _("Local groups")
+        ordering = ("name",)
 
     @property
     def xr_name(self):
