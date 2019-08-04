@@ -26,6 +26,7 @@ from wagtail.core.models import Page
 from xr_newsletter.forms import (
     WagtailAdminMauticNewsletterFormPageForm,
     WagtailAdminGdprFormPageForm,
+    PlaceholderFormBuilder,
 )
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
@@ -112,6 +113,8 @@ class EmailFormField(NamedAbstractFormField):
 class AbstractEmailFormPage(AbstractEmailForm, XrPage):
     content = StreamField(ContentBlock, blank=True)
     group = models.ForeignKey(LocalGroup, editable=False, on_delete=models.PROTECT)
+
+    form_builder = PlaceholderFormBuilder
 
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel("content"),

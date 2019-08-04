@@ -1,7 +1,7 @@
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.forms import ValidationError
 from django.utils.translation import ugettext as _
-from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
+from wagtail.contrib.forms.forms import WagtailAdminFormPageForm, FormBuilder
 
 
 class WagtailAdminGdprFormPageForm(WagtailAdminFormPageForm):
@@ -208,3 +208,17 @@ class WagtailAdminMauticNewsletterFormPageForm(WagtailAdminGdprFormPageForm):
             ),
         ]
         return form_fields
+
+
+class PlaceholderFormBuilder(FormBuilder):
+    @property
+    def formfields(self):
+        formfields = super().formfields
+
+        for field in self.fields:
+            if field.placeholder:
+                formfields[field.clean_name].widget.attrs.update(
+                    {"placeholder": field.placeholder}
+                )
+
+        return formfields
