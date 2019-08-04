@@ -243,7 +243,9 @@ class NewsletterFormField(NamedAbstractFormField):
 class NewsletterFormPage(AbstractEmailFormPage):
     template = "xr_newsletter/pages/newsletter_form.html"
     sendy_list_id = models.CharField(max_length=254, null=True, blank=True)
-    mautic_form_id = models.PositiveSmallIntegerField(null=True, blank=True)
+    mautic_form_id = models.PositiveSmallIntegerField(
+        null=True, blank=True, default=settings.MAUTIC_DEFAULT_FORM_ID
+    )
 
     settings_panels = AbstractEmailFormPage.settings_panels + [
         MultiFieldPanel(
