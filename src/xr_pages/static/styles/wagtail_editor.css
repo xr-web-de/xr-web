@@ -26,3 +26,7 @@ summary .help {
 body.ready textarea {
     resize: both !important;
 }
+
+.multiple {
+    max-width: 100%;
+}
