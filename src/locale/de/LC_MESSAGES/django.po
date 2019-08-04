@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-20 10:50+0200\n"
+"POT-Creation-Date: 2019-08-04 19:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,17 +35,14 @@ msgid "Blog Entry Page"
 msgstr "Blog Beitrag Seite"
 
 #: xr_blog/models.py:50
-#| msgid "Content Pages"
 msgid "Blog Entry Pages"
 msgstr "Blog Beitrag Seiten"
 
 #: xr_blog/models.py:75
-#| msgid "Event List Page"
 msgid "Blog List Page"
 msgstr "Blog Übersicht Seite"
 
 #: xr_blog/models.py:76
-#| msgid "Event List Pages"
 msgid "Blog List Pages"
 msgstr "Blog Übersicht Seiten"
 
@@ -100,7 +97,6 @@ msgid "A more specific location, overwrites the events default location."
 msgstr ""
 
 #: xr_events/models.py:135
-#| msgid "The content is only visible on the detail page."
 msgid "Optional date description. Visible on event detail page only."
 msgstr ""
 
@@ -161,199 +157,201 @@ msgstr ""
 msgid "von"
 msgstr ""
 
-#: xr_newsletter/blocks.py:32 xr_pages/blocks.py:94 xr_pages/blocks.py:132
-#: xr_pages/blocks.py:171 xr_pages/blocks.py:210
+#: xr_newsletter/blocks.py:32 xr_pages/blocks.py:95 xr_pages/blocks.py:133
+#: xr_pages/blocks.py:172 xr_pages/blocks.py:211 xr_pages/blocks.py:229
 msgid "Card"
 msgstr ""
 
-#: xr_newsletter/blocks.py:33 xr_newsletter/models.py:73
-#: xr_newsletter/models.py:219 xr_pages/blocks.py:95 xr_pages/blocks.py:134
-#: xr_pages/blocks.py:173 xr_pages/blocks.py:240
+#: xr_newsletter/blocks.py:33 xr_newsletter/models.py:80 xr_pages/blocks.py:96
+#: xr_pages/blocks.py:135 xr_pages/blocks.py:174 xr_pages/blocks.py:230
+#: xr_pages/blocks.py:260
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: xr_newsletter/forms.py:26 xr_newsletter/forms.py:149
-msgid "Email"
-msgstr "Email"
-
-#: xr_newsletter/forms.py:33 xr_newsletter/forms.py:135
-msgid "Name"
-msgstr "Name"
-
-#: xr_newsletter/forms.py:40
+#: xr_newsletter/forms.py:26 xr_newsletter/forms.py:148
 msgid "I agree"
 msgstr "Ich bin einverstanden"
 
-#: xr_newsletter/forms.py:45 xr_newsletter/forms.py:168
+#: xr_newsletter/forms.py:31 xr_newsletter/forms.py:153
+#: xr_newsletter/forms.py:206
 msgid ""
 "GDPR Permission: I give my consent to Extinction Rebellion to get in touch "
 "with me using the information I have provided in this form, for the purpose "
 "of news, updates, and rebellion."
 msgstr ""
-"Ich bin damit einverstanden, dass Extinction Rebellion "
-"die Informationen in diesem Formular "
-"dazu nutzt mich zu kontaktieren und auf dem Laufenden zu halten."
+"Ich bin damit einverstanden, dass Extinction Rebellion die Informationen in "
+"diesem Formular dazu nutzt mich zu kontaktieren und auf dem Laufenden zu "
+"halten."
 
-#: xr_newsletter/forms.py:74
+#: xr_newsletter/forms.py:60
 #, python-format
 msgid "There is another field with the name %s, please change one of them."
 msgstr "Es gibt bereits ein Feld mit dem Namen %s, bitte nenne eines um."
 
-#: xr_newsletter/forms.py:142
+#: xr_newsletter/forms.py:134 xr_newsletter/forms.py:187
+msgid "Email"
+msgstr "Email"
+
+#: xr_newsletter/forms.py:141 xr_newsletter/forms.py:173
+msgid "Name"
+msgstr "Name"
+
+#: xr_newsletter/forms.py:180
 msgid "City"
 msgstr "Stadt"
 
-#: xr_newsletter/forms.py:156
+#: xr_newsletter/forms.py:194
 msgid "Phone"
 msgstr "Rufnummer"
 
-#: xr_newsletter/forms.py:163
+#: xr_newsletter/forms.py:201
 msgid "Data policy"
 msgstr "Datenschutz"
 
-#: xr_newsletter/models.py:46 xr_newsletter/models.py:191
-msgid "placeholder"
-msgstr ""
-
-#: xr_newsletter/models.py:49 xr_newsletter/models.py:194
-msgid "The placeholder is displayed in grey, and disappears on focus."
-msgstr ""
-
-#: xr_newsletter/models.py:90
-msgid "Form fields"
-msgstr "Formularfelder"
-
-#: xr_newsletter/models.py:104
-msgid "Send email on submit"
-msgstr "Verschicke eine Email nach dem Absenden"
-
-#: xr_newsletter/models.py:117
-msgid "Thank you! Your form was submitted successfully."
-msgstr "Vielen Dank! Deine Anfrage wurde erfolgreich versandt."
-
-#: xr_newsletter/models.py:138
-msgid "Save the submitted data on the webserver (e.g. for CSV export)"
-msgstr ""
-
-#: xr_newsletter/models.py:143
-msgid "Email Form Page"
-msgstr "Email-Formular Seite"
-
-#: xr_newsletter/models.py:144
-msgid "Email Form Pages"
-msgstr "Email-Formular Seiten"
-
-#: xr_newsletter/models.py:186
+#: xr_newsletter/models.py:44
 msgid "name"
 msgstr "Name"
 
-#: xr_newsletter/models.py:188
+#: xr_newsletter/models.py:46
 msgid "A unique name for the form field"
 msgstr "Ein eindeutiger Name für das Formularfeld"
 
-#: xr_newsletter/models.py:246
+#: xr_newsletter/models.py:51
+msgid "placeholder"
+msgstr "Platzhalter"
+
+#: xr_newsletter/models.py:54
+msgid "The placeholder is displayed in grey, and disappears on focus."
+msgstr "Wird in grau angezeigt und verschwindet sobald das Feld fokusiert wird."
+
+#: xr_newsletter/models.py:118
+msgid "Form fields"
+msgstr "Formularfelder"
+
+#: xr_newsletter/models.py:132
+msgid "Send email on submit"
+msgstr "Verschicke eine Email nach dem Absenden"
+
+#: xr_newsletter/models.py:145
+msgid "Thank you! Your form was submitted successfully."
+msgstr "Vielen Dank! Deine Anfrage wurde erfolgreich versandt."
+
+#: xr_newsletter/models.py:168
+msgid "Save the submitted data on the webserver (e.g. for CSV export)"
+msgstr ""
+
+#: xr_newsletter/models.py:173
+msgid "Email Form Page"
+msgstr "Email-Formular Seite"
+
+#: xr_newsletter/models.py:174
+msgid "Email Form Pages"
+msgstr "Email-Formular Seiten"
+
+#: xr_newsletter/models.py:228
 msgid "Subscribe to Sendy newsletter list on submit"
 msgstr "Abonniere einen Sendy-Newsletter nach dem Absenden"
 
-#: xr_newsletter/models.py:250
+#: xr_newsletter/models.py:232
 msgid "Subscribe to Mautic newsletter on submit."
 msgstr "Abonniere einen Mautic-Newsletter nach dem Absenden"
 
-#: xr_newsletter/models.py:259
+#: xr_newsletter/models.py:241
 msgid "Newsletter Form Page"
 msgstr "Newsletter-Formular Seite"
 
-#: xr_newsletter/models.py:260
+#: xr_newsletter/models.py:242
 msgid "Newsletter Form Pages"
 msgstr "Newsletter-Formular Seiten"
 
-#: xr_newsletter/models.py:321
+#: xr_newsletter/models.py:303
 msgid "Uups, something went wrong. Please try again later."
-msgstr "Uups, irgendetwas ist schief gelaufen :/ Bitte versuch es später noch einmal."
+msgstr ""
+"Uups, irgendetwas ist schief gelaufen :/ Bitte versuch es später noch einmal."
 
-#: xr_newsletter/models.py:365
+#: xr_newsletter/models.py:347
 msgid "Thank You Page"
 msgstr "Danke Seite"
 
-#: xr_newsletter/models.py:366
+#: xr_newsletter/models.py:348
 msgid "Thank You Pages"
 msgstr "Danke Seiten"
 
-#: xr_pages/blocks.py:38
+#: xr_pages/blocks.py:39
 msgid ""
 "Simple richtext with basic formatting. Use links in order to connect related "
 "pages frequently. Ordered lists are rendered with big numbers.For images and "
 "videos use the image and video blocks."
 msgstr ""
 
-#: xr_pages/blocks.py:54 xr_web/block_utils.py:55
+#: xr_pages/blocks.py:55 xr_web/block_utils.py:56
 msgid "Center"
 msgstr ""
 
-#: xr_pages/blocks.py:54 xr_web/block_utils.py:57
+#: xr_pages/blocks.py:55 xr_web/block_utils.py:58
 msgid "Left"
 msgstr ""
 
-#: xr_pages/blocks.py:58 xr_web/block_utils.py:112 xr_web/block_utils.py:153
-#: xr_web/block_utils.py:159
+#: xr_pages/blocks.py:59 xr_web/block_utils.py:119 xr_web/block_utils.py:160
+#: xr_web/block_utils.py:166
 msgid "Choose the alignment of the block."
 msgstr ""
 
-#: xr_pages/blocks.py:61
+#: xr_pages/blocks.py:62
 msgid "Appearance"
 msgstr ""
 
-#: xr_pages/blocks.py:71
+#: xr_pages/blocks.py:72
 msgid "Link to an internal page. Is overwritten by \"external link\"."
 msgstr ""
 
-#: xr_pages/blocks.py:76
+#: xr_pages/blocks.py:77
 msgid "Link to an external page (https://...). Overwrites \"internal link\"."
 msgstr ""
 
-#: xr_pages/blocks.py:110
+#: xr_pages/blocks.py:111
 msgid ""
 "An optional alternative title, which is displayed on hover. If not given, "
 "the image's title attribute will be used instead."
 msgstr ""
 
-#: xr_pages/blocks.py:120
+#: xr_pages/blocks.py:121
 msgid ""
 "An optional copyright or attribution text, which is displayed at the bottom "
 "right of the image."
 msgstr ""
 
-#: xr_pages/blocks.py:150
+#: xr_pages/blocks.py:151
 msgid "The text is displayed centered and linebreaks will be preserved."
 msgstr ""
 
-#: xr_pages/blocks.py:155
+#: xr_pages/blocks.py:156
 msgid ""
 "Adjust the font size to fit your needs. Use the preview feature to see how "
 "big the font will be rendered."
 msgstr ""
 
-#: xr_pages/blocks.py:196
+#: xr_pages/blocks.py:197
 msgid ""
 "An optional caption, which is displayed below the block's content. "
 "Overwrites the page title of the linked page."
 msgstr ""
 
-#: xr_pages/blocks.py:203
+#: xr_pages/blocks.py:204
 msgid ""
 "An optional description, which is displayed below the block's caption. "
 "Overwrites the page description of the linked page."
 msgstr ""
 
-#: xr_pages/blocks.py:229
+#: xr_pages/blocks.py:249
 msgid "2"
 msgstr ""
 
-#: xr_pages/blocks.py:229
+#: xr_pages/blocks.py:249
 msgid "3"
 msgstr ""
 
-#: xr_pages/blocks.py:229
+#: xr_pages/blocks.py:249
 msgid "4"
 msgstr ""
 
@@ -464,27 +462,27 @@ msgstr "Ortsgruppe"
 msgid "Local groups"
 msgstr "Ortsgruppen"
 
-#: xr_pages/models.py:364
+#: xr_pages/models.py:365
 msgid "Local Group List Page"
 msgstr "Ortsgruppen Übersicht Seite"
 
-#: xr_pages/models.py:365
+#: xr_pages/models.py:366
 msgid "Local Group List Pages"
 msgstr "Ortsgruppen Übersicht Seiten"
 
-#: xr_pages/models.py:387
+#: xr_pages/models.py:388
 msgid "Local Group Page"
 msgstr "Ortsgruppen Seite"
 
-#: xr_pages/models.py:388
+#: xr_pages/models.py:389
 msgid "Local Group Pages"
 msgstr "Ortsgruppen Seiten"
 
-#: xr_pages/models.py:429
+#: xr_pages/models.py:430
 msgid "Local Group Content Page"
 msgstr "Ortsgruppen Inhalts-Seite"
 
-#: xr_pages/models.py:430
+#: xr_pages/models.py:431
 msgid "Local Group Content Pages"
 msgstr "Ortsgruppen Inhalts-Seiten"
 
@@ -511,99 +509,99 @@ msgstr ""
 msgid "Absenden"
 msgstr ""
 
-#: xr_pages/templates/xr_pages/layouts/default.html:98
+#: xr_pages/templates/xr_pages/layouts/default.html:100
 msgid "Disclaimer"
 msgstr ""
 
-#: xr_web/block_utils.py:28
+#: xr_web/block_utils.py:29
 msgid "Green"
 msgstr ""
 
-#: xr_web/block_utils.py:29
+#: xr_web/block_utils.py:30
 msgid "Black"
 msgstr ""
 
-#: xr_web/block_utils.py:30
+#: xr_web/block_utils.py:31
 msgid "Lemon"
 msgstr ""
 
-#: xr_web/block_utils.py:31
+#: xr_web/block_utils.py:32
 msgid "Light blue"
 msgstr ""
 
-#: xr_web/block_utils.py:32
+#: xr_web/block_utils.py:33
 msgid "Pink"
 msgstr ""
 
-#: xr_web/block_utils.py:33
+#: xr_web/block_utils.py:34
 msgid "Purple"
 msgstr ""
 
-#: xr_web/block_utils.py:34
+#: xr_web/block_utils.py:35
 msgid "Light green"
 msgstr ""
 
-#: xr_web/block_utils.py:35
+#: xr_web/block_utils.py:36
 msgid "Warm yellow"
 msgstr ""
 
-#: xr_web/block_utils.py:36
+#: xr_web/block_utils.py:37
 msgid "Bright pink"
 msgstr ""
 
-#: xr_web/block_utils.py:37
+#: xr_web/block_utils.py:38
 msgid "Red"
 msgstr ""
 
-#: xr_web/block_utils.py:38
+#: xr_web/block_utils.py:39
 msgid "Dark blue"
 msgstr ""
 
-#: xr_web/block_utils.py:39
+#: xr_web/block_utils.py:40
 msgid "Angry"
 msgstr ""
 
-#: xr_web/block_utils.py:40
+#: xr_web/block_utils.py:41
 msgid "White"
 msgstr ""
 
-#: xr_web/block_utils.py:41
+#: xr_web/block_utils.py:42
 msgid "Light grey"
 msgstr ""
 
-#: xr_web/block_utils.py:42
+#: xr_web/block_utils.py:43
 msgid "Grey"
 msgstr ""
 
-#: xr_web/block_utils.py:43
+#: xr_web/block_utils.py:44
 msgid "Dark grey"
 msgstr ""
 
-#: xr_web/block_utils.py:46
+#: xr_web/block_utils.py:47
 msgid "None / Transparent"
 msgstr ""
 
-#: xr_web/block_utils.py:56
+#: xr_web/block_utils.py:57
 msgid "Full content"
 msgstr ""
 
-#: xr_web/block_utils.py:58
+#: xr_web/block_utils.py:59
 msgid "Right"
 msgstr ""
 
-#: xr_web/block_utils.py:59
+#: xr_web/block_utils.py:60
 msgid "Full page"
 msgstr ""
 
-#: xr_web/block_utils.py:166
+#: xr_web/block_utils.py:173
 msgid "An optional heading, which is displayed above the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:174
+#: xr_web/block_utils.py:181
 msgid "An optional caption, which is displayed below the block's content."
 msgstr ""
 
-#: xr_web/block_utils.py:181
+#: xr_web/block_utils.py:188
 msgid "An optional description, which is displayed below the block's caption."
 msgstr ""
 
