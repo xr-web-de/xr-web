@@ -23,7 +23,10 @@ from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 
-from xr_newsletter.forms import WagtailAdminMauticFormPageForm
+from xr_newsletter.forms import (
+    WagtailAdminMauticNewsletterFormPageForm,
+    WagtailAdminGdprFormPageForm,
+)
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_pages.services import get_home_page
@@ -38,47 +41,72 @@ from xr_pages.models import (
 )
 
 
-class EmailFormField(AbstractFormField):
-    page = ParentalKey(
-        "EmailFormPage", on_delete=models.CASCADE, related_name="form_fields"
+class NamedAbstractFormField(AbstractFormField):
+    name = models.CharField(
+        verbose_name=_("name"),
+        max_length=255,
+        help_text=_("A unique name for the form field"),
+        null=True,
+        blank=True,
     )
     placeholder = models.CharField(
         verbose_name=_("placeholder"),
         max_length=255,
-        help_text=_(
-            "The placeholder is displayed in grey, " "and disappears on focus."
-        ),
+        help_text=_("The placeholder is displayed in grey, and disappears on focus."),
         default="",
         blank=True,
     )
 
     panels = [
-        FieldRowPanel((FieldPanel("label"), FieldPanel("required"))),
+        FieldRowPanel(
+            (FieldPanel("label"), FieldPanel("name"), FieldPanel("required"))
+        ),
         FieldCollapsiblePanel(
             [
                 FieldRowPanel(
                     (
                         FieldPanel("field_type", classname="formbuilder-type"),
-                        FieldPanel("placeholder"),
+                        FieldPanel("choices", classname="formbuilder-choices"),
                     )
                 ),
-                FieldPanel("help_text"),
                 FieldRowPanel(
                     (
-                        FieldPanel("choices", classname="formbuilder-choices"),
+                        FieldPanel("placeholder"),
                         FieldPanel("default_value", classname="formbuilder-default"),
                     )
                 ),
+                FieldPanel("help_text"),
             ],
             heading=_("Settings"),
         ),
     ]
 
     class Meta:
+        unique_together = ("page", "name")
         ordering = ["sort_order"]
+        abstract = True
+
+    @property
+    def clean_name(self):
+        # unidecode will return an ascii string while slugify wants a
+        # unicode string on the other hand, slugify returns a safe-string
+        # which will be converted to a normal str
+        if self.name:
+            return str(slugify(str(unidecode(self.name))))
+        return "field_{}".format(self.id)
 
     def __str__(self):
-        return self.label
+        return "{} ({})".format(self.label, self.name)
+
+
+class EmailFormField(NamedAbstractFormField):
+    page = ParentalKey(
+        "EmailFormPage", on_delete=models.CASCADE, related_name="form_fields"
+    )
+
+    class Meta:
+        unique_together = ("page", "name")
+        ordering = ["sort_order"]
 
 
 class AbstractEmailFormPage(AbstractEmailForm, XrPage):
@@ -132,6 +160,8 @@ class EmailFormPage(AbstractEmailFormPage):
 
     parent_page_types = [HomePage, LocalGroupPage, HomeSubPage, LocalGroupSubPage]
 
+    base_form_class = WagtailAdminGdprFormPageForm
+
     settings_panels = AbstractEmailFormPage.settings_panels + [
         MultiFieldPanel(
             [FieldPanel("save_submission")],
@@ -177,62 +207,14 @@ class EmailFormPage(AbstractEmailFormPage):
         return context
 
 
-class NewsletterFormField(AbstractFormField):
+class NewsletterFormField(NamedAbstractFormField):
     page = ParentalKey(
         "NewsletterFormPage", on_delete=models.CASCADE, related_name="form_fields"
     )
 
-    name = models.CharField(
-        verbose_name=_("name"),
-        max_length=255,
-        help_text=_("A unique name for the form field"),
-    )
-    placeholder = models.CharField(
-        verbose_name=_("placeholder"),
-        max_length=255,
-        help_text=_(
-            "The placeholder is displayed in grey, " "and disappears on focus."
-        ),
-        default="",
-        blank=True,
-    )
-
-    panels = [
-        FieldRowPanel((FieldPanel("label"), FieldPanel("name"))),
-        FieldPanel("required"),
-        FieldCollapsiblePanel(
-            [
-                FieldRowPanel(
-                    (
-                        FieldPanel("field_type", classname="formbuilder-type"),
-                        FieldPanel("placeholder"),
-                    )
-                ),
-                FieldPanel("help_text"),
-                FieldRowPanel(
-                    (
-                        FieldPanel("choices", classname="formbuilder-choices"),
-                        FieldPanel("default_value", classname="formbuilder-default"),
-                    )
-                ),
-            ],
-            heading=_("Settings"),
-        ),
-    ]
-
     class Meta:
         unique_together = ("page", "name")
         ordering = ["sort_order"]
-
-    @property
-    def clean_name(self):
-        # unidecode will return an ascii string while slugify wants a
-        # unicode string on the other hand, slugify returns a safe-string
-        # which will be converted to a normal str
-        return str(slugify(str(unidecode(self.name))))
-
-    def __str__(self):
-        return self.label
 
 
 class NewsletterFormPage(AbstractEmailFormPage):
@@ -253,7 +235,7 @@ class NewsletterFormPage(AbstractEmailFormPage):
 
     parent_page_types = [HomePage, HomeSubPage, LocalGroupPage, LocalGroupSubPage]
 
-    base_form_class = WagtailAdminMauticFormPageForm
+    base_form_class = WagtailAdminMauticNewsletterFormPageForm
 
     class Meta:
         verbose_name = _("Newsletter Form Page")
