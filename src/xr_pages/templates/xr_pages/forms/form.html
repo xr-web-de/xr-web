@@ -32,9 +32,13 @@
 
                 {# see https://github.com/jazzband/django-widget-tweaks #}
 
-                <div class="col-xxs-12 col-sm-6 col-md-4">
+                {% if field.is_hidden %}
                     {% include "xr_pages/forms/field.html" with field=field %}
-                </div>
+                {% else %}
+                    <div class="col-xxs-12 col-sm-6 col-md-4">
+                        {% include "xr_pages/forms/field.html" with field=field %}
+                    </div>
+                {% endif %}
 
             {% endfor %}
         {% endblock %}
