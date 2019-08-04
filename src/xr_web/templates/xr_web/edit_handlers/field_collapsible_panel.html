@@ -4,7 +4,7 @@
     <summary><span class="button">{{ self.heading }}</span>
         <p class="help">{% spaceless %}
             {% for child in self.flat_children %}
-                {{ child.heading }}{% if not forloop.last %}, {% endif %}
+                {% if child.heading %}{{ child.heading }}{% elif child.db_field.verbose_name %}{{ child.db_field.verbose_name }}{% endif %}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         {% endspaceless %}</p>
     </summary>
