@@ -40,7 +40,8 @@ $placeholder-color: map_get($colors, xr-grey);
     box-sizing: inherit;
     height: 3em;
     padding: 0.5em 1em;
-    width: 22em;
+    //width: 22em;
+    width: 100%;
     max-width: 100%;
 
     &:focus {
@@ -123,6 +124,7 @@ fieldset {
         left: 0;
         top: 50%;
         margin-top: -0.9em;
+        font-size: 1.3rem;
 
         &:before {
             content: '';
@@ -191,4 +193,41 @@ fieldset {
         padding-bottom: 0.2em;
         margin-bottom: 0.6em;
     }
+    .controls > ul {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -1em;
+    }
+
+    .controls > ul > li {
+        width: 100%;
+        padding: 0 1em;
+        flex: 0 1 auto;
+    }
+}
+
+@media screen and (min-width: $bp-sm) {
+    .field-size-2_3,
+    .field-size-1_1 {
+        .controls > ul > li {
+            width: 50%;
+        }
+    }
+}
+
+@media screen and (min-width: $bp-md) {
+    .field-size-1_2 {
+        .controls > ul > li {
+            width: 50%;
+        }
+    }
+    .field-size-1_1 {
+        .controls > ul > li {
+            width: 33.333%;
+        }
+    }
+}
+
+.submit-button-item {
+    align-self: flex-end;
 }

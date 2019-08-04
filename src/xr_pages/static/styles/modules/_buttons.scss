@@ -19,6 +19,8 @@ input[type='submit'] {
     text-decoration: none;
     white-space: nowrap;
 
+    transform: rotate(-5deg);
+
     @include fucxed;
 
     &:focus,

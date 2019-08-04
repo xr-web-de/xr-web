@@ -35,17 +35,31 @@
                 {% if field.is_hidden %}
                     {% include "xr_pages/forms/field.html" with field=field %}
                 {% else %}
-                    <div class="col-xxs-12 col-sm-6 col-md-4">
-                        {% include "xr_pages/forms/field.html" with field=field %}
-                    </div>
+                    {% with size=field.field.size %}
+                        {% if size == "1_3" %}
+                            <div class="col-xxs-12 col-sm-6 col-md-4 field-size-1_3">
+                        {% elif size == "1_2" %}
+                            <div class="col-xxs-12 col-sm-6 col-md-6 field-size-1_2">
+                        {% elif size == "2_3" %}
+                            <div class="col-xxs-12 col-sm-12 col-md-8 field-size-2_3">
+                        {% elif size == "1_1" %}
+                            <div class="col-xxs-12 field-size-1_1">
+                        {% else %} {# default to one third as default size #}
+                            <div class="col-xxs-12 col-sm-6 col-md-4 field-size-1_3">
+                        {% endif %}
+
+                            {% include "xr_pages/forms/field.html" with field=field %}
+
+                        </div>
+                    {% endwith %}
                 {% endif %}
 
             {% endfor %}
         {% endblock %}
 
         {% block submit_buttons %}
-            <div class="col-xxs-12 col-sm-6 col-md-4">
-                <button type="submit" {% if submit_name %}name="{{ submit_name }}"{% endif %}>
+            <div class="col-xxs-12 col-sm-6 col-md-4 submit-button-item">
+                <button type="submit" {% if submit_name %}name="{{ submit_name }}"{% endif %} class="float-right">
                     {% if submit_butten_text %}
                         {{ submit_butten_text }}
                     {% else %}

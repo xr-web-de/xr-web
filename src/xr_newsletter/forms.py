@@ -220,5 +220,7 @@ class PlaceholderFormBuilder(FormBuilder):
                 formfields[field.clean_name].widget.attrs.update(
                     {"placeholder": field.placeholder}
                 )
+            if field.size:
+                formfields[field.clean_name].size = field.size
 
         return formfields

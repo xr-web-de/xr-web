@@ -57,16 +57,33 @@ class NamedAbstractFormField(AbstractFormField):
         default="",
         blank=True,
     )
+    SIZE_CHOICES = (
+        ("1_3", _("1/3")),
+        ("1_2", _("1/2")),
+        ("2_3", _("2/3")),
+        ("1_1", _("1")),
+    )
+    size = models.CharField(
+        verbose_name=_("Size"),
+        max_length=255,
+        help_text=_("The width of the field."),
+        default="1_3",
+        choices=SIZE_CHOICES,
+    )
 
     panels = [
         FieldRowPanel(
-            (FieldPanel("label"), FieldPanel("name"), FieldPanel("required"))
+            (
+                FieldPanel("label"),
+                FieldPanel("field_type", classname="formbuilder-type"),
+            )
         ),
         FieldCollapsiblePanel(
             [
+                FieldRowPanel((FieldPanel("name"), FieldPanel("required"))),
                 FieldRowPanel(
                     (
-                        FieldPanel("field_type", classname="formbuilder-type"),
+                        FieldPanel("size"),
                         FieldPanel("choices", classname="formbuilder-choices"),
                     )
                 ),
