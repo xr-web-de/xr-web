@@ -13,7 +13,7 @@
                         <span class="short-date__day">{{ event.start_date|date:"d" }}</span>
                         <span class="short-date__month">{{ event.start_date|date:"M" }}</span>
                     </span>
-                    {% if event.start_date != event.end_date %}
+                    {% if event.start_date.date != event.end_date.date %}
                         <span class="short-date__end">
                             <span class="short-date__day">{{ event.end_date|date:"d" }}</span>
                             <span class="short-date__month">{{ event.end_date|date:"M" }}</span>
