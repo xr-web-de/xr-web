@@ -147,6 +147,9 @@ class AbstractEmailFormPage(AbstractEmailForm, XrPage):
         if request:
             message = _("Thank you! Your form was submitted successfully.")
             messages.success(request, message)
+
+        if self.group.active_localgrouppage:
+            return self.group.active_localgrouppage
         return get_home_page()
 
     def save(self, *args, **kwargs):
