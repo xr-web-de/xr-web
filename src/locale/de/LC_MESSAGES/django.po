@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-04 19:22+0200\n"
+"POT-Creation-Date: 2019-08-05 10:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,7 +72,7 @@ msgstr ""
 "Eine Stadt oder Adresse, wie du sie bei GoogleMaps oder OpenStreetMap "
 "eingeben würdest (z.B. \"Berlin\", \"Musterstraße 5, 54321 Musterstadt\""
 
-#: xr_events/models.py:56 xr_events/models.py:146 xr_events/wagtail_hooks.py:46
+#: xr_events/models.py:56 xr_events/models.py:226 xr_events/wagtail_hooks.py:46
 msgid "Dates"
 msgstr "Termine"
 
@@ -88,64 +88,68 @@ msgstr "Veranstaltung"
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: xr_events/models.py:123
+#: xr_events/models.py:159
+msgid "Shadow Event"
+msgstr "Verknüpfte Veranstaltung"
+
+#: xr_events/models.py:160
+msgid "Shadow Events"
+msgstr "Verknüpfte Veranstaltungen"
+
+#: xr_events/models.py:203
 msgid "Optional label like \"Part I\" or \"Meeting point\""
 msgstr "Optionale Bezeichnung, z.B. \"Teil I\" oder \"Treffpunkt\""
 
-#: xr_events/models.py:129
+#: xr_events/models.py:209
 msgid "A more specific location, overwrites the events default location."
 msgstr ""
 
-#: xr_events/models.py:135
+#: xr_events/models.py:215
 msgid "Optional date description. Visible on event detail page only."
 msgstr ""
 
-#: xr_events/models.py:145
+#: xr_events/models.py:225
 msgid "Date"
 msgstr "Termin"
 
-#: xr_events/models.py:168
+#: xr_events/models.py:248
 msgid ""
 "If the event is organised in cooperation with other groups, name them here."
 msgstr ""
 "Falls die Veranstaltung in Kooperation mit weiteren Veranstaltern "
 "organisiert wird, kannst du sie hier benennen."
 
-#: xr_events/models.py:176
+#: xr_events/models.py:256
 msgid "Organiser"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:177 xr_events/wagtail_hooks.py:55
+#: xr_events/models.py:257 xr_events/wagtail_hooks.py:55
 msgid "Organisers"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:194 xr_events/models.py:239
+#: xr_events/models.py:274 xr_events/models.py:319
 msgid "A default image as Fallback for events, that have no image."
 msgstr ""
 
-#: xr_events/models.py:207
+#: xr_events/models.py:287
 msgid "Event List Page"
 msgstr "Veranstaltungs Übersicht Seite"
 
-#: xr_events/models.py:208
+#: xr_events/models.py:288
 msgid "Event List Pages"
 msgstr "Veranstaltungs Übersicht Seiten"
 
-#: xr_events/models.py:254
+#: xr_events/models.py:334
 msgid "Event Group Page"
 msgstr "Veranstaltungs Gruppen Seite"
 
-#: xr_events/models.py:255
+#: xr_events/models.py:335
 msgid "Event Group Pages"
 msgstr "Veranstaltungs Gruppen Seiten"
 
-#: xr_events/templates/xr_events/pages/event_detail.html:111
+#: xr_events/templates/xr_events/pages/event_detail.html:110
 msgid "Hosted by"
 msgstr "Veranstaltet von"
-
-#: xr_events/templates/xr_events/pages/event_detail.html:116
-msgid "in cooperation with"
-msgstr "in Kooperation mit"
 
 #: xr_events/templates/xr_events/pages/event_group.html:9
 #: xr_pages/templates/xr_pages/menus/local_group_main_menu.html:16
@@ -162,18 +166,18 @@ msgstr ""
 msgid "Card"
 msgstr ""
 
-#: xr_newsletter/blocks.py:33 xr_newsletter/models.py:80 xr_pages/blocks.py:96
+#: xr_newsletter/blocks.py:33 xr_newsletter/models.py:98 xr_pages/blocks.py:96
 #: xr_pages/blocks.py:135 xr_pages/blocks.py:174 xr_pages/blocks.py:230
 #: xr_pages/blocks.py:260
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: xr_newsletter/forms.py:26 xr_newsletter/forms.py:148
+#: xr_newsletter/forms.py:26 xr_newsletter/forms.py:145
 msgid "I agree"
 msgstr "Ich bin einverstanden"
 
-#: xr_newsletter/forms.py:31 xr_newsletter/forms.py:153
-#: xr_newsletter/forms.py:206
+#: xr_newsletter/forms.py:31 xr_newsletter/forms.py:150
+#: xr_newsletter/forms.py:203
 msgid ""
 "GDPR Permission: I give my consent to Extinction Rebellion to get in touch "
 "with me using the information I have provided in this form, for the purpose "
@@ -188,92 +192,117 @@ msgstr ""
 msgid "There is another field with the name %s, please change one of them."
 msgstr "Es gibt bereits ein Feld mit dem Namen %s, bitte nenne eines um."
 
-#: xr_newsletter/forms.py:134 xr_newsletter/forms.py:187
+#: xr_newsletter/forms.py:131 xr_newsletter/forms.py:184
 msgid "Email"
 msgstr "Email"
 
-#: xr_newsletter/forms.py:141 xr_newsletter/forms.py:173
+#: xr_newsletter/forms.py:138 xr_newsletter/forms.py:170
 msgid "Name"
 msgstr "Name"
 
-#: xr_newsletter/forms.py:180
+#: xr_newsletter/forms.py:177
 msgid "City"
 msgstr "Stadt"
 
-#: xr_newsletter/forms.py:194
+#: xr_newsletter/forms.py:191
 msgid "Phone"
 msgstr "Rufnummer"
 
-#: xr_newsletter/forms.py:201
+#: xr_newsletter/forms.py:198
 msgid "Data policy"
 msgstr "Datenschutz"
 
-#: xr_newsletter/models.py:44
+#: xr_newsletter/models.py:47
 msgid "name"
 msgstr "Name"
 
-#: xr_newsletter/models.py:46
+#: xr_newsletter/models.py:49
 msgid "A unique name for the form field"
 msgstr "Ein eindeutiger Name für das Formularfeld"
 
-#: xr_newsletter/models.py:51
+#: xr_newsletter/models.py:54
 msgid "placeholder"
 msgstr "Platzhalter"
 
-#: xr_newsletter/models.py:54
+#: xr_newsletter/models.py:56
 msgid "The placeholder is displayed in grey, and disappears on focus."
-msgstr "Wird in grau angezeigt und verschwindet sobald das Feld fokusiert wird."
+msgstr ""
+"Wird in grau angezeigt und verschwindet sobald das Feld fokusiert wird."
 
-#: xr_newsletter/models.py:118
+#: xr_newsletter/models.py:61
+msgid "1/3"
+msgstr ""
+
+#: xr_newsletter/models.py:62
+msgid "1/2"
+msgstr ""
+
+#: xr_newsletter/models.py:63
+msgid "2/3"
+msgstr ""
+
+#: xr_newsletter/models.py:64
+msgid "1"
+msgstr ""
+
+#: xr_newsletter/models.py:67
+msgid "Size"
+msgstr "Größe"
+
+#: xr_newsletter/models.py:69
+msgid "The width of the field."
+msgstr "Wie breit das Feld dargestellt werden soll. Standard: 1/3."
+
+#: xr_newsletter/models.py:138
 msgid "Form fields"
 msgstr "Formularfelder"
 
-#: xr_newsletter/models.py:132
+#: xr_newsletter/models.py:152
 msgid "Send email on submit"
 msgstr "Verschicke eine Email nach dem Absenden"
 
-#: xr_newsletter/models.py:145
+#: xr_newsletter/models.py:165
 msgid "Thank you! Your form was submitted successfully."
 msgstr "Vielen Dank! Deine Anfrage wurde erfolgreich versandt."
 
-#: xr_newsletter/models.py:168
+#: xr_newsletter/models.py:191
 msgid "Save the submitted data on the webserver (e.g. for CSV export)"
 msgstr ""
 
-#: xr_newsletter/models.py:173
+#: xr_newsletter/models.py:196
 msgid "Email Form Page"
 msgstr "Email-Formular Seite"
 
-#: xr_newsletter/models.py:174
+#: xr_newsletter/models.py:197
 msgid "Email Form Pages"
 msgstr "Email-Formular Seiten"
 
-#: xr_newsletter/models.py:228
+#: xr_newsletter/models.py:253
 msgid "Subscribe to Sendy newsletter list on submit"
 msgstr "Abonniere einen Sendy-Newsletter nach dem Absenden"
 
-#: xr_newsletter/models.py:232
+#: xr_newsletter/models.py:257
 msgid "Subscribe to Mautic newsletter on submit."
 msgstr "Abonniere einen Mautic-Newsletter nach dem Absenden"
 
-#: xr_newsletter/models.py:241
+#: xr_newsletter/models.py:266
 msgid "Newsletter Form Page"
 msgstr "Newsletter-Formular Seite"
 
-#: xr_newsletter/models.py:242
+#: xr_newsletter/models.py:267
 msgid "Newsletter Form Pages"
 msgstr "Newsletter-Formular Seiten"
 
-#: xr_newsletter/models.py:303
+#: xr_newsletter/models.py:328
 msgid "Uups, something went wrong. Please try again later."
 msgstr ""
 "Uups, irgendetwas ist schief gelaufen :/ Bitte versuch es später noch einmal."
 
-#: xr_newsletter/models.py:347
+#: xr_newsletter/models.py:372
 msgid "Thank You Page"
 msgstr "Danke Seite"
 
-#: xr_newsletter/models.py:348
+#: xr_newsletter/models.py:373
 msgid "Thank You Pages"
 msgstr "Danke Seiten"
 
@@ -505,7 +534,7 @@ msgstr ""
 msgid "Uups, da stimmt noch etwas nicht..."
 msgstr ""
 
-#: xr_pages/templates/xr_pages/forms/form.html:48
+#: xr_pages/templates/xr_pages/forms/form.html:66
 msgid "Absenden"
 msgstr ""
 
@@ -604,6 +633,9 @@ msgstr ""
 #: xr_web/block_utils.py:188
 msgid "An optional description, which is displayed below the block's caption."
 msgstr ""
+
+#~ msgid "in cooperation with"
+#~ msgstr "in Kooperation mit"
 
 #, fuzzy
 #~| msgid ""

@@ -9,9 +9,10 @@ from wagtail.admin.edit_handlers import (
     FieldRowPanel,
     HelpPanel,
     StreamFieldPanel,
+    PageChooserPanel,
 )
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, PageManager
+from wagtail.core.models import Orderable, PageManager, Page
 from wagtail.core.query import PageQuerySet
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -89,12 +90,18 @@ class EventPage(XrPage):
     def organiser(self):
         return self.group
 
-    @property
-    def all_organiser_names(self):
-        all_organisers = [self.group.name]
+    def get_all_organisers(self):
+        all_organisers = [self.group]
+        shadow_qs = self.shadow_events.live().filter(original_event=self)
+        if shadow_qs.exists():
+            all_organisers += [shadow.specific.group for shadow in shadow_qs]
         if hasattr(self, "further_organisers") and self.further_organisers.exists():
             all_organisers += list(self.further_organisers.all())
-        return ", ".join([str(organiser) for organiser in all_organisers])
+        return all_organisers
+
+    @property
+    def all_organiser_names(self):
+        return ", ".join([organiser.name for organiser in self.get_all_organisers()])
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "group"):
@@ -109,6 +116,89 @@ class EventPage(XrPage):
             all_dates = sorted(all_dates)
             self.start_date = all_dates[0]
             self.end_date = all_dates[-1]
+
+        super().save(*args, **kwargs)
+
+
+class ShadowEventPageQuerySet(PageQuerySet):
+    def upcoming(self):
+        event_qs = EventPage.objects.filter(end_date__isnull=False).filter(
+            end_date__gte=localdate()
+        )
+        return self.filter(original_event__in=event_qs)
+
+    def previous(self):
+        event_qs = EventPage.objects.filter(start_date__isnull=False).filter(
+            start_date__lte=localdate()
+        )
+        return self.filter(original_event__in=event_qs)
+
+
+ShadowEventPageManager = PageManager.from_queryset(ShadowEventPageQuerySet)
+
+
+class ShadowEventPage(Page):
+    template = "xr_events/pages/event_detail.html"
+    group = models.ForeignKey(
+        LocalGroup,
+        on_delete=models.PROTECT,
+        editable=False,
+        related_name="shadow_events",
+    )
+    original_event = models.ForeignKey(
+        "wagtailcore.Page",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="shadow_events",
+    )
+
+    content_panels = Page.content_panels + [
+        PageChooserPanel("original_event", EventPage)
+    ]
+
+    is_event_page = True
+
+    objects = ShadowEventPageManager()
+
+    class Meta:
+        verbose_name = _("Shadow Event")
+        verbose_name_plural = _("Shadow Events")
+
+    def get_shadowed_event(self):
+        event = self.original_event.specific
+
+        all_organisers = [self.group, event.group]
+
+        shadow_qs = (
+            self.original_event.shadow_events.live()
+            .filter(original_event=self.original_event)
+            .exclude(pk=self.pk)
+        )
+
+        if shadow_qs.exists():
+            all_organisers += [shadow.specific.group for shadow in shadow_qs]
+
+        if (
+            hasattr(self.original_event, "further_organisers")
+            and self.original_event.further_organisers.exists()
+        ):
+            all_organisers += list(self.original_event.further_organisers.all())
+
+        event.get_all_organisers = lambda: all_organisers
+        event.group = self.group
+        event.get_url = self.get_url
+
+        return event
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["event"] = self.get_shadowed_event()
+        return context
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "group"):
+            self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)
 
@@ -264,12 +354,16 @@ class EventGroupPage(XrPage):
 
     @property
     def upcoming_events(self):
-        return (
-            EventPage.objects.live()
-            .child_of(self)
-            .upcoming()
-            .order_by("start_date", "title")
+        event_pages = EventPage.objects.live().descendant_of(self).upcoming()
+        shadow_event_pages = (
+            ShadowEventPage.objects.live().descendant_of(self).upcoming()
         )
+        upcoming_events = sorted(
+            list(event_pages)
+            + [page.get_shadowed_event() for page in shadow_event_pages],
+            key=lambda x: (x.start_date, x.title),
+        )
+        return upcoming_events
 
     @property
     def previous_events(self):

@@ -107,17 +107,13 @@
 
         <div class="container">
             <section class="block align-full_content">
-                {% if event.organiser %}
-                    <h4 class="h h--4 h--caps">{% trans "Hosted by" %}</h4>
-                    {% include "xr_pages/partials/local_group_list_item.html" with local_group=event.organiser %}
-                {% endif %}
-
-                {% if event.further_organisers.exists %}
-                    <h4 class="h h--4 h--caps">{% trans "in cooperation with" %}</h4>
-                    {% for organiser in event.further_organisers.all %}
-                        {% include "xr_pages/partials/local_group_list_item.html" with local_group=organiser %}
-                    {% endfor %}
-                {% endif %}
+                <h4 class="h h--4 h--caps">{% trans "Hosted by" %}</h4>
+                {% for organiser in event.get_all_organisers %}
+{#                    {% if forloop.counter0 == 1  %}#}
+{#                        <h4 class="h h--4 h--caps">{% trans "in cooperation with" %}</h4>#}
+{#                    {% endif %}#}
+                    {% include "xr_pages/partials/local_group_list_item.html" with local_group=organiser %}
+                {% endfor %}
             </section>
         </div>
 
