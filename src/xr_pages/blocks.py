@@ -112,6 +112,14 @@ class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
             "If not given, the image's title attribute will be used instead."
         ),
     )
+    keep_aspect_ratio = blocks.BooleanBlock(
+        required=False,
+        default=False,
+        help_text=_(
+            "If set, the image will not be cropped. "
+            "Otherwise the image will be cropped to fill 16:9."
+        ),
+    )
     background_color = blocks.ChoiceBlock(
         choices=BG_COLOR_CHOICES, default=COLOR_XR_TRANSPARENT
     )
@@ -133,7 +141,13 @@ class ImageBlock(CollapsibleFieldsMixin, blocks.StructBlock):
         {"label": _("Card"), "fields": ["caption", "description", "link"]},
         {
             "label": _("Settings"),
-            "fields": ["align", "alternative_title", "attribution", "background_color"],
+            "fields": [
+                "align",
+                "alternative_title",
+                "keep_aspect_ratio",
+                "attribution",
+                "background_color",
+            ],
         },
     ]
 

@@ -9,6 +9,17 @@
 {% block block_content %}
 
     <figure>
+    {% if value.keep_aspect_ratio %}
+        {% if value.align == "full_page" %}
+            {% image value.image width-1920 alt=value.block.get_title class="img-responsive" %}
+        {% elif value.align == "full_content" %}
+            {% image value.image width-1280 alt=value.block.get_title class="img-responsive" %}
+        {% elif value.align == "center" %}
+            {% image value.image width-768 alt=value.block.get_title class="img-responsive" %}
+        {% else %} {# align in "left, right" #}
+            {% image value.image width-512 alt=value.block.get_title class="img-responsive" %}
+        {% endif %}
+    {% else %}
         {% if value.align == "full_page" %}
             {% image value.image fill-1920x1080-c75 alt=value.block.get_title class="img-responsive" %}
         {% elif value.align == "full_content" %}
@@ -26,6 +37,7 @@
                 {% image value.image fill-512x640-c75 alt=value.block.get_title class="img-responsive" %}
             {% endif %}
         {% endif %}
+    {% endif %}
 
         {% if value.attribution %}
             <div class="image-attribution">{{ value.attribution }}</div>
