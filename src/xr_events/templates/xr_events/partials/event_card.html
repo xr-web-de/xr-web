@@ -22,7 +22,7 @@
                 </div>
             {% endif %}
             {% if event.get_image %}
-                {% image event.get_image fill-512x288-c75 alt=event.title class="img-responsive" %}
+                {% image event.get_image width-512 alt=event.title class="img-responsive" %}
             {% else %}
                 <div class="image-placeholder"></div>
             {% endif %}
