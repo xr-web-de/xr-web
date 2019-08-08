@@ -234,7 +234,7 @@ class EventDate(Orderable):
     class Meta:
         verbose_name = _("Date")
         verbose_name_plural = _("Dates")
-        ordering = ["sort_order"]
+        ordering = ["start", "sort_order"]
 
     def __str__(self):
         start = formats.date_format(self.start, "SHORT_DATETIME_FORMAT")
