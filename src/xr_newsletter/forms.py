@@ -19,10 +19,10 @@ class WagtailAdminGdprFormPageForm(WagtailAdminFormPageForm):
 
     @staticmethod
     def get_form_fields():
-        from xr_newsletter.models import NewsletterFormField
+        from xr_newsletter.models import EmailFormField
 
         form_fields = [
-            NewsletterFormField(
+            EmailFormField(
                 label=_("I agree"),
                 name="gdpr",
                 field_type="checkbox",
