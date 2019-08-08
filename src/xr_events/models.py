@@ -241,8 +241,8 @@ class EventDate(Orderable):
     def __str__(self):
         start = formats.date_format(self.start, "SHORT_DATETIME_FORMAT")
         if not self.label:
-            return start
-        return "%s | %s" % (start, self.label)
+            return "{}".format(start)
+        return "{} | {}".format(start, self.label)
 
 
 class EventOrganiser(Orderable):
