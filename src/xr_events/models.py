@@ -159,6 +159,8 @@ class ShadowEventPage(Page):
 
     is_event_page = True
 
+    parent_page_types = ["EventGroupPage"]
+
     objects = ShadowEventPageManager()
 
     class Meta:
