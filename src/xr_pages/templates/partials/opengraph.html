@@ -4,7 +4,8 @@
 		<meta property="og:locale" content="de_DE" />
 {% if page.author %}
 		<meta property="og:type" content="article" />
-		<meta property="og:article:published_time" content="{{ page.get_og_datetime }}" />
+		<meta property="og:article:published_time" content="{{ page.date|date:"c" }}" />
+		<meta property="og:article:modified_time" content="{{ page.last_published_at|date:"c" }}" />
 		<meta property="og:article:author:username" content="{{ page.author }}" />
 		<meta property="og:article:section" content="{{ page.group.name }}" />
 {% else %}
@@ -19,8 +20,9 @@
 		<meta property="og:description" content="{{ page.description }}" />
 {% endif %}
 {% if page.image %}
-		<meta property="og:image" content="{{ page.get_image_url }}" />
-		<meta property="og:image:width" content="{{ page.get_image_width }}" />
-		<meta property="og:image:height" content="{{ page.get_image_height }}" />
-{% endif %}                    
+        {% image page.image max-1200x630 as image_dict %}
+		<meta property="og:image" content="{{ image_dict.url }}" />
+		<meta property="og:image:width" content="{{ image_dict.width }}" />
+		<meta property="og:image:height" content="{{ image_dict.height }}" />
+{% endif %}
 		<meta property="og:url" content="{{ request.build_absolute_uri }}" />

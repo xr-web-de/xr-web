@@ -28,19 +28,6 @@ class XrPage(Page):
         ),
     )
 
-    # We use this method to allow the opengraph template to get the url 
-    # of the image associated with that page.
-    # The image is not rendered at another resolution that the original
-    # Maybe we want to change that one time...
-    def get_image_url(self):
-        return self.image.get_rendition('original').url
-    
-    def get_image_width(self):
-        return self.image.get_rendition('original').width
-    
-    def get_image_height(self):
-        return self.image.get_rendition('original').height
-    
     description = models.CharField(
         max_length=254,
         default="",

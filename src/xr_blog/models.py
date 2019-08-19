@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import StreamField
-import datetime;
 
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import (
@@ -23,16 +22,14 @@ class BlogEntryPage(XrPage):
         related_name="blog_entries",
     )
     date = models.DateField(_("Post date"))
-    
-    def get_og_datetime(self):
-        return datetime.datetime(self.date.year,self.date.month, self.date.day,0,0,0).isoformat()
-    
+
     author = models.CharField(max_length=200)
     content = StreamField(
         ContentBlock,
         blank=True,
         help_text=_("The content is only visible on the detail page."),
     )
+
     # Panels (Editor interface)
     content_panels = [
         MultiFieldPanel(
