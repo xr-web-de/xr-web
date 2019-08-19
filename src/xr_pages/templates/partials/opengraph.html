@@ -21,7 +21,7 @@
 {% endif %}
 {% if page.image %}
         {% image page.image max-1200x630 as image_dict %}
-		<meta property="og:image" content="{{ image_dict.url }}" />
+		<meta property="og:image" content="http://{{ request.get_host }}{{ image_dict.url }}" />
 		<meta property="og:image:width" content="{{ image_dict.width }}" />
 		<meta property="og:image:height" content="{{ image_dict.height }}" />
 {% endif %}
