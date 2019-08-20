@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "xr_events",
     "xr_newsletter",
     "xr_blog",
+    "xr_embeds",
 ]
 
 MIDDLEWARE = [
@@ -190,14 +191,14 @@ WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = (
 WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_wagtail.wagtail_hooks.XrMainMenuAdmin"
 
 youtube = {
-    "endpoint": "http://www.youtube.com/oembed",
+    "endpoint": "https://www.youtube.com/oembed",
     "urls": [
+        r"^http(?:s)?://youtu\.be/.+$",
+        r"^http(?:s)?://m\.youtube(?:-nocookie)?\.com/index.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/watch.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/v/.+$",
-        r"^http(?:s)?://youtu\.be/.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/user/.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/[^#?/]+#[^#?/]+/.+$",
-        r"^http(?:s)?://m\.youtube(?:-nocookie)?\.com/index.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/profile.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/view_play_list.+$",
         r"^http(?:s)?://(?:[-\w]+\.)?youtube(?:-nocookie)?\.com/playlist.+$",
@@ -205,8 +206,9 @@ youtube = {
 }
 
 WAGTAILEMBEDS_FINDERS = [
-    {"class": "xr_pages.finders.oembed.embed_finder_class", "providers": [youtube]}
+    {"class": "xr_embeds.finders.oembed.embed_finder_class", "providers": [youtube]}
 ]
+XR_EMBEDS_THUMBNAIL_CACHE_VALID_TIME = 3600 * 24
 
 
 # Local Group Settings
