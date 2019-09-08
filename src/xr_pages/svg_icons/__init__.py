@@ -13,4 +13,5 @@ svg_icon_map = {
     "globe": "012-earth-globe.svg",
     "lock": "013-lock.svg",
     "group": "014-group.svg",
+    "mastodon": "015-mastodon-logo.svg",
 }

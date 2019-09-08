@@ -106,7 +106,7 @@ def render_social_media_links_for_group(
 
     social_media_links = []
 
-    for attr_name in ["facebook", "twitter", "youtube", "instagram"]:
+    for attr_name in ["facebook", "twitter", "youtube", "instagram", "mastodon"]:
         url = None
         if hasattr(group, attr_name):
             url = getattr(group, attr_name)

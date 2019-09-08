@@ -197,6 +197,7 @@ class LocalGroup(models.Model):
     youtube = models.URLField(
         null=True, blank=True, help_text=_("YouTube channel or user account URL")
     )
+    mastodon = models.URLField(null=True, blank=True, help_text=_("Mastodon page URL"))
 
     panels = [
         FieldPanel("name", classname="full"),
@@ -222,6 +223,7 @@ class LocalGroup(models.Model):
                 FieldPanel("youtube"),
                 FieldPanel("twitter"),
                 FieldPanel("instagram"),
+                FieldPanel("mastodon"),
             ],
             heading=_("Social media"),
         ),
