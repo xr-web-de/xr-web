@@ -1,0 +1,15 @@
+{% load static %}
+{% load wagtailimages_tags %}
+        <meta name="twitter:card" content="summary_large_image">
+{% if page.seo_title %}
+		<meta name="twitter:title" content="{{ page.seo_title }}" />
+{% else %}
+		<meta name="twitter:title" content="{{ page.title }}" />
+{% endif %}
+{% if page.description %}
+		<meta name="twitter:description" content="{{ page.description|truncatechars:200 }}" />
+{% endif %}
+{% if page.image %}
+        {% image page.image max-1200x630 as image_dict %}
+		<meta name="twitter:image" content="http://{{ request.get_host }}{{ image_dict.url }}" />
+{% endif %}
