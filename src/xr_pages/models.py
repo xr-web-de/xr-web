@@ -1,6 +1,7 @@
 import datetime
 from urllib.parse import unquote
 
+import geocoder
 from django.db import models, transaction
 from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
@@ -189,6 +190,13 @@ class LocalGroup(models.Model):
             'e.g. "Berlin", "Somestreet 84, 12345 Samplecity".'
         ),
     )
+    latlng = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        editable=False,
+        help_text=_("Auto discovered latitude and longitude. Comma separated."),
+    )
     facebook = models.URLField(null=True, blank=True, help_text=_("Facebook page URL"))
     instagram = models.URLField(
         null=True, blank=True, help_text=_("Instagram page URL")
@@ -344,6 +352,16 @@ class LocalGroup(models.Model):
 
         if not hasattr(self, "site") or not self.site:
             self.site = get_site()
+
+        if self.location:
+            result = geocoder.osm(self.location)
+            if result and result.json and "lat" in result.json and "lng" in result.json:
+                latlng = "{lat},{lng}".format(
+                    lat=result.json["lat"], lng=result.json["lng"]
+                )
+                self.latlng = latlng
+        else:
+            self.latlng = ""
 
         super().save(*args, **kwargs)
 

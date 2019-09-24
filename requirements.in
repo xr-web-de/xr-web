@@ -10,3 +10,4 @@ flake8
 selenium
 sendypy
 django-widget-tweaks
+geocoder

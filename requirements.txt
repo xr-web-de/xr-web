@@ -7,6 +7,8 @@
 beautifulsoup4==4.6.0     # via wagtail, webtest
 certifi==2019.6.16        # via requests
 chardet==3.0.4            # via requests
+click==7.0                # via geocoder
+decorator==4.4.0          # via ratelim
 django-cogwheels==0.2     # via wagtailmenus
 django-dynamic-fixture==2.0.0
 django-extensions==2.1.9
@@ -21,6 +23,8 @@ djangorestframework==3.9.4  # via wagtail
 draftjs-exporter==2.1.6   # via wagtail
 entrypoints==0.3          # via flake8
 flake8==3.7.7
+future==0.17.1            # via geocoder
+geocoder==1.38.1
 html5lib==1.0.1           # via wagtail
 idna==2.8                 # via requests
 mccabe==0.6.1             # via flake8
@@ -28,10 +32,11 @@ pillow==5.4.1             # via wagtail
 pycodestyle==2.5.0        # via flake8
 pyflakes==2.1.1           # via flake8
 pytz==2019.1              # via django, django-modelcluster, wagtail
-requests==2.22.0          # via sendypy, wagtail
+ratelim==0.1.6            # via geocoder
+requests==2.22.0          # via geocoder, sendypy, wagtail
 selenium==3.141.0
 sendypy==0.1.5b0
-six==1.12.0               # via django-dynamic-fixture, django-extensions, html5lib, wagtail, webtest
+six==1.12.0               # via django-dynamic-fixture, django-extensions, geocoder, html5lib, wagtail, webtest
 sqlparse==0.3.0           # via django
 unidecode==1.1.0          # via wagtail
 urllib3==1.25.3           # via requests, selenium
