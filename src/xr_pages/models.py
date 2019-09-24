@@ -96,7 +96,15 @@ class HomeSubPage(XrPage):
 
 class LocalGroupQuerySet(models.QuerySet):
     def active(self):
-        return self.filter(status=LocalGroup.STATUS_ACTIVE)
+        return self.filter(
+            status__in=[LocalGroup.STATUS_ACTIVE, LocalGroup.STATUS_LOOKING_FOR_PEOPLE]
+        )
+
+    def in_foundation(self):
+        return self.filter(status=LocalGroup.STATUS_IN_FOUNDATION)
+
+    def idle(self):
+        return self.filter(status=LocalGroup.STATUS_IDLE)
 
     def has_active_localgrouppage(self):
         return self.filter(localgrouppage__isnull=False).filter(
@@ -354,7 +362,10 @@ class LocalGroup(models.Model):
             self.site = get_site()
 
         if self.location:
-            result = geocoder.osm(self.location)
+            try:
+                result = geocoder.osm(self.location)
+            except:  # noqa
+                result = None
             if result and result.json and "lat" in result.json and "lng" in result.json:
                 lnglat = "{lng},{lat}".format(
                     lng=result.json["lng"], lat=result.json["lat"]
