@@ -190,7 +190,7 @@ class LocalGroup(models.Model):
             'e.g. "Berlin", "Somestreet 84, 12345 Samplecity".'
         ),
     )
-    latlng = models.CharField(
+    lnglat = models.CharField(
         max_length=255,
         blank=True,
         default="",
@@ -356,12 +356,12 @@ class LocalGroup(models.Model):
         if self.location:
             result = geocoder.osm(self.location)
             if result and result.json and "lat" in result.json and "lng" in result.json:
-                latlng = "{lat},{lng}".format(
-                    lat=result.json["lat"], lng=result.json["lng"]
+                lnglat = "{lng},{lat}".format(
+                    lng=result.json["lng"], lat=result.json["lat"]
                 )
-                self.latlng = latlng
+                self.lnglat = lnglat
         else:
-            self.latlng = ""
+            self.lnglat = ""
 
         super().save(*args, **kwargs)
 
