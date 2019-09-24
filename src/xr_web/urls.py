@@ -28,7 +28,7 @@ urlpatterns = [
     re_path(r"^django-admin/", admin.site.urls),
     re_path(r"^admin/", include(wagtailadmin_urls)),
     re_path(r"^documents/", include(wagtaildocs_urls)),
-    re_path(r"^export/umap_marker", umap_marker, name="umap_marker"),
+    re_path(r"^export/umap_marker/", umap_marker, name="umap_marker"),
     re_path(r"", include(wagtail_urls)),
 ]
 
