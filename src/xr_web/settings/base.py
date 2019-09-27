@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # Wagtail 3rd Party
     "wagtailmenus",
     "condensedinlinepanel",
+    "wagtailembedpeertube",
     # Project
     "xr_wagtail",
     "xr_pages",
@@ -193,6 +194,7 @@ WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_wagtail.wagtail_hooks.XrMainMenuA
 WAGTAILEMBEDS_FINDERS = [
     {"class": "xr_embeds.finders.UmapEmbedFinder"},
     {"class": "xr_embeds.finders.YoutubeNoCookieOEmbedFinder"},
+    {"class": "wagtailembedpeertube.finders"},
     {"class": "wagtail.embeds.finders.oembed"},
 ]
 XR_EMBEDS_THUMBNAIL_CACHE_VALID_TIME = 3600 * 24
