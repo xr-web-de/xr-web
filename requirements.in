@@ -6,6 +6,7 @@ django-dynamic-fixture
 wagtail
 wagtailmenus
 wagtail-condensedinlinepanel
+wagtailembedpeertube
 flake8
 selenium
 sendypy
