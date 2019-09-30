@@ -170,7 +170,14 @@ class AbstractEmailFormPage(AbstractEmailForm, XrPage):
         return get_home_page()
 
     def save(self, *args, **kwargs):
-        if not hasattr(self, "group") or self.group is None:
+        """We want to make sure, each time an AbstractEmailFormPage is created (also when copied
+        or moved) we assign the group of the parent.
+        """
+        if (
+            not hasattr(self, "group")
+            or self.group is None
+            or self.group != self.get_parent().specific.group
+        ):
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)
@@ -363,7 +370,14 @@ class ThankYouPage(XrPage):
     parent_page_types = [EmailFormPage, NewsletterFormPage]
 
     def save(self, *args, **kwargs):
-        if not hasattr(self, "group") or self.group is None:
+        """We want to make sure, each time an ThankYouPage is created (also when copied
+        or moved) we assign the group of the parent.
+        """
+        if (
+            not hasattr(self, "group")
+            or self.group is None
+            or self.group != self.get_parent().specific.group
+        ):
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)
