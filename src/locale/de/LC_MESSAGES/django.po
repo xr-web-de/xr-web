@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 10:43+0200\n"
+"POT-Creation-Date: 2019-09-30 23:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,27 +22,27 @@ msgstr ""
 msgid "Post date"
 msgstr ""
 
-#: xr_blog/models.py:29 xr_blog/models.py:67 xr_events/models.py:39
+#: xr_blog/models.py:30 xr_blog/models.py:68 xr_events/models.py:87
 msgid "The content is only visible on the detail page."
 msgstr "Der Inhalt ist nur auf der Detail-Ansicht sichtbar."
 
-#: xr_blog/models.py:39 xr_pages/models.py:47
+#: xr_blog/models.py:40 xr_pages/models.py:49
 msgid "Title"
 msgstr "Titel"
 
-#: xr_blog/models.py:49
+#: xr_blog/models.py:50
 msgid "Blog Entry Page"
 msgstr "Blog Beitrag Seite"
 
-#: xr_blog/models.py:50
+#: xr_blog/models.py:51
 msgid "Blog Entry Pages"
 msgstr "Blog Beitrag Seiten"
 
-#: xr_blog/models.py:75
+#: xr_blog/models.py:76
 msgid "Blog List Page"
 msgstr "Blog Übersicht Seite"
 
-#: xr_blog/models.py:76
+#: xr_blog/models.py:77
 msgid "Blog List Pages"
 msgstr "Blog Übersicht Seiten"
 
@@ -64,7 +64,27 @@ msgstr ""
 msgid "More"
 msgstr "Mehr"
 
-#: xr_events/models.py:45 xr_pages/models.py:187
+#: xr_events/models.py:53
+msgid "Next month"
+msgstr "Im kommenden Monat"
+
+#: xr_events/models.py:53
+msgid "Next six months"
+msgstr "Im kommenden halben Jahr"
+
+#: xr_events/models.py:53
+msgid "Next Year"
+msgstr "Im kommenden Jahr"
+
+#: xr_events/models.py:53
+msgid "All upcoming"
+msgstr "Alle kommenden"
+
+#: xr_events/models.py:53
+msgid "Last month"
+msgstr "Im vergangenen Monat"
+
+#: xr_events/models.py:93 xr_pages/models.py:197
 msgid ""
 "Some city or address, like you would enter in GMaps or OpenStreetMap, e.g. "
 "\"Berlin\", \"Somestreet 84, 12345 Samplecity\"."
@@ -72,78 +92,79 @@ msgstr ""
 "Eine Stadt oder Adresse, wie du sie bei GoogleMaps oder OpenStreetMap "
 "eingeben würdest (z.B. \"Berlin\", \"Musterstraße 5, 54321 Musterstadt\""
 
-#: xr_events/models.py:56 xr_events/models.py:226 xr_events/wagtail_hooks.py:46
+#: xr_events/models.py:104 xr_events/models.py:285
+#: xr_events/wagtail_hooks.py:46
 msgid "Dates"
 msgstr "Termine"
 
-#: xr_events/models.py:58
+#: xr_events/models.py:106
 msgid "Further organisers"
 msgstr "Weitere Veranstalter"
 
-#: xr_events/models.py:69
+#: xr_events/models.py:117
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: xr_events/models.py:70
+#: xr_events/models.py:118
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: xr_events/models.py:159
+#: xr_events/models.py:214
 msgid "Shadow Event"
 msgstr "Verknüpfte Veranstaltung"
 
-#: xr_events/models.py:160
+#: xr_events/models.py:215
 msgid "Shadow Events"
 msgstr "Verknüpfte Veranstaltungen"
 
-#: xr_events/models.py:203
+#: xr_events/models.py:262
 msgid "Optional label like \"Part I\" or \"Meeting point\""
 msgstr "Optionale Bezeichnung, z.B. \"Teil I\" oder \"Treffpunkt\""
 
-#: xr_events/models.py:209
+#: xr_events/models.py:268
 msgid "A more specific location, overwrites the events default location."
 msgstr ""
 
-#: xr_events/models.py:215
+#: xr_events/models.py:274
 msgid "Optional date description. Visible on event detail page only."
 msgstr ""
 
-#: xr_events/models.py:225
+#: xr_events/models.py:284
 msgid "Date"
 msgstr "Termin"
 
-#: xr_events/models.py:248
+#: xr_events/models.py:307
 msgid ""
 "If the event is organised in cooperation with other groups, name them here."
 msgstr ""
 "Falls die Veranstaltung in Kooperation mit weiteren Veranstaltern "
 "organisiert wird, kannst du sie hier benennen."
 
-#: xr_events/models.py:256
+#: xr_events/models.py:315
 msgid "Organiser"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:257 xr_events/wagtail_hooks.py:55
+#: xr_events/models.py:316 xr_events/wagtail_hooks.py:55
 msgid "Organisers"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:274 xr_events/models.py:319
+#: xr_events/models.py:333 xr_events/models.py:389
 msgid "A default image as Fallback for events, that have no image."
 msgstr ""
 
-#: xr_events/models.py:287
+#: xr_events/models.py:357
 msgid "Event List Page"
 msgstr "Veranstaltungs Übersicht Seite"
 
-#: xr_events/models.py:288
+#: xr_events/models.py:358
 msgid "Event List Pages"
 msgstr "Veranstaltungs Übersicht Seiten"
 
-#: xr_events/models.py:334
+#: xr_events/models.py:415
 msgid "Event Group Page"
 msgstr "Veranstaltungs Gruppen Seite"
 
-#: xr_events/models.py:335
+#: xr_events/models.py:416
 msgid "Event Group Pages"
 msgstr "Veranstaltungs Gruppen Seiten"
 
@@ -161,14 +182,14 @@ msgstr ""
 msgid "von"
 msgstr ""
 
-#: xr_newsletter/blocks.py:32 xr_pages/blocks.py:95 xr_pages/blocks.py:133
-#: xr_pages/blocks.py:172 xr_pages/blocks.py:211 xr_pages/blocks.py:229
+#: xr_newsletter/blocks.py:32 xr_pages/blocks.py:95 xr_pages/blocks.py:141
+#: xr_pages/blocks.py:186 xr_pages/blocks.py:225 xr_pages/blocks.py:243
 msgid "Card"
 msgstr ""
 
 #: xr_newsletter/blocks.py:33 xr_newsletter/models.py:98 xr_pages/blocks.py:96
-#: xr_pages/blocks.py:135 xr_pages/blocks.py:174 xr_pages/blocks.py:230
-#: xr_pages/blocks.py:260
+#: xr_pages/blocks.py:143 xr_pages/blocks.py:188 xr_pages/blocks.py:244
+#: xr_pages/blocks.py:274
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -344,47 +365,53 @@ msgid ""
 "the image's title attribute will be used instead."
 msgstr ""
 
-#: xr_pages/blocks.py:121
+#: xr_pages/blocks.py:119
+msgid ""
+"If set, the image will not be cropped. Otherwise the image will be cropped "
+"to fill 16:9."
+msgstr ""
+
+#: xr_pages/blocks.py:129
 msgid ""
 "An optional copyright or attribution text, which is displayed at the bottom "
 "right of the image."
 msgstr ""
 
-#: xr_pages/blocks.py:151
+#: xr_pages/blocks.py:165
 msgid "The text is displayed centered and linebreaks will be preserved."
 msgstr ""
 
-#: xr_pages/blocks.py:156
+#: xr_pages/blocks.py:170
 msgid ""
 "Adjust the font size to fit your needs. Use the preview feature to see how "
 "big the font will be rendered."
 msgstr ""
 
-#: xr_pages/blocks.py:197
+#: xr_pages/blocks.py:211
 msgid ""
 "An optional caption, which is displayed below the block's content. "
 "Overwrites the page title of the linked page."
 msgstr ""
 
-#: xr_pages/blocks.py:204
+#: xr_pages/blocks.py:218
 msgid ""
 "An optional description, which is displayed below the block's caption. "
 "Overwrites the page description of the linked page."
 msgstr ""
 
-#: xr_pages/blocks.py:249
+#: xr_pages/blocks.py:263
 msgid "2"
 msgstr ""
 
-#: xr_pages/blocks.py:249
+#: xr_pages/blocks.py:263
 msgid "3"
 msgstr ""
 
-#: xr_pages/blocks.py:249
+#: xr_pages/blocks.py:263
 msgid "4"
 msgstr ""
 
-#: xr_pages/models.py:26
+#: xr_pages/models.py:27
 msgid ""
 "An image that can be used not only for the detail view, but also for lists, "
 "teasers or social media."
@@ -392,7 +419,7 @@ msgstr ""
 "Ein Bild, nicht nur für die Detail-Ansicht, sondern auch für Social Media, "
 "Teaser und Listen."
 
-#: xr_pages/models.py:35
+#: xr_pages/models.py:37
 msgid ""
 "A description not only for the detail view, but also for lists, teasers or "
 "social media."
@@ -400,118 +427,126 @@ msgstr ""
 "Ein Beschreibung, nicht nur für die Detail-Ansicht, sondern auch für Social "
 "Media, Teaser und Listen."
 
-#: xr_pages/models.py:71
+#: xr_pages/models.py:73
 msgid "Home Page"
 msgstr "Home Page"
 
-#: xr_pages/models.py:72
+#: xr_pages/models.py:74
 msgid "Home Pages"
 msgstr "Home Pages"
 
-#: xr_pages/models.py:91
+#: xr_pages/models.py:93
 msgid "Content Page"
 msgstr "Inhalts Seite"
 
-#: xr_pages/models.py:92
+#: xr_pages/models.py:94
 msgid "Content Pages"
 msgstr "Inhalts Seiten"
 
-#: xr_pages/models.py:135
+#: xr_pages/models.py:145
 msgid "site"
 msgstr ""
 
-#: xr_pages/models.py:147
+#: xr_pages/models.py:157
 msgid ""
 "The unique name for the local group. Used as label for links referring to "
 "this page. Enter a name without leading \"XR \"."
 msgstr ""
 
-#: xr_pages/models.py:157
+#: xr_pages/models.py:167
 msgid "More information about the area the group is active in."
 msgstr ""
 
-#: xr_pages/models.py:164
+#: xr_pages/models.py:174
 msgid "active"
 msgstr "aktiv"
 
-#: xr_pages/models.py:165
+#: xr_pages/models.py:175
 msgid "in foundation"
 msgstr "im Aufbau"
 
-#: xr_pages/models.py:166
+#: xr_pages/models.py:176
 #: xr_pages/templates/xr_pages/partials/local_group_list_item.html:35
 msgid "looking for people"
 msgstr "Rebell*innen gesucht"
 
-#: xr_pages/models.py:167
+#: xr_pages/models.py:177
 msgid "idle"
 msgstr "inaktiv"
 
-#: xr_pages/models.py:171 xr_pages/models.py:204
+#: xr_pages/models.py:181 xr_pages/models.py:222
 msgid "Status"
 msgstr "Status"
 
-#: xr_pages/models.py:173
+#: xr_pages/models.py:183
 msgid "Founding date"
 msgstr "Gründungsdatum"
 
-#: xr_pages/models.py:191
+#: xr_pages/models.py:206
+msgid "Auto discovered latitude and longitude. Comma separated."
+msgstr ""
+
+#: xr_pages/models.py:208
 msgid "Facebook page URL"
 msgstr ""
 
-#: xr_pages/models.py:193
+#: xr_pages/models.py:210
 msgid "Instagram page URL"
 msgstr ""
 
-#: xr_pages/models.py:195
+#: xr_pages/models.py:212
 msgid "Twitter page URL"
 msgstr ""
 
-#: xr_pages/models.py:197
+#: xr_pages/models.py:214
 msgid "YouTube channel or user account URL"
 msgstr ""
 
-#: xr_pages/models.py:213
+#: xr_pages/models.py:216
+msgid "Mastodon page URL"
+msgstr ""
+
+#: xr_pages/models.py:231
 msgid "Contact"
 msgstr "Kontakt"
 
-#: xr_pages/models.py:216
+#: xr_pages/models.py:234
 msgid "Location"
 msgstr ""
 
-#: xr_pages/models.py:225
+#: xr_pages/models.py:244
 msgid "Social media"
 msgstr ""
 
-#: xr_pages/models.py:232
+#: xr_pages/models.py:251
 msgid "Local group"
 msgstr "Ortsgruppe"
 
-#: xr_pages/models.py:233 xr_pages/wagtail_hooks.py:45
+#: xr_pages/models.py:252 xr_pages/wagtail_hooks.py:45
 msgid "Local groups"
 msgstr "Ortsgruppen"
 
-#: xr_pages/models.py:365
+#: xr_pages/models.py:397
 msgid "Local Group List Page"
 msgstr "Ortsgruppen Übersicht Seite"
 
-#: xr_pages/models.py:366
+#: xr_pages/models.py:398
 msgid "Local Group List Pages"
 msgstr "Ortsgruppen Übersicht Seiten"
 
-#: xr_pages/models.py:388
+#: xr_pages/models.py:420
 msgid "Local Group Page"
 msgstr "Ortsgruppen Seite"
 
-#: xr_pages/models.py:389
+#: xr_pages/models.py:421
 msgid "Local Group Pages"
 msgstr "Ortsgruppen Seiten"
 
-#: xr_pages/models.py:430
+#: xr_pages/models.py:462
 msgid "Local Group Content Page"
 msgstr "Ortsgruppen Inhalts-Seite"
 
-#: xr_pages/models.py:431
+#: xr_pages/models.py:463
 msgid "Local Group Content Pages"
 msgstr "Ortsgruppen Inhalts-Seiten"
 

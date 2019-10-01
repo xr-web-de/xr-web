@@ -19,11 +19,86 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import LocalGroup, XrPage
+from datetime import timedelta
+from django.template.response import TemplateResponse
+
+
+"""
+A little helper class for common things
+on EventListing pages (shared by EventListPage
+and EventGroupPage).
+"""
+
+
+class EventPageListFilter:
+
+    """
+    Creates a queryset with objects of the page given through xrEventPage
+    and parses the given request for a valid range to filter the list.
+    Adds the filtered_events, the timefilter-definition and the selected
+    value to the context for easy access within the template.
+    """
+
+    @staticmethod
+    def add_filtered_event_list_to_context(xrEventPage, request, *args, **kwargs):
+        # parse GET request
+        get_d = request.GET.get("d")
+        if get_d == "365":
+            days = 365
+        elif get_d == "182":
+            days = 182
+        elif get_d == "-30":
+            days = -30
+        elif get_d == "0":
+            days = 0
+        else:
+            days = 30
+
+        # used to built the list of selectable time filters in the template
+        timefilter = {
+            "30": _("Next month"),
+            "182": _("Next six months"),
+            "365": _("Next Year"),
+            "0": _("All upcoming"),
+            "-30": _("Last month"),
+        }
+
+        # filter the events with the given timespan
+        event_qs = (
+            EventPage.objects.live().descendant_of(xrEventPage).from_timespan(days)
+        )
+
+        # get and extend context of xrEventPage
+        context = xrEventPage.get_context(request, *args, **kwargs)
+        context.update(
+            {
+                "filtered_events": event_qs,
+                "timefilter": timefilter,
+                "selected": str(days),
+            }
+        )
+
+        return context
 
 
 class EventPageQuerySet(PageQuerySet):
     def upcoming(self):
         return self.filter(end_date__isnull=False).filter(end_date__gte=localdate())
+
+    def from_timespan(self, days):
+        t = timedelta(days=days)
+        if days > 0:
+            return self.filter(end_date__isnull=False).filter(
+                start_date__gte=localdate(), end_date__lte=(localdate() + t)
+            )
+        elif days == 0:
+            return self.filter(end_date__isnull=False).filter(
+                start_date__gte=localdate()
+            )
+        else:
+            return self.filter(start_date__isnull=False).filter(
+                start_date__lte=localdate(), start_date__gte=(localdate() + t)
+            )
 
     def previous(self):
         return self.filter(start_date__isnull=False).filter(start_date__lte=localdate())
@@ -295,6 +370,16 @@ class EventListPage(XrPage):
     parent_page_types = []
     is_creatable = False
 
+    """
+    Override serve method to filter based on request params
+    """
+
+    def serve(self, request, *args, **kwargs):
+        context = EventPageListFilter.add_filtered_event_list_to_context(
+            self, request, args, kwargs
+        )
+        return TemplateResponse(request, self.template, context)
+
     class Meta:
         verbose_name = _("Event List Page")
         verbose_name_plural = _("Event List Pages")
@@ -341,6 +426,16 @@ class EventGroupPage(XrPage):
     ]
 
     parent_page_types = ["EventListPage"]
+
+    """
+    Override serve method to filter based on request params
+    """
+
+    def serve(self, request, *args, **kwargs):
+        context = EventPageListFilter.add_filtered_event_list_to_context(
+            self, request, args, kwargs
+        )
+        return TemplateResponse(request, self.template, context)
 
     class Meta:
         verbose_name = _("Event Group Page")

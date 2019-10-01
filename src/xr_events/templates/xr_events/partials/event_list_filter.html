@@ -24,6 +24,13 @@
                             </option>
                         {% endfor %}
                     </select>
+               </div>
+               <div class="controls">
+                    <select id="filter-by-date" class="form-control">
+                    	{% for value, option in timefilter.items %}
+	                    	<option value="{{ value }}" {% if selected == value %} selected="selected" {% endif %} >{{ option }}</option>
+                    	{% endfor %}
+                    </select>
                 </div>
             </div>
         </div>

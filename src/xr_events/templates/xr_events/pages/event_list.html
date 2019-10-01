@@ -15,10 +15,10 @@
 
     {% include "xr_events/partials/event_list_filter.html" %}
 
-    {% if page.upcoming_events %}
+    {% if filtered_events %}
         <section class="container">
             <div class="row">
-                {% for event in page.upcoming_events %}
+                {% for event in filtered_events %}
                     <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">
                         {% include "xr_events/partials/event_card.html" with event=event %}
                     </div>
