@@ -65,7 +65,10 @@ class EventPageListFilter:
 
         # filter the events with the given timespan
         event_qs = (
-            EventPage.objects.live().descendant_of(xrEventPage).from_timespan(days)
+            EventPage.objects.live()
+            .descendant_of(xrEventPage)
+            .from_timespan(days)
+            .order_by("dates__start")
         )
 
         # get and extend context of xrEventPage
@@ -88,16 +91,24 @@ class EventPageQuerySet(PageQuerySet):
     def from_timespan(self, days):
         t = timedelta(days=days)
         if days > 0:
-            return self.filter(end_date__isnull=False).filter(
-                start_date__gte=localdate(), end_date__lte=(localdate() + t)
+            return self.filter(
+                dates__isnull=False,
+                dates__start__isnull=False,
+                dates__start__gte=localdate(),
+                dates__start__lte=localdate() + t,
             )
         elif days == 0:
-            return self.filter(end_date__isnull=False).filter(
-                start_date__gte=localdate()
+            return self.filter(
+                dates__isnull=False,
+                dates__start__isnull=False,
+                dates__start__gte=localdate(),
             )
         else:
-            return self.filter(start_date__isnull=False).filter(
-                start_date__lte=localdate(), start_date__gte=(localdate() + t)
+            return self.filter(
+                dates__isnull=False,
+                dates__start__isnull=False,
+                dates__start__lte=localdate(),
+                dates__start__gte=(localdate() + t),
             )
 
     def previous(self):
