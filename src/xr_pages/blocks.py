@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from wagtail.core import blocks
+from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
@@ -69,12 +70,24 @@ class TitleBlock(CollapsibleFieldsMixin, blocks.StructBlock):
 class LinkBlock(blocks.StructBlock):
     internal_link = blocks.PageChooserBlock(
         required=False,
-        help_text=_('Link to an internal page. Is overwritten by "external link".'),
+        help_text=_(
+            "Link to an internal page. "
+            'Overwrites "document link". '
+            'Is overwritten by "external link".'
+        ),
     )
     external_link = blocks.URLBlock(
         required=False,
         help_text=_(
-            'Link to an external page (https://...). Overwrites "internal link".'
+            "Link to an external page (https://...). "
+            'Overwrites "internal link" and "document link".'
+        ),
+    )
+    document_link = DocumentChooserBlock(
+        required=False,
+        help_text=_(
+            "Link to an external page (https://...). "
+            'Is overwritten by "internal link" and "external link".'
         ),
     )
 
