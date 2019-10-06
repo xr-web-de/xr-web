@@ -2,7 +2,7 @@ from wagtail.admin.edit_handlers import BaseCompositeEditHandler
 
 
 class FieldCollapsiblePanel(BaseCompositeEditHandler):
-    template = "xr_web/edit_handlers/field_collapsible_panel.html"
+    template = "xr_wagtail/edit_handlers/field_collapsible_panel.html"
 
     def __init__(self, children=(), *args, **kwargs):
         super().__init__(children, *args, **kwargs)

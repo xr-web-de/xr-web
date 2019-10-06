@@ -5,7 +5,7 @@ from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 
-from xr_web.block_utils import (
+from xr_wagtail.block_utils import (
     heading_block_kwargs,
     simple_rich_text_features,
     caption_block_kwargs,

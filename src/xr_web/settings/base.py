@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "wagtailmenus",
     "condensedinlinepanel",
     # Project
+    "xr_wagtail",
     "xr_pages",
     "xr_events",
     "xr_newsletter",
@@ -88,6 +89,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "xr_web", "templates"),
+            os.path.join(BASE_DIR, "xr_wagtail", "templates"),
             os.path.join(django.__path__[0], "forms", "templates"),
         ],
         "APP_DIRS": True,
@@ -185,7 +187,7 @@ WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = (
     "xr_pages/menus/local_group_level_3_menu.html"
 )
 
-WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_pages.wagtail_hooks.XrMainMenuAdmin"
+WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_wagtail.wagtail_hooks.XrMainMenuAdmin"
 
 
 # Local Group Settings

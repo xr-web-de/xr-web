@@ -31,7 +31,7 @@ from xr_newsletter.forms import (
 from xr_newsletter.services import sendy_api
 from xr_pages.blocks import ContentBlock
 from xr_pages.services import get_home_page
-from xr_web.edit_handlers import FieldCollapsiblePanel
+from xr_wagtail.edit_handlers import FieldCollapsiblePanel
 from xr_pages.models import (
     LocalGroup,
     HomePage,
