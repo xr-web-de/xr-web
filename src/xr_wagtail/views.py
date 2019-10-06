@@ -63,6 +63,7 @@ def remove_old_revisions_for_all_pages(request):
         .exclude(page__live_revision_id=F("id"))
         .filter(page__live_revision__created_at__gte=F("created_at"))
         .order_by("page__title", "-created_at")
+        .select_related("page", "page__live_revision")
     )
 
     next = request.META.get("HTTP_REFERER", None)
