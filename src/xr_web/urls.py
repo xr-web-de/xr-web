@@ -20,16 +20,15 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
-from xr_pages.views import umap_marker
 from xr_wagtail.views import (
     remove_old_revisions_for_page,
     remove_old_revisions_for_all_pages,
 )
+from xr_embeds import urls as xr_embeds_urls
 
 from . import webroot_redirects
 
 urlpatterns = [
-    re_path(r"^export/umap_marker/", umap_marker, name="umap_marker"),
     re_path(
         r"^admin/pages/(\d+)/revisions/remove_old/$",
         remove_old_revisions_for_page,
@@ -40,6 +39,7 @@ urlpatterns = [
         remove_old_revisions_for_all_pages,
         name="remove_old_revisions_for_all_pages",
     ),
+    re_path(r"^embeds/", include(xr_embeds_urls)),
     re_path(r"^django-admin/", admin.site.urls),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"^admin/", include(wagtailadmin_urls)),

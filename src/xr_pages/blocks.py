@@ -5,7 +5,7 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
-
+from xr_embeds.blocks import GdprEmbedBlock
 from xr_wagtail.block_utils import (
     heading_block_kwargs,
     simple_rich_text_features,
@@ -323,6 +323,10 @@ class AlignedUmapBlock(AlignmentMixin, UmapBlock):
     pass
 
 
+class AlignedGdprEmbedBlock(AlignmentMixin, GdprEmbedBlock):
+    pass
+
+
 # Page content StreamField
 class ContentBlock(blocks.StreamBlock):
     title = TitleBlock()
@@ -334,6 +338,7 @@ class ContentBlock(blocks.StreamBlock):
     form = EmailFormBlock()
     grid = GridBlock()
     umap = AlignedUmapBlock()
+    embed = AlignedGdprEmbedBlock()
     # carousel = AlignedCarouselBlock()
 
     class Meta:

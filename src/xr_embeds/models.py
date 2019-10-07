@@ -1,7 +1,12 @@
+import logging
+
 from django.db import models
 
 
-class VideoThumbnail(models.Model):
-    thumbnail = models.ImageField(upload_to="video_thumbnails/")
+logger = logging.getLogger(__name__)
+
+
+class CachedImage(models.Model):
+    image = models.ImageField(upload_to="cached_images")
     last_updated = models.DateTimeField(auto_now=True)
-    thumbnail_url = models.URLField()
+    original_url = models.URLField(unique=True)

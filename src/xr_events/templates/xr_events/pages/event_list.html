@@ -6,13 +6,6 @@
 
     {% include_block page.content %}
 
-{#    <div class="mapIframe">#}
-{#        <iframe width="100%" height="510px" frameborder="0" allowfullscreen#}
-{#                src="https://umap.openstreetmap.fr/en/map/extinction-rebellion-international-map-of-actions-_343242#7/51.292/9.710"></iframe>#}
-{#        <p><a href="https://umap.openstreetmap.fr/en/map/extinction-rebellion-international-map-of-actions-_343242#7/51.292/9.710">Vollbildanzeige</a>#}
-{#        </p>#}
-{#    </div>#}
-
     {% include "xr_events/partials/event_list_filter.html" %}
 
     {% if page.upcoming_events %}

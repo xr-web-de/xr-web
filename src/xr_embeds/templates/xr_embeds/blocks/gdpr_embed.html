@@ -1,0 +1,54 @@
+{% extends "xr_pages/blocks/base.html" %}
+{% load i18n %}
+{% load wagtailcore_tags %}
+{% load xr_embed_tags %}
+
+
+{% block block_content %}
+
+    {% get_embed value.embed.url as embed %}
+
+    <div class="embed-wrapper" style="{% if value.width %}width: {{ value.width }}; {% endif %}{% if value.height %}height: {{ value.height }};{% endif %}">
+
+    {% if value.show_gdpr_message %}
+
+        {% if embed.thumbnail_url %}
+            {% get_cached_image embed.thumbnail_url as cached_image %}
+        {% endif %}
+
+
+            <div data-embed-url="{% url "embeds:embed_html" embed.pk %}"
+                 {% if embed.is_responsive %}style="height: 0; padding-bottom: {{ embed.ratio_css }};"{% endif %} class="responsive-object">
+
+                {% if cached_image %}
+                    <img class="embed-placeholder" src="{{ cached_image.url }}" alt="{{ embed.title|escape }}">
+                {% else %}
+                    <div class="embed-placeholder"></div>
+                {% endif %}
+
+                <div class="embed-load-message">
+                    <p>
+                        {% blocktrans with provider=embed.provider_name %}
+                            This content will be loaded from "{{ provider }}".
+                        {% endblocktrans %}
+                    </p>
+                    <button type="button" class="embed-load-button">
+                        {% trans "Load Content." %}
+                    </button>
+                </div>
+
+            </div>
+
+
+    {% else %}
+        <div {% if embed.is_responsive %} style="height: 0; padding-bottom: {{ embed.ratio_css }};"{% endif %} class="responsive-object">
+
+            {{ embed.html|safe }}
+
+        </div>
+
+    {% endif %}
+
+    </div>
+
+{% endblock %}
