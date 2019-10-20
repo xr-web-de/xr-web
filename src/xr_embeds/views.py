@@ -60,8 +60,6 @@ def geojson_view(request, model_slug, query_slug):
         if obj.email:
             description += "\n[[mailto:{}|{}]]".format(obj.email, obj.email)
 
-        icon_url = request.build_absolute_uri(static("img/extinctionsymbol_48.png"))
-
         features.append(
             {
                 "type": "Feature",
@@ -76,6 +74,8 @@ def geojson_view(request, model_slug, query_slug):
                 },
             }
         )
+
+    icon_url = request.build_absolute_uri(static("img/extinctionsymbol_48.png"))
 
     data = {
         "type": "FeatureCollection",
