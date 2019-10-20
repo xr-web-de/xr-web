@@ -10,7 +10,7 @@
         {% if form.is_bound and not form.is_valid %}
 
             <div class="alert alert-danger">
-                {% trans "Uups, da stimmt noch etwas nicht..." %}
+                {% trans "Oops, there's something wrong..." %}
             </div>
 
         {% endif %}
@@ -63,7 +63,7 @@
                     {% if submit_butten_text %}
                         {{ submit_butten_text }}
                     {% else %}
-                        {% trans "Absenden" %}
+                        {% trans "Submit" %}
                     {% endif %}
                 </button>
             </div>

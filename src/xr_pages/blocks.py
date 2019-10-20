@@ -39,7 +39,7 @@ class TextBlock(CollapsibleFieldsMixin, blocks.StructBlock):
         help_text=_(
             "Simple richtext with basic formatting. "
             "Use links in order to connect related pages frequently. "
-            "Ordered lists are rendered with big numbers."
+            "Ordered lists are rendered with big numbers. "
             "For images and videos use the image and video blocks."
         ),
     )

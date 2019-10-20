@@ -28,7 +28,7 @@
 
                 <div class="embed-load-message">
                     <p>
-                        {% blocktrans with provider=embed.provider_name %}
+                        {% blocktrans trimmed with provider=embed.provider_name %}
                             This content will be loaded from "{{ provider }}".
                         {% endblocktrans %}
                     </p>

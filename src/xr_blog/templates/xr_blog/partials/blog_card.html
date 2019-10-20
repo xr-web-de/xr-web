@@ -31,7 +31,7 @@
         <footer class="block__footer">
             <h3 class="h h--3 h--caps">{{ entry.title }}</h3>
             <p class="blog-entry__from">
-                {% blocktrans with author=entry.author date=entry.date|date:"SHORT_DATE_FORMAT" %}
+                {% blocktrans trimmed with author=entry.author date=entry.date|date:"SHORT_DATE_FORMAT" %}
                     Written by <em>{{ author }}</em> on <em>{{ date }}</em>
                 {% endblocktrans %}
             </p>
