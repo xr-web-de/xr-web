@@ -58,6 +58,9 @@ class XrPage(Page):
     class Meta:
         abstract = True
 
+    def get_absolute_url(self):
+        return self.full_url
+
 
 class HomePage(XrPage):
     template = "xr_pages/pages/home.html"

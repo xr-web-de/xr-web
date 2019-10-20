@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 from django.utils.translation import ugettext as _
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, MultiFieldPanel
 from wagtail.core.fields import StreamField
@@ -84,3 +85,13 @@ class BlogListPage(XrPage):
 
     def entries(self):
         return BlogEntryPage.objects.child_of(self).live().order_by("-date")
+
+    @property
+    def rss_feed_url(self):
+        """URL to RSS feed of this page."""
+        return reverse("blog-rss-feed", kwargs={"feed_id": self.page_ptr_id})
+
+    @property
+    def atom_feed_url(self):
+        """URL to RSS feed of this page."""
+        return reverse("blog-atom-feed", kwargs={"feed_id": self.page_ptr_id})

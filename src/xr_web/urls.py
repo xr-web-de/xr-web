@@ -25,6 +25,7 @@ from xr_wagtail.views import (
     remove_old_revisions_for_all_pages,
 )
 from xr_embeds import urls as xr_embeds_urls
+from xr_blog.views import RssFeed, AtomFeed
 
 from . import webroot_redirects
 
@@ -40,6 +41,8 @@ urlpatterns = [
         name="remove_old_revisions_for_all_pages",
     ),
     re_path(r"^embeds/", include(xr_embeds_urls)),
+    path("feed/rss<int:feed_id>.xml", RssFeed(), name="blog-rss-feed"),
+    path("feed/atom<int:feed_id>.xml", AtomFeed(), name="blog-atom-feed"),
     re_path(r"^django-admin/", admin.site.urls),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"^admin/", include(wagtailadmin_urls)),

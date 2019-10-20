@@ -1,6 +1,7 @@
 {% extends "xr_pages/layouts/default_page.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
+{% load xr_pages_tags %}
 
 {% block content %}
 
@@ -17,5 +18,22 @@
             </div>
         </section>
     {% endif %}
+
+    <section class="container">
+      <div class="float-right">
+        <ul class="icon-list icon-list--icons-vertical">
+          <li>
+            <a href="{{ page.rss_feed_url }}" title="{{ _("RSS") }}" target="_blank">
+              {% svg_icon "feed" 30 %}
+            </a>
+          </li>
+          <li>
+            <a href="{{ page.atom_feed_url }}" title="{{ _("Atom") }}" target="_blank">
+              {% svg_icon "feed" 30 %}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
 
 {% endblock %}
