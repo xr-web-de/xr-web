@@ -323,7 +323,9 @@ class LocalGroup(models.Model):
 
     @property
     def has_any_social_media_urls(self):
-        return any([self.facebook, self.twitter, self.youtube, self.instagram])
+        return any(
+            [self.facebook, self.twitter, self.youtube, self.instagram, self.mastodon]
+        )
 
     @property
     def newly_founded(self):
