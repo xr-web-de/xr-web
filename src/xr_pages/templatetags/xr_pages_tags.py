@@ -59,17 +59,46 @@ def get_footer_menus(context):
     return list(footer_menus)
 
 
-@register.simple_tag()
-def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
+@register.simple_tag(takes_context=True)
+def svg_icon(context, icon_name, size=32, css_classes="", aria_label=""):
     if icon_name not in svg_icon_map:
         return ""
-    icon_filename = svg_icon_map[icon_name]
-    icon_directory = "xr_pages/svg_icons/icons/"
 
-    icon_path = os.path.join(settings.BASE_DIR, icon_directory, icon_filename)
+    embedded_svg_icons = context.get("_embedded_svg_icons", set())
+    svg_context = Context(
+        {
+            "name": icon_name,
+            "size": size,
+            "css_classes": css_classes,
+            "aria_label": aria_label,
+        }
+    )
 
-    if not os.path.isfile(icon_path):
-        return ""
+    if icon_name in embedded_svg_icons:
+        # The icon was already embedded. Render a <use> tag instead.
+        svg_context["svg"] = mark_safe(
+            '<svg viewbox="0 0 100 100"><use href="#svg-icon-{name}"/></svg>'.format(
+                name=icon_name
+            )
+        )
+
+    else:
+        # The icon is not yet embedded. Render the svg.
+        icon_filename = svg_icon_map[icon_name]
+        icon_directory = "xr_pages/svg_icons/icons/"
+
+        icon_path = os.path.join(settings.BASE_DIR, icon_directory, icon_filename)
+
+        if not os.path.isfile(icon_path):
+            return ""
+
+        with open(icon_path) as svg_file:
+            svg_context["svg"] = mark_safe(svg_file.read())
+
+        # Remember, that we already embedded this svg icon.
+        # Every time we render with the same context, the icon won't be embedded again but a <use> tag will be rendered instead.
+        embedded_svg_icons.add(icon_name)
+        context["_embedded_svg_icons"] = embedded_svg_icons
 
     svg_template = Template(
         """
@@ -82,19 +111,7 @@ def svg_icon(icon_name, size=32, css_classes="", aria_label=""):
         >{{ svg }}</i>
     """
     )
-
-    with open(icon_path) as svg_file:
-        context = Context(
-            {
-                "name": icon_name,
-                "svg": mark_safe(svg_file.read()),
-                "size": size,
-                "css_classes": css_classes,
-                "aria_label": aria_label,
-            }
-        )
-
-    html = svg_template.render(context)
+    html = svg_template.render(svg_context)
 
     return html
 
