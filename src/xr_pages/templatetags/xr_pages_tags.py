@@ -116,9 +116,11 @@ def svg_icon(context, icon_name, size=32, css_classes="", aria_label=""):
     return html
 
 
-@register.inclusion_tag("xr_pages/templatetags/social_media_page_links.html")
+@register.inclusion_tag(
+    "xr_pages/templatetags/social_media_page_links.html", takes_context=True
+)
 def render_social_media_links_for_group(
-    group, size=32, css_classes="", show_label=False
+    context, group, size=32, css_classes="", show_label=False
 ):
 
     social_media_links = []
@@ -138,6 +140,7 @@ def render_social_media_links_for_group(
             )
 
     return {
+        "_embedded_svg_icons": context.get("_embedded_svg_icons", set()),
         "social_media_links": social_media_links,
         "size": size,
         "css_classes": css_classes,
