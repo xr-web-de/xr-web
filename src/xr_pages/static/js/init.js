@@ -6,6 +6,7 @@ import { initSiteHeader } from './modules/siteheader.js'
 import { initLocalGroups } from './pages/localgroups.js'
 import { initEvents } from './pages/events.js'
 import { initDatetimeWidget } from './modules/datetime_widget'
+import { initEmbeds } from './modules/embeds'
 
 export const init = () => {
     window.ctx = {
@@ -15,6 +16,8 @@ export const init = () => {
     initSiteHeader()
 
     initDatetimeWidget()
+
+    initEmbeds()
 
     const page = document.body.dataset.page || 'default'
 

@@ -463,7 +463,16 @@ class LocalGroupSubPage(XrPage):
         verbose_name_plural = _("Local Group Content Pages")
 
     def save(self, *args, **kwargs):
-        if not hasattr(self, "group") or self.group is None:
+        """
+        We want to make sure, each time an LocalGroupSubPage
+        is created (also when copied or moved) we assign the
+        group of the parent.
+        """
+        if (
+            not hasattr(self, "group")
+            or self.group is None
+            or self.group != self.get_parent().specific.group
+        ):
             self.group = self.get_parent().specific.group
 
         super().save(*args, **kwargs)

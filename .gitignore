@@ -63,6 +63,7 @@ cover/
 # User files
 /uploads/
 /pdfs/
+/media/
 
 # Caches
 /cache/
@@ -70,6 +71,9 @@ cover/
 
 # collected static files
 /static/
+
+# Media
+/media/
 
 # Local settings
 src/*/settings/local.py

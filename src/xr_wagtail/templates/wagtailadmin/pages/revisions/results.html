@@ -1,0 +1,20 @@
+{% load i18n wagtailadmin_tags %}
+
+{% if revisions %}
+    {% page_permissions page as page_perms %}
+    {% if page_perms.can_edit %}
+        <div class="align-right">
+            <a href="{% url "remove_old_revisions_for_page" page.pk %}" class="button">{% trans "Remove old revisions" %}</a>
+            <br>
+            <span class="help">
+                {% trans "Deletes all revisions older than the published revision<br> and not scheduled for publishing and not submitted for moderation." %}
+            </span>
+        </div>
+    {% endif %}
+
+    {% include "wagtailadmin/pages/revisions/list.html" %}
+
+    {% include "wagtailadmin/shared/pagination_nav.html" with items=revisions linkurl="wagtailadmin_pages:revisions_index" %}
+{% else %}
+    <p>{% blocktrans %}No revision of this page exist{% endblocktrans %}</p>
+{% endif %}

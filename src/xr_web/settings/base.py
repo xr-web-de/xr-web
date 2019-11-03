@@ -60,11 +60,14 @@ INSTALLED_APPS = [
     # Wagtail 3rd Party
     "wagtailmenus",
     "condensedinlinepanel",
+    "wagtailembedpeertube",
     # Project
+    "xr_wagtail",
     "xr_pages",
     "xr_events",
     "xr_newsletter",
     "xr_blog",
+    "xr_embeds",
 ]
 
 MIDDLEWARE = [
@@ -88,6 +91,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "xr_web", "templates"),
+            os.path.join(BASE_DIR, "xr_wagtail", "templates"),
             os.path.join(django.__path__[0], "forms", "templates"),
         ],
         "APP_DIRS": True,
@@ -185,7 +189,15 @@ WAGTAILMENUS_DEFAULT_CHILDREN_MENU_TEMPLATE = (
     "xr_pages/menus/local_group_level_3_menu.html"
 )
 
-WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_pages.wagtail_hooks.XrMainMenuAdmin"
+WAGTAILMENUS_MAIN_MENUS_MODELADMIN_CLASS = "xr_wagtail.wagtail_hooks.XrMainMenuAdmin"
+
+WAGTAILEMBEDS_FINDERS = [
+    {"class": "xr_embeds.finders.UmapEmbedFinder"},
+    {"class": "xr_embeds.finders.YoutubeNoCookieOEmbedFinder"},
+    {"class": "wagtailembedpeertube.finders"},
+    {"class": "wagtail.embeds.finders.oembed"},
+]
+XR_EMBEDS_THUMBNAIL_CACHE_VALID_TIME = 3600 * 24
 
 
 # Local Group Settings

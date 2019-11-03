@@ -5,4 +5,6 @@
     <a href="{{ value.external_link }}" target="_blank" class="block__link">
 {% elif value.internal_link %}
     <a href="{% pageurl value.internal_link %}" class="block__link">
+{% elif value.document_link %}
+    <a href="{{ value.document_link.url }}" class="block__link">
 {% endif %}

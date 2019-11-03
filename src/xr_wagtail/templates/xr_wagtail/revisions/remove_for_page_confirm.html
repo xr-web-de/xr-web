@@ -1,0 +1,67 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n wagtailadmin_tags %}
+{% block titletag %}{% blocktrans with title=page.get_admin_display_title %}Delete old revisons for {{ title }}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+    {% trans "Delete old revisons for" as del_str %}
+    {% include "wagtailadmin/shared/header.html" with title=del_str subtitle=page.get_admin_display_title icon="doc-empty-inverse" %}
+
+    <div class="nice-padding">
+        <p>
+            {% trans 'Are you sure you want to delete all old revisions for this page?' %}
+        </p>
+        <p>
+            <span class="help">
+                {% trans "Old revisions are revisions older than the published revision and not scheduled for publishing and not submitted for moderation." %}
+            </span>
+        </p>
+
+        <p>
+            <form action="{% url "remove_old_revisions_for_page" page.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next|default:"" }}">
+                <button type="submit" class="button serious">
+                    {% trans "Yes, remove old revisions" %}
+                </button>
+                <a href="{% if next %}{{ next }}{% else %}{% url 'wagtailadmin_pages:revisions_index' page.id %}{% endif %}" class="button button-secondary">{% trans "No, don't delete old revisions" %}</a>
+            </form>
+        </p>
+
+        <p>
+            {% trans "Revisions which will be deleted:" %}
+        </p>
+
+        {% if revisions %}
+            <table class="listing full-width">
+                {% regroup revisions by page as grouped_revisions %}
+                {% for revision_group in grouped_revisions %}
+                    <tr>
+                        <th colspan="4">
+                            {{ revision_group.grouper }}
+                            <a href="{% url "wagtailadmin_pages:edit" revision_group.grouper.id %}">{% trans "edit" %}</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Revision" %}</th>
+                        <th>{% trans "created at" %}</th>
+                        <th>{% trans "is public" %}</th>
+                        <th>{% trans "live created at" %}</th>
+                    </tr>
+                    {% for revision in revision_group.list %}
+                        <tr>
+                            <td>"{{ revision.as_page_object.title }}"</td>
+                            <td>{{ revision.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+                            <td>{{ revision_group.grouper.live }}</td>
+                            <td>{{ revision_group.grouper.live_revision.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>
+                {% trans "There are no old revisions to delete." %}
+            </p>
+        {% endif %}
+
+    </div>
+{% endblock %}

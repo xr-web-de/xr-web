@@ -97,6 +97,10 @@ class XrStructValue(StructValue):
             internal_link = link_block.get("internal_link")
             if internal_link:
                 return internal_link
+
+            document_link = link_block.get("document_link")
+            if document_link:
+                return document_link
         return ""
 
     def background_color(self):
@@ -148,7 +152,7 @@ class CollapsibleFieldsMixin(blocks.StructBlock):
         return context
 
     class Meta:
-        form_template = "xr_web/block_forms/collapsible_struct.html"
+        form_template = "xr_wagtail/block_forms/collapsible_struct.html"
 
 
 # Common Block Fields

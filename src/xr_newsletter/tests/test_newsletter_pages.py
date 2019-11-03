@@ -39,7 +39,7 @@ class NewsletterBaseTest(PagesBaseTest):
         self.email_form_page = EmailFormPage(
             title="Example Form Page", group=self.local_group
         )
-        self.home_page.add_child(instance=self.email_form_page)
+        self.local_group_page.add_child(instance=self.email_form_page)
 
         self.FORM_PAGES = {self.newsletter_form_page, self.email_form_page}
 

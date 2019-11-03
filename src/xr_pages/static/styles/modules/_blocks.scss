@@ -304,3 +304,57 @@
         @include fucxed;
     }
 }
+
+.embed-wrapper {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+
+    @include clearfix();
+}
+
+.responsive-object {
+    position: relative;
+    display: flex;
+
+    iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+}
+.embed-placeholder {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+    }
+}
+.embed-load-message {
+    position: absolute;
+    float: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: xrColor('red');
+    box-shadow: 0 1em 5em rgba(0, 0, 0, 1);
+    color: xrColor('warm-yellow');
+
+    padding: 20px;
+    text-align: center;
+}
