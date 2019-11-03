@@ -64,11 +64,15 @@ class EventPageListFilter:
         }
 
         # filter the events with the given timespan
+        # also: add dates__start and dates__end to the
+        # query results for easy access in template
         event_qs = (
             EventPage.objects.live()
             .descendant_of(xrEventPage)
             .from_timespan(days)
             .order_by("dates__start")
+            .extra(select={'individualDateStart': "start"})
+            .extra(select={'individualDateEnd': "end"})
         )
 
         # get and extend context of xrEventPage
