@@ -3,48 +3,49 @@
 {% load wagtailimages_tags %}
 {% load xr_pages_tags %}
 
+{% with event=event_date.event_page display_date=event_date.start %}
+    <article class="block event-block" id="event_date-id-{{ event_date.id }}">
+        <a href="{{ event.get_url }}" class="block__link">
+            <div class="block__content">
+                {% if display_date %}
+                    <div class="short-date">
+                        <span class="short-date__start">
+                            <span class="short-date__day">{{ display_date|date:"d" }}</span>
+                            <span class="short-date__month">{{ display_date|date:"M" }}</span>
+                        </span>
+    {#                    {% if display_date.date != event.end_date.date %}#}
+    {#                        <span class="short-date__end">#}
+    {#                            <span class="short-date__day">{{ event.end_date|date:"d" }}</span>#}
+    {#                            <span class="short-date__month">{{ event.end_date|date:"M" }}</span>#}
+    {#                        </span>#}
+    {#                    {% endif %}#}
+                    </div>
+                {% endif %}
+                {% if event.get_image %}
+                    {% image event.get_image width-512 alt=event.title class="img-responsive" %}
+                {% else %}
+                    <div class="image-placeholder"></div>
+                {% endif %}
+            </div>
 
-<article class="block event-block">
-    <a href="{{ event.get_url }}" class="block__link">
-        <div class="block__content">
-            {% if display_date %}
-                <div class="short-date">
-                    <span class="short-date__start">
-                        <span class="short-date__day">{{ display_date|date:"d" }}</span>
-                        <span class="short-date__month">{{ display_date|date:"M" }}</span>
-                    </span>
-{#                    {% if display_date.date != event.end_date.date %}#}
-{#                        <span class="short-date__end">#}
-{#                            <span class="short-date__day">{{ event.end_date|date:"d" }}</span>#}
-{#                            <span class="short-date__month">{{ event.end_date|date:"M" }}</span>#}
-{#                        </span>#}
-{#                    {% endif %}#}
-                </div>
-            {% endif %}
-            {% if event.get_image %}
-                {% image event.get_image width-512 alt=event.title class="img-responsive" %}
-            {% else %}
-                <div class="image-placeholder"></div>
-            {% endif %}
-        </div>
+            <div class="block__footer">
+                <h3 class="h h--3 h--caps">{{ event.title }}</h3>
 
-        <div class="block__footer">
-            <h3 class="h h--3 h--caps">{{ event.title }}</h3>
+                {% if event.all_organiser_names %}
+                    <p><strong>{{ event.all_organiser_names }}</strong></p>
+                {% endif %}
 
-            {% if event.all_organiser_names %}
-                <p><strong>{{ event.all_organiser_names }}</strong></p>
-            {% endif %}
+                {% if event.description %}
+                    <p>{{ event.description|truncatewords:"20" }}</p>
+                {% endif %}
 
-            {% if event.description %}
-                <p>{{ event.description|truncatewords:"20" }}</p>
-            {% endif %}
+                <strong class="black float-right">{% trans "More" %} {% svg_icon "more" 24 %}</strong>
 
-            <strong class="black float-right">{% trans "More" %} {% svg_icon "more" 24 %}</strong>
+                {% if event.location %}
+                    <p>{{ event.location }}</p>
+                {% endif %}
 
-            {% if event.location %}
-                <p>{{ event.location }}</p>
-            {% endif %}
-
-        </div>
-    </a>
-</article>
+            </div>
+        </a>
+    </article>
+{% endwith %}

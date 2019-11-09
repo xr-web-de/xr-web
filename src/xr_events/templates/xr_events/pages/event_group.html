@@ -1,4 +1,4 @@
-{% extends "xr_pages/layouts/default_page.html" %}
+{% extends "xr_events/pages/event_list.html" %}
 {% load i18n %}
 {% load wagtailcore_tags %}
 
@@ -10,24 +10,4 @@
         </div>
     {% endif %}
 
-{% endblock %}
-
-{% block content %}
-
-    {% include_block page.content %}
-
-    {% include "xr_events/partials/event_list_filter.html" %}
-
-    {% if filtered_events %}
-
-        <section class="container">
-            <div class="row">
-                {% for event in filtered_events %}
-                    <div class="col-sm-4">
-                        {% include "xr_events/partials/event_card.html" %}
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
 {% endblock %}

@@ -2,7 +2,6 @@ import datetime
 
 from django.utils.timezone import localdate
 
-from xr_events.models import EventPage
 from xr_pages.services import (
     get_home_page,
     MODERATORS_PAGE_PERMISSIONS,
@@ -29,7 +28,7 @@ def get_event_list_page(request=None):
     return event_list_page
 
 
-def get_event_group_pages(request=None, only_with_active_events=False):
+def get_event_group_pages(request=None):
     from .models import EventGroupPage
 
     event_list_page = get_event_list_page(request)
@@ -38,21 +37,10 @@ def get_event_group_pages(request=None, only_with_active_events=False):
         event_group_pages = (
             EventGroupPage.objects.child_of(event_list_page)
             .live()
-            .order_by("group__is_regional_group", "group__name")
+            .order_by("-group__is_regional_group", "group__name")
         )
     except (KeyError, AttributeError, EventGroupPage.DoesNotExist):
         return []
-
-    # filter out pages with no active events
-    if only_with_active_events:
-        upcoming_events = (
-            EventPage.objects.descendant_of(event_list_page).live().upcoming()
-        )
-
-        event_group_pages = event_group_pages.filter(
-            id__in=[e.id for e in upcoming_events]
-        )
-        # event_group_pages = [page for page in event_group_pages if page.upcoming_events]
 
     # # arrange regional group pages at the start
     # if any([page.is_regional_group for page in event_group_pages]):

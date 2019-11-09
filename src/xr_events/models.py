@@ -41,7 +41,7 @@ class EventPageListFilter:
 
     @staticmethod
     def get_timefilter_and_selected_days(data):
-        # parse GET request
+        # data may be request.GET e.g.
         get_d = data.get("d", 30)
 
         if get_d == "365":
@@ -68,21 +68,27 @@ class EventPageListFilter:
 
 
 class EventPageQuerySet(PageQuerySet):
+    def start_before(self, date):
+        return self.filter(Q(start_date__isnull=False) & Q(start_date__date__lte=date))
+
+    def end_after(self, date):
+        return self.filter(
+            Q(end_date__isnull=False) & Q(end_date__date__gte=date)
+            | Q(start_date__isnull=False) & Q(start_date__date__gte=date)
+        )
+
     def upcoming(self):
-        return self.filter(end_date__isnull=False, end_date__gte=localdate())
+        return self.end_after(localdate())
 
     def previous(self):
-        return self.filter(start_date__isnull=False, start_date__lte=localdate())
+        return self.start_before(localdate())
 
     def date_range(self, date_range):
         from_date, to_date = date_range
+        return self.end_after(from_date).start_before(to_date)
 
-        return self.filter(
-            start_date__isnull=False,
-            end_date__isnull=False,
-            end_date__gte=from_date,
-            start_date__lte=to_date,
-        )
+    def for_group(self, group):
+        return self.filter(Q(group=group) | Q(shadow_events__group=group))
 
 
 EventPageManager = PageManager.from_queryset(EventPageQuerySet)
@@ -177,28 +183,34 @@ class EventPage(XrPage):
 
 
 class ShadowEventPageQuerySet(PageQuerySet):
-    def upcoming(self):
+    def start_before(self, date):
         return self.filter(
-            original_event__isnull=False,
-            original_event__end_date__isnull=False,
-            original_event__end_date__gte=localdate(),
+            Q(original_event__start_date__isnull=False)
+            & Q(original_event__start_date__date__lte=date)
         )
 
-    def previous(self):
+    def end_after(self, date):
         return self.filter(
-            original_event__isnull=False,
-            original_event__start_date__isnull=False,
-            original_event__start_date__lte=localdate(),
+            Q(original_event__end_date__isnull=False)
+            & Q(original_event__end_date__date__gte=date)
+            | Q(original_event__start_date__isnull=False)
+            & Q(original_event__start_date__date__gte=date)
         )
+
+    def upcoming(self):
+        return self.end_after(localdate())
+
+    def previous(self):
+        return self.start_before(localdate())
 
     def date_range(self, date_range):
         from_date, to_date = date_range
+        return self.end_after(from_date).start_before(to_date)
+
+    def for_group(self, group):
         return self.filter(
-            original_event__isnull=False,
-            original_event__start_date__isnull=False,
-            original_event__end_date__isnull=False,
-            original_event__end_date__gte=from_date,
-            original_event__start_date__lte=to_date,
+            Q(original_event__group=group)
+            | Q(original_event__shadow_events__group=group)
         )
 
 
@@ -278,11 +290,12 @@ class EventDateQuerySet(QuerySet):
         return self.filter(event_page__live=True)
 
     def start_before(self, date):
-        return self.filter(start__date__lte=date)
+        return self.filter(Q(start__isnull=False) & Q(start__date__lte=date))
 
     def end_after(self, date):
         return self.filter(
-            Q(end__isnull=False) & Q(end__date__gte=date) | Q(start__date__gte=date)
+            Q(end__isnull=False) & Q(end__date__gte=date)
+            | Q(start__isnull=False) & Q(start__date__gte=date)
         )
 
     def upcoming(self):
@@ -415,7 +428,6 @@ class EventListPage(XrPage):
         context.update(
             {
                 "event_dates": event_dates,
-                # "events_by_date": events_by_date,
                 "timefilter": timefilter,
                 "selected": str(selected),
             }
@@ -464,13 +476,14 @@ class EventGroupPage(XrPage):
 
         date_range = date_range_from_days(selected)
 
-        event_dates = EventDate.objects.live().date_range(date_range)
+        event_dates = (
+            EventDate.objects.live().for_group(self.group).date_range(date_range)
+        )
 
         context = self.get_context(request, *args, **kwargs)
         context.update(
             {
                 "event_dates": event_dates,
-                # "events_by_date": events_by_date,
                 "timefilter": timefilter,
                 "selected": str(selected),
             }

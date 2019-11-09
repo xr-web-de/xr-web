@@ -15,7 +15,7 @@
 
                         <option value="{% pageurl event_list_page %}">Alle Ortsgruppen</option>
 
-                        {% get_active_event_group_pages as event_group_pages %}
+                        {% get_event_group_pages as event_group_pages %}
 
                         {% for event_group_page in event_group_pages %}
                             <option value="{% pageurl event_group_page %}"
