@@ -1,5 +1,5 @@
-from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 from django.db import models
+from django.db.models import Q, QuerySet
 from django.utils import formats
 from django.utils.timezone import localdate
 from django.utils.translation import ugettext as _
@@ -16,10 +16,10 @@ from wagtail.core.models import Orderable, PageManager, Page
 from wagtail.core.query import PageQuerySet
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 
 from xr_pages.blocks import ContentBlock
 from xr_pages.models import LocalGroup, XrPage
-from datetime import timedelta
 from django.template.response import TemplateResponse
 
 
@@ -40,9 +40,10 @@ class EventPageListFilter:
     """
 
     @staticmethod
-    def add_filtered_event_list_to_context(xrEventPage, request, *args, **kwargs):
+    def get_timefilter_and_selected_days(data):
         # parse GET request
-        get_d = request.GET.get("d")
+        get_d = data.get("d", 30)
+
         if get_d == "365":
             days = 365
         elif get_d == "182":
@@ -63,60 +64,25 @@ class EventPageListFilter:
             "-30": _("Last month"),
         }
 
-        # filter the events with the given timespan
-        # also: add dates__start and dates__end to the
-        # query results for easy access in template
-        event_qs = (
-            EventPage.objects.live()
-            .descendant_of(xrEventPage)
-            .from_timespan(days)
-            .order_by("dates__start")
-            .extra(select={'individualDateStart': "start"})
-            .extra(select={'individualDateEnd': "end"})
-        )
-
-        # get and extend context of xrEventPage
-        context = xrEventPage.get_context(request, *args, **kwargs)
-        context.update(
-            {
-                "filtered_events": event_qs,
-                "timefilter": timefilter,
-                "selected": str(days),
-            }
-        )
-
-        return context
+        return timefilter, days
 
 
 class EventPageQuerySet(PageQuerySet):
     def upcoming(self):
-        return self.filter(end_date__isnull=False).filter(end_date__gte=localdate())
-
-    def from_timespan(self, days):
-        t = timedelta(days=days)
-        if days > 0:
-            return self.filter(
-                dates__isnull=False,
-                dates__start__isnull=False,
-                dates__start__gte=localdate(),
-                dates__start__lte=localdate() + t,
-            )
-        elif days == 0:
-            return self.filter(
-                dates__isnull=False,
-                dates__start__isnull=False,
-                dates__start__gte=localdate(),
-            )
-        else:
-            return self.filter(
-                dates__isnull=False,
-                dates__start__isnull=False,
-                dates__start__lte=localdate(),
-                dates__start__gte=(localdate() + t),
-            )
+        return self.filter(end_date__isnull=False, end_date__gte=localdate())
 
     def previous(self):
-        return self.filter(start_date__isnull=False).filter(start_date__lte=localdate())
+        return self.filter(start_date__isnull=False, start_date__lte=localdate())
+
+    def date_range(self, date_range):
+        from_date, to_date = date_range
+
+        return self.filter(
+            start_date__isnull=False,
+            end_date__isnull=False,
+            end_date__gte=from_date,
+            start_date__lte=to_date,
+        )
 
 
 EventPageManager = PageManager.from_queryset(EventPageQuerySet)
@@ -212,16 +178,28 @@ class EventPage(XrPage):
 
 class ShadowEventPageQuerySet(PageQuerySet):
     def upcoming(self):
-        event_qs = EventPage.objects.filter(end_date__isnull=False).filter(
-            end_date__gte=localdate()
+        return self.filter(
+            original_event__isnull=False,
+            original_event__end_date__isnull=False,
+            original_event__end_date__gte=localdate(),
         )
-        return self.filter(original_event__in=event_qs)
 
     def previous(self):
-        event_qs = EventPage.objects.filter(start_date__isnull=False).filter(
-            start_date__lte=localdate()
+        return self.filter(
+            original_event__isnull=False,
+            original_event__start_date__isnull=False,
+            original_event__start_date__lte=localdate(),
         )
-        return self.filter(original_event__in=event_qs)
+
+    def date_range(self, date_range):
+        from_date, to_date = date_range
+        return self.filter(
+            original_event__isnull=False,
+            original_event__start_date__isnull=False,
+            original_event__end_date__isnull=False,
+            original_event__end_date__gte=from_date,
+            original_event__start_date__lte=to_date,
+        )
 
 
 ShadowEventPageManager = PageManager.from_queryset(ShadowEventPageQuerySet)
@@ -236,7 +214,7 @@ class ShadowEventPage(Page):
         related_name="shadow_events",
     )
     original_event = models.ForeignKey(
-        "wagtailcore.Page",
+        EventPage,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -295,6 +273,37 @@ class ShadowEventPage(Page):
         super().save(*args, **kwargs)
 
 
+class EventDateQuerySet(QuerySet):
+    def live(self):
+        return self.filter(event_page__live=True)
+
+    def start_before(self, date):
+        return self.filter(start__date__lte=date)
+
+    def end_after(self, date):
+        return self.filter(
+            Q(end__isnull=False) & Q(end__date__gte=date) | Q(start__date__gte=date)
+        )
+
+    def upcoming(self):
+        return self.end_after(localdate())
+
+    def previous(self):
+        return self.start_before(localdate())
+
+    def date_range(self, date_range):
+        from_date, to_date = date_range
+        return self.end_after(from_date).start_before(to_date)
+
+    def for_group(self, group):
+        return self.filter(
+            Q(event_page__group=group) | Q(event_page__shadow_events__group=group)
+        )
+
+
+EventDateManager = PageManager.from_queryset(EventDateQuerySet)
+
+
 class EventDate(Orderable):
     event_page = ParentalKey(EventPage, on_delete=models.CASCADE, related_name="dates")
     start = models.DateTimeField()
@@ -322,6 +331,8 @@ class EventDate(Orderable):
         FieldRowPanel([FieldPanel("label"), FieldPanel("location")]),
         FieldPanel("description"),
     ]
+
+    objects = EventDateQuerySet.as_manager()
 
     class Meta:
         verbose_name = _("Date")
@@ -390,32 +401,30 @@ class EventListPage(XrPage):
     """
 
     def serve(self, request, *args, **kwargs):
-        context = EventPageListFilter.add_filtered_event_list_to_context(
-            self, request, args, kwargs
+        from xr_events.services import date_range_from_days
+
+        timefilter, selected = EventPageListFilter.get_timefilter_and_selected_days(
+            request.GET
+        )
+
+        date_range = date_range_from_days(selected)
+
+        event_dates = EventDate.objects.live().date_range(date_range)
+
+        context = self.get_context(request, *args, **kwargs)
+        context.update(
+            {
+                "event_dates": event_dates,
+                # "events_by_date": events_by_date,
+                "timefilter": timefilter,
+                "selected": str(selected),
+            }
         )
         return TemplateResponse(request, self.template, context)
 
     class Meta:
         verbose_name = _("Event List Page")
         verbose_name_plural = _("Event List Pages")
-
-    @property
-    def upcoming_events(self):
-        return (
-            EventPage.objects.live()
-            .descendant_of(self)
-            .upcoming()
-            .order_by("start_date", "title")
-        )
-
-    @property
-    def previous_events(self):
-        return (
-            EventPage.objects.live()
-            .descendant_of(self)
-            .previous()
-            .order_by("-start_date", "title")
-        )
 
 
 class EventGroupPage(XrPage):
@@ -447,41 +456,27 @@ class EventGroupPage(XrPage):
     """
 
     def serve(self, request, *args, **kwargs):
-        context = EventPageListFilter.add_filtered_event_list_to_context(
-            self, request, args, kwargs
+        from xr_events.services import date_range_from_days
+
+        timefilter, selected = EventPageListFilter.get_timefilter_and_selected_days(
+            request.GET
+        )
+
+        date_range = date_range_from_days(selected)
+
+        event_dates = EventDate.objects.live().date_range(date_range)
+
+        context = self.get_context(request, *args, **kwargs)
+        context.update(
+            {
+                "event_dates": event_dates,
+                # "events_by_date": events_by_date,
+                "timefilter": timefilter,
+                "selected": str(selected),
+            }
         )
         return TemplateResponse(request, self.template, context)
 
     class Meta:
         verbose_name = _("Event Group Page")
         verbose_name_plural = _("Event Group Pages")
-
-    @property
-    def organiser(self):
-        return self.group
-
-    @property
-    def is_regional_group(self):
-        return self.group.is_regional_group
-
-    @property
-    def upcoming_events(self):
-        event_pages = EventPage.objects.live().descendant_of(self).upcoming()
-        shadow_event_pages = (
-            ShadowEventPage.objects.live().descendant_of(self).upcoming()
-        )
-        upcoming_events = sorted(
-            list(event_pages)
-            + [page.get_shadowed_event() for page in shadow_event_pages],
-            key=lambda x: (x.start_date, x.title),
-        )
-        return upcoming_events
-
-    @property
-    def previous_events(self):
-        return (
-            EventPage.objects.live()
-            .child_of(self)
-            .previous()
-            .order_by("-start_date", "title")
-        )

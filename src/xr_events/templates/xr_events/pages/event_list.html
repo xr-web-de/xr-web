@@ -8,13 +8,26 @@
 
     {% include "xr_events/partials/event_list_filter.html" %}
 
-    {% if filtered_events %}
+    {% if event_dates %}
         <section class="container">
             <div class="row">
-                {% for event in filtered_events %}
-                    <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                        {% include "xr_events/partials/event_card.html" with event=event %}
-                    </div>
+{#                {% for display_date, event_set in events_by_date %}#}
+{##}
+{#                    {% for event in event_set %}#}
+{#                        <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">#}
+{#                        {{ display_date }}#}
+{#                            {% include "xr_events/partials/event_card.html" with event=event %}#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                {% endfor %}#}
+
+                {% for event_date in event_dates %}
+                    {% ifchanged event_date.start.date event_date.event_page %}
+                        <div class="col-xxs-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        {{ event_date.start.date }}
+                            {% include "xr_events/partials/event_card.html" with event=event_date.event_page display_date=event_date.start %}
+                        </div>
+                    {% endifchanged %}
                 {% endfor %}
             </div>
         </section>

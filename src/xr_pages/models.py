@@ -296,7 +296,10 @@ class LocalGroup(models.Model):
     def upcoming_events(self):
         if not self.active_eventgrouppage:
             return []
-        return self.active_eventgrouppage.upcoming_events
+
+        from xr_events.models import EventPage
+
+        return EventPage.objects.descendant_of(self.active_eventgrouppage).upcoming()
 
     @property
     def url(self):

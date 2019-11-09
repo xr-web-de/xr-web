@@ -7,20 +7,18 @@
 <article class="block event-block">
     <a href="{{ event.get_url }}" class="block__link">
         <div class="block__content">
-            {% if event.individualDateStart %}
+            {% if display_date %}
                 <div class="short-date">
                     <span class="short-date__start">
-                        <span class="short-date__day">{{ event.individualDateStart|date:"d" }}</span>
-                        <span class="short-date__month">{{ event.individualDateStart|date:"M" }}</span>
+                        <span class="short-date__day">{{ display_date|date:"d" }}</span>
+                        <span class="short-date__month">{{ display_date|date:"M" }}</span>
                     </span>
-                    {% if event.individualDateEnd %}
-                    {% if event.individualDateStart.date != event.individualDateEnd.date %}
-                        <span class="short-date__end">
-                            <span class="short-date__day">{{ event.individualDateEnd|date:"d" }}</span>
-                            <span class="short-date__month">{{ event.individualDateEnd|date:"M" }}</span>
-                        </span>
-                    {% endif %}
-                    {% endif %}
+{#                    {% if display_date.date != event.end_date.date %}#}
+{#                        <span class="short-date__end">#}
+{#                            <span class="short-date__day">{{ event.end_date|date:"d" }}</span>#}
+{#                            <span class="short-date__month">{{ event.end_date|date:"M" }}</span>#}
+{#                        </span>#}
+{#                    {% endif %}#}
                 </div>
             {% endif %}
             {% if event.get_image %}
