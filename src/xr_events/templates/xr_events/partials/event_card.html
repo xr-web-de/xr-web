@@ -5,7 +5,7 @@
 
 {% with event=event_date.event_page display_date=event_date.start %}
     <article class="block event-block" id="event_date-id-{{ event_date.id }}">
-        <a href="{{ event.get_url }}" class="block__link">
+        <a href="{{ event.get_url }}{% if event_date %}{{ event_date.id }}/{% endif %}" class="block__link">
             <div class="block__content">
                 {% if display_date %}
                     <div class="short-date">

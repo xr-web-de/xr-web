@@ -47,6 +47,9 @@
         display: flex;
         align-items: start;
         margin-top: 1em;
+        &--highlighted {
+            background: xrColor(light-grey);
+        }
     }
     &__grouper {
         float: left;

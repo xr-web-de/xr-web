@@ -13,7 +13,14 @@
             <section class="block event-block align-full_page bg--xr-transparent">
 
                 <div class="block__content">
-                    {% if event.start_date %}
+                    {% if event_date %}
+                        <div class="short-date">
+                            <span class="short-date__start">
+                                <span class="short-date__day">{{ event_date.start|date:"d" }}</span>
+                                <span class="short-date__month">{{ event_date.start|date:"M" }}</span>
+                            </span>
+                        </div>
+                    {% elif event.start_date %}
                         <div class="short-date">
                             <span class="short-date__start">
                                 <span class="short-date__day">{{ event.start_date|date:"d" }}</span>
@@ -60,7 +67,7 @@
 
                     <div class="date-list">
                         {% for date_group in grouped_dates %}
-                            <div class="date-list__group">
+                            <div class="date-list__group {% if date_group.grouper == event_date.start.date %}date-list__group--highlighted{% endif %}">
 
                                 <div class="date-list__grouper short-date">
                                     <span class="short-date__start">

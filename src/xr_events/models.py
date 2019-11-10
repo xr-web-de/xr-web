@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Q, QuerySet
+from django.http import Http404
+from django.shortcuts import redirect
 from django.utils import formats
 from django.utils.timezone import localdate
 from django.utils.translation import ugettext as _
@@ -14,6 +16,7 @@ from wagtail.admin.edit_handlers import (
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, PageManager, Page
 from wagtail.core.query import PageQuerySet
+from wagtail.core.url_routing import RouteResult
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
@@ -132,10 +135,64 @@ class EventPage(XrPage):
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["event"] = self
-        return context
+    def route(self, request, path_components, redirect_self=None):
+        if path_components:
+            event_date_id = None
+            try:
+                event_date_id = int(path_components[0])
+            except (ValueError, TypeError):
+                pass
+            return RouteResult(
+                self,
+                kwargs={"event_date_id": event_date_id, "redirect_self": redirect_self},
+            )
+        else:
+            # request is for this very page
+            if self.live:
+                return RouteResult(self, kwargs={"redirect_self": redirect_self})
+            else:
+                raise Http404
+
+    def serve(self, request, event_date_id=None, redirect_self=False):
+        if redirect_self:
+            return redirect("{}{}/".format(self.url, event_date_id))
+
+        request.is_preview = getattr(request, "is_preview", False)
+        event_date = None
+
+        if event_date_id:
+            try:
+                event_date = (
+                    EventDate.objects.filter(id=event_date_id)
+                    .select_related("event_page")
+                    .first()
+                )
+                if event_date and event_date.event_page != self:
+                    return redirect(
+                        "{}{}/".format(event_date.event_page.url, event_date_id)
+                    )
+            except EventDate.DoesNotExist:
+                pass
+
+        if not event_date:
+            event_date = self.get_next_date()
+
+        context = self.get_context(request)
+        context.update({"event": self, "event_date": event_date})
+
+        return TemplateResponse(request, self.get_template(request), context)
+
+    def get_next_date(self):
+        next_date = None
+        try:
+            next_date = (
+                self.dates.filter(start__date__gte=localdate())
+                .order_by("start")
+                .first()
+            )
+        except EventDate.DoesNotExist:
+            pass
+        return next_date
 
     def get_image(self):
         if self.image:
@@ -387,10 +444,7 @@ class EventOrganiser(Orderable):
         return self.name
 
 
-class EventListPage(XrPage):
-    template = "xr_events/pages/event_list.html"
-    content = StreamField(ContentBlock, blank=True)
-    group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
+class EventListPageBase(XrPage):
     default_event_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -400,18 +454,9 @@ class EventListPage(XrPage):
         help_text=_("A default image as Fallback for events, that have no image."),
     )
 
-    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
-
     settings_panels = XrPage.settings_panels + [
         ImageChooserPanel("default_event_image")
     ]
-
-    parent_page_types = []
-    is_creatable = False
-
-    """
-    Override serve method to filter based on request params
-    """
 
     def serve(self, request, *args, **kwargs):
         from xr_events.services import date_range_from_days
@@ -421,8 +466,7 @@ class EventListPage(XrPage):
         )
 
         date_range = date_range_from_days(selected)
-
-        event_dates = EventDate.objects.live().date_range(date_range)
+        event_dates = self.get_event_dates(date_range)
 
         context = self.get_context(request, *args, **kwargs)
         context.update(
@@ -435,60 +479,68 @@ class EventListPage(XrPage):
         return TemplateResponse(request, self.template, context)
 
     class Meta:
+        abstract = True
+
+
+class EventListPage(EventListPageBase):
+    template = "xr_events/pages/event_list.html"
+    content = StreamField(ContentBlock, blank=True)
+    group = models.OneToOneField(LocalGroup, editable=False, on_delete=models.PROTECT)
+
+    content_panels = XrPage.content_panels + [StreamFieldPanel("content")]
+
+    parent_page_types = []
+    is_creatable = False
+
+    def get_event_dates(self, date_range):
+        return EventDate.objects.live().date_range(date_range)
+
+    class Meta:
         verbose_name = _("Event List Page")
         verbose_name_plural = _("Event List Pages")
 
 
-class EventGroupPage(XrPage):
+class EventGroupPage(EventListPageBase):
     template = "xr_events/pages/event_group.html"
     content = StreamField(ContentBlock, blank=True)
     group = models.OneToOneField(LocalGroup, on_delete=models.PROTECT)
-    default_event_image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text=_("A default image as Fallback for events, that have no image."),
-    )
 
     content_panels = XrPage.content_panels + [
         SnippetChooserPanel("group"),
         StreamFieldPanel("content"),
     ]
 
-    settings_panels = XrPage.settings_panels + [
-        ImageChooserPanel("default_event_image")
-    ]
-
     parent_page_types = ["EventListPage"]
 
-    """
-    Override serve method to filter based on request params
-    """
+    def get_event_dates(self, date_range):
+        return EventDate.objects.live().for_group(self.group).date_range(date_range)
 
-    def serve(self, request, *args, **kwargs):
-        from xr_events.services import date_range_from_days
+    def route(self, request, path_components):
+        if path_components:
+            # request is for a child of this page
+            child_slug = path_components[0]
+            remaining_components = path_components[1:]
 
-        timefilter, selected = EventPageListFilter.get_timefilter_and_selected_days(
-            request.GET
-        )
-
-        date_range = date_range_from_days(selected)
-
-        event_dates = (
-            EventDate.objects.live().for_group(self.group).date_range(date_range)
-        )
-
-        context = self.get_context(request, *args, **kwargs)
-        context.update(
-            {
-                "event_dates": event_dates,
-                "timefilter": timefilter,
-                "selected": str(selected),
-            }
-        )
-        return TemplateResponse(request, self.template, context)
+            try:
+                subpage = self.get_children().get(slug=child_slug)
+            except Page.DoesNotExist:
+                try:
+                    # try to find an event_page, by matching the
+                    # second path_component with an event_date id
+                    event_date_id = int(path_components[1])
+                    event_page = EventPage.objects.get(dates__id=event_date_id)
+                    return event_page.route(
+                        request, remaining_components, redirect_self=True
+                    )
+                except (IndexError, ValueError, TypeError, EventPage.DoesNotExist):
+                    raise Http404
+            return subpage.specific.route(request, remaining_components)
+        else:
+            # request is for this very page
+            if self.live:
+                return RouteResult(self)
+            else:
+                raise Http404
 
     class Meta:
         verbose_name = _("Event Group Page")
