@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 22:12+0100\n"
+"POT-Creation-Date: 2019-11-11 22:21+0100\n"
 "PO-Revision-Date: 2019-10-20 14:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Post date"
 msgstr "Erstellungsdatum"
 
-#: xr_blog/models.py:30 xr_blog/models.py:68 xr_events/models.py:40
+#: xr_blog/models.py:30 xr_blog/models.py:68 xr_events/models.py:105
 msgid "The content is only visible on the detail page."
 msgstr "Der Inhalt ist nur auf der Detail-Ansicht sichtbar."
 
@@ -89,7 +89,27 @@ msgstr "Anzeigen."
 msgid "Homepage"
 msgstr "Homepage"
 
-#: xr_events/models.py:46 xr_pages/models.py:197
+#: xr_events/models.py:63
+msgid "Next month"
+msgstr ""
+
+#: xr_events/models.py:64
+msgid "Next six months"
+msgstr ""
+
+#: xr_events/models.py:65
+msgid "Next Year"
+msgstr ""
+
+#: xr_events/models.py:66
+msgid "All upcoming"
+msgstr ""
+
+#: xr_events/models.py:67
+msgid "Last month"
+msgstr ""
+
+#: xr_events/models.py:111 xr_pages/models.py:197
 msgid ""
 "Some city or address, like you would enter in GMaps or OpenStreetMap, e.g. "
 "\"Berlin\", \"Somestreet 84, 12345 Samplecity\"."
@@ -97,87 +117,88 @@ msgstr ""
 "Eine Stadt oder Adresse, wie du sie bei GoogleMaps oder OpenStreetMap "
 "eingeben würdest (z.B. \"Berlin\", \"Musterstraße 5, 54321 Musterstadt\")."
 
-#: xr_events/models.py:57 xr_events/models.py:238 xr_events/wagtail_hooks.py:46
+#: xr_events/models.py:122 xr_events/models.py:409
+#: xr_events/wagtail_hooks.py:46
 msgid "Dates"
 msgstr "Termine"
 
-#: xr_events/models.py:59
+#: xr_events/models.py:124
 msgid "Further organisers"
 msgstr "Weitere Veranstalter"
 
-#: xr_events/models.py:70
+#: xr_events/models.py:135
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: xr_events/models.py:71
+#: xr_events/models.py:136
 #: xr_events/templates/xr_events/pages/event_group.html:9
 #: xr_pages/templates/xr_pages/menus/local_group_main_menu.html:16
 #: xr_pages/templates/xr_pages/menus/local_group_main_menu.html:32
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: xr_events/models.py:167
+#: xr_events/models.py:304
 msgid "Shadow Event"
 msgstr "Verknüpfte Veranstaltung"
 
-#: xr_events/models.py:168
+#: xr_events/models.py:305
 msgid "Shadow Events"
 msgstr "Verknüpfte Veranstaltungen"
 
-#: xr_events/models.py:215
+#: xr_events/models.py:384
 msgid "Optional label like \"Part I\" or \"Meeting point\""
 msgstr "Optionale Bezeichnung, z.B. \"Teil I\" oder \"Treffpunkt\""
 
-#: xr_events/models.py:221
+#: xr_events/models.py:390
 msgid "A more specific location, overwrites the events default location."
 msgstr "Genauerer Ort. Überschreibt den Standard Eventort ."
 
-#: xr_events/models.py:227
+#: xr_events/models.py:396
 msgid "Optional date description. Visible on event detail page only."
 msgstr ""
 "Optionale Terminbeschreibung. Nur auf der Veranstaltungsdetailseite sichtbar."
 
-#: xr_events/models.py:237
+#: xr_events/models.py:408
 msgid "Date"
 msgstr "Termin"
 
-#: xr_events/models.py:260
+#: xr_events/models.py:431
 msgid ""
 "If the event is organised in cooperation with other groups, name them here."
 msgstr ""
 "Falls die Veranstaltung in Kooperation mit weiteren Veranstaltern "
 "organisiert wird, kannst du sie hier benennen."
 
-#: xr_events/models.py:268
+#: xr_events/models.py:439
 msgid "Organiser"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:269 xr_events/wagtail_hooks.py:55
+#: xr_events/models.py:440 xr_events/wagtail_hooks.py:55
 msgid "Organisers"
 msgstr "Veranstalter"
 
-#: xr_events/models.py:286 xr_events/models.py:331
+#: xr_events/models.py:454
 msgid "A default image as Fallback for events, that have no image."
 msgstr ""
 "Ein Standardbild als Fallback für Veranstaltungen, die kein Bild haben."
 
-#: xr_events/models.py:299
+#: xr_events/models.py:499
 msgid "Event List Page"
 msgstr "Veranstaltungs Übersicht Seite"
 
-#: xr_events/models.py:300
+#: xr_events/models.py:500
 msgid "Event List Pages"
 msgstr "Veranstaltungs Übersicht Seiten"
 
-#: xr_events/models.py:346
+#: xr_events/models.py:546
 msgid "Event Group Page"
 msgstr "Veranstaltungs Gruppen Seite"
 
-#: xr_events/models.py:347
+#: xr_events/models.py:547
 msgid "Event Group Pages"
 msgstr "Veranstaltungs Gruppen Seiten"
 
-#: xr_events/templates/xr_events/pages/event_detail.html:110
+#: xr_events/templates/xr_events/pages/event_detail.html:117
 msgid "Hosted by"
 msgstr "Veranstaltet von"
 
@@ -278,45 +299,45 @@ msgstr "Verschicke eine Email nach dem Absenden"
 msgid "Thank you! Your form was submitted successfully."
 msgstr "Vielen Dank! Deine Anfrage wurde erfolgreich versandt."
 
-#: xr_newsletter/models.py:191
+#: xr_newsletter/models.py:198
 msgid "Save the submitted data on the webserver (e.g. for CSV export)"
 msgstr ""
 "Speichere die übermittelten Daten auf dem Webserver (z.B. für den CSV-Export)"
 
-#: xr_newsletter/models.py:196
+#: xr_newsletter/models.py:203
 msgid "Email Form Page"
 msgstr "Email-Formular Seite"
 
-#: xr_newsletter/models.py:197
+#: xr_newsletter/models.py:204
 msgid "Email Form Pages"
 msgstr "Email-Formular Seiten"
 
-#: xr_newsletter/models.py:253
+#: xr_newsletter/models.py:260
 msgid "Subscribe to Sendy newsletter list on submit"
 msgstr "Abonniere einen Sendy-Newsletter nach dem Absenden"
 
-#: xr_newsletter/models.py:257
+#: xr_newsletter/models.py:264
 msgid "Subscribe to Mautic newsletter on submit."
 msgstr "Abonniere einen Mautic-Newsletter nach dem Absenden."
 
-#: xr_newsletter/models.py:266
+#: xr_newsletter/models.py:273
 msgid "Newsletter Form Page"
 msgstr "Newsletter-Formular Seite"
 
-#: xr_newsletter/models.py:267
+#: xr_newsletter/models.py:274
 msgid "Newsletter Form Pages"
 msgstr "Newsletter-Formular Seiten"
 
-#: xr_newsletter/models.py:328
+#: xr_newsletter/models.py:335
 msgid "Uups, something went wrong. Please try again later."
 msgstr ""
 "Uups, irgendetwas ist schief gelaufen :/ Bitte versuch es später noch einmal."
 
-#: xr_newsletter/models.py:372
+#: xr_newsletter/models.py:386
 msgid "Thank You Page"
 msgstr "Danke Seite"
 
-#: xr_newsletter/models.py:373
+#: xr_newsletter/models.py:387
 msgid "Thank You Pages"
 msgstr "Danke Seiten"
 
@@ -553,27 +574,27 @@ msgstr "Ortsgruppe"
 msgid "Local groups"
 msgstr "Ortsgruppen"
 
-#: xr_pages/models.py:397
+#: xr_pages/models.py:400
 msgid "Local Group List Page"
 msgstr "Ortsgruppen Übersicht Seite"
 
-#: xr_pages/models.py:398
+#: xr_pages/models.py:401
 msgid "Local Group List Pages"
 msgstr "Ortsgruppen Übersicht Seiten"
 
-#: xr_pages/models.py:420
+#: xr_pages/models.py:423
 msgid "Local Group Page"
 msgstr "Ortsgruppen Seite"
 
-#: xr_pages/models.py:421
+#: xr_pages/models.py:424
 msgid "Local Group Pages"
 msgstr "Ortsgruppen Seiten"
 
-#: xr_pages/models.py:462
+#: xr_pages/models.py:465
 msgid "Local Group Content Page"
 msgstr "Ortsgruppen Inhalts-Seite"
 
-#: xr_pages/models.py:463
+#: xr_pages/models.py:466
 msgid "Local Group Content Pages"
 msgstr "Ortsgruppen Inhalts-Seiten"
 
